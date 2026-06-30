@@ -1,0 +1,2807 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="stmarks">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Rail Automation Paradox · USA</title>
+<style>
+  /* ============================================================
+     DESIGN SYSTEM
+     Subject: US ground transport autonomy — the inverted gap.
+     Direction: "dispatch board / signal panel." The page is a
+     control panel where one indicator is lit and the rest are dark.
+     Palette pulls from railroad signal aspects (red/amber/green
+     wayside lamps) against the matte charcoal of locomotive steel.
+     Display face: Saira Condensed — the tall, mechanical lettering
+     of rolling-stock reporting marks and platform signage.
+     Body: IBM Plex Sans. Data: IBM Plex Mono (gauge readouts).
+     ============================================================ */
+  @import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --steel:#16181c;
+    --steel-2:#1d2025;
+    --steel-3:#262a31;
+    --steel-glow:#1e2229;
+    --steel-deep:var(--steel-deep);
+    --steel-track:var(--steel-track);
+    --line:#34394330;
+    --line-solid:#363b44;
+    --ink:#e8e9ec;
+    --ink-dim:#9aa0ab;
+    --ink-faint:#6b7280;
+    /* signal aspects — reserved for GoA chart meaning, do not retheme */
+    --green:#34d17a;
+    --green-dk:#1c8f4f;
+    --amber:#f4b740;
+    --amber-dk:#c8881a;
+    --red:#e8554e;
+    --red-dk:#a8322c;
+    --lamp-off:#2a2e35;
+    --radius:4px;
+    --maxw:1080px;
+    /* theme accent — UI chrome only (tabs, buttons, links, focus rings) */
+    --accent:#34d17a;
+    --accent-dk:#1c8f4f;
+    --accent-glow:#34d17a55;
+    --accent-wash:#34d17a16;
+    --accent-wash-2:#34d17a18;
+    --accent-ink:#0c0e11;
+  }
+
+  /* ============================================================
+     SCHOOL THEMES
+     Swap the accent + surface variables; GoA green/amber/red
+     stay fixed so chart meaning never changes between themes.
+     ============================================================ */
+  html[data-theme="stmarks"]{
+    --accent:#3a7bd5; --accent-dk:#1d4e8f; --accent-glow:#3a7bd555;
+    --accent-wash:#3a7bd516; --accent-wash-2:#3a7bd518; --accent-ink:#0c0e11;
+  }
+  html[data-theme="stphils"]{
+    --steel:#1a1316; --steel-2:#241a1e; --steel-3:#2e2126; --steel-glow:#241921;
+    --steel-deep:#170f12; --steel-track:#231a1d;
+    --line-solid:#3d2c30; --line:#3d2c3030;
+    --accent:#d4a843; --accent-dk:#8f6f1f; --accent-glow:#d4a84355;
+    --accent-wash:#d4a84318; --accent-wash-2:#d4a8431c; --accent-ink:#1a1316;
+  }
+  html[data-theme="stbernards"]{
+    --steel:#eef0f3; --steel-2:#ffffff; --steel-3:#e4e7ec; --steel-glow:#f8f9fb;
+    --steel-deep:#e2e6ec; --steel-track:#dde2e9;
+    --line-solid:#ccd2db; --line:#ccd2db40;
+    --ink:#1b2430; --ink-dim:#4a5568; --ink-faint:#7c8896;
+    --accent:#1d3a6e; --accent-dk:#0f2247; --accent-glow:#1d3a6e44;
+    --accent-wash:#1d3a6e12; --accent-wash-2:#1d3a6e16; --accent-ink:#ffffff;
+  }
+  html[data-theme="stthomas"]{
+    --steel:#f7f5f4; --steel-2:#ffffff; --steel-3:#ece6e5; --steel-glow:#fdfbfa;
+    --steel-deep:#efe7e6; --steel-track:#e7dddc;
+    --line-solid:#d8cdcb; --line:#d8cdcb40;
+    --ink:#241416; --ink-dim:#5c4448; --ink-faint:#8a7376;
+    --accent:#7a1f2b; --accent-dk:#4f0f17; --accent-glow:#7a1f2b3d;
+    --accent-wash:#7a1f2b10; --accent-wash-2:#7a1f2b14; --accent-ink:#ffffff;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    background:
+      radial-gradient(120% 80% at 50% -10%, var(--steel-glow) 0%, var(--steel) 55%) fixed;
+    color:var(--ink);
+    line-height:1.5;
+    padding:clamp(14px,3vw,40px) clamp(12px,3vw,24px) 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto}
+
+  /* ---------- EYEBROW / HEADER ---------- */
+  .eyebrow{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:18px;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-wash-2), 0 0 10px var(--accent-glow);}
+  .eyebrow .sep{flex:1;height:1px;background:var(--line-solid);min-width:20px}
+
+  /* ---------- THEME ROW ---------- */
+  .theme-row{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    margin-bottom:22px;padding-bottom:14px;
+    border-bottom:1px solid var(--line-solid);
+  }
+  .theme-row-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-faint);margin-right:2px;
+  }
+  .theme-btn{
+    appearance:none;cursor:pointer;display:flex;align-items:center;gap:7px;
+    background:var(--steel-2);border:1px solid var(--line-solid);border-radius:5px;
+    padding:6px 12px 6px 8px;
+    font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;font-weight:500;
+    color:var(--ink-dim);transition:all .15s;
+  }
+  .theme-btn:hover{border-color:var(--ink-faint);color:var(--ink)}
+  .theme-btn.active{
+    background:var(--accent-wash);border-color:var(--accent-dk);color:var(--ink);
+  }
+  .theme-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .theme-swatch{
+    width:16px;height:16px;border-radius:50%;flex-shrink:0;
+    box-shadow:inset 0 0 0 1px #00000022;
+  }
+
+  h1{
+    font-family:'Saira Condensed',sans-serif;
+    font-weight:800;
+    font-size:clamp(34px,7vw,68px);
+    line-height:.96;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  h1 .lit{color:var(--accent)}
+  h1 .dark{color:var(--ink);opacity:.55}
+  .standfirst{
+    max-width:62ch;font-size:clamp(15px,2.2vw,17px);color:var(--ink-dim);
+    margin-bottom:8px;
+  }
+  .standfirst b{color:var(--ink);font-weight:600}
+
+  /* ---------- THE TWO-PANEL VERDICT ---------- */
+  .verdict{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;
+    margin:30px 0 12px;
+  }
+  @media(max-width:620px){.verdict{grid-template-columns:1fr}}
+  .panel{
+    position:relative;
+    background:linear-gradient(180deg,var(--steel-2),var(--steel));
+    border:1px solid var(--line-solid);
+    border-radius:var(--radius);
+    padding:22px 22px 20px;
+    overflow:hidden;
+  }
+  .panel::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  }
+  .panel.on::before{background:linear-gradient(var(--accent),var(--accent-dk));
+    box-shadow:0 0 14px var(--accent-glow);}
+  .panel.off::before{background:linear-gradient(var(--red),var(--red-dk));
+    box-shadow:0 0 14px #e8554e44;}
+  .panel .ptag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .panel.on .ptag .lamp{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+  .panel.off .ptag .lamp{background:var(--red);box-shadow:0 0 8px var(--red)}
+  .ptag .lamp{width:8px;height:8px;border-radius:50%}
+  .panel h2{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;
+    font-size:clamp(20px,3.4vw,26px);text-transform:uppercase;
+    letter-spacing:-.005em;line-height:1.02;margin-bottom:6px;
+  }
+  .panel .big{
+    font-family:'Saira Condensed',sans-serif;font-weight:800;
+    font-size:clamp(40px,9vw,62px);line-height:1;margin:8px 0 4px;
+  }
+  .panel.on .big{color:var(--accent)}
+  .panel.off .big{color:var(--red)}
+  .panel .sub{font-size:13.5px;color:var(--ink-dim)}
+  .panel .sub b{color:var(--ink)}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{margin-top:46px}
+
+  /* ---------- TAB BAR ---------- */
+  .tabs{
+    display:flex;gap:2px;margin-top:30px;
+    border-bottom:1px solid var(--line-solid);
+  }
+  .tab{
+    appearance:none;background:none;border:none;cursor:pointer;
+    font-family:'Saira Condensed',sans-serif;font-weight:700;
+    font-size:clamp(14px,2.4vw,17px);text-transform:uppercase;letter-spacing:.02em;
+    color:var(--ink-faint);
+    padding:11px 16px 13px;position:relative;
+    display:flex;align-items:center;gap:9px;
+    transition:color .15s;
+  }
+  .tab:hover{color:var(--ink-dim)}
+  .tab .tn{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
+    color:var(--line-solid);
+  }
+  .tab[aria-selected="true"]{color:var(--ink)}
+  .tab[aria-selected="true"] .tn{color:var(--accent)}
+  .tab[aria-selected="true"]::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-dk));
+    box-shadow:0 0 10px var(--accent-glow);
+  }
+  .tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:2px}
+  .panel-tab{display:none}
+  .panel-tab.active{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){.panel-tab.active{animation:none}}
+  .sec-head{
+    display:flex;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap;
+  }
+  .sec-num{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent);
+    letter-spacing:.1em;
+  }
+  .sec-head h3{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;
+    font-size:clamp(20px,3.6vw,28px);text-transform:uppercase;letter-spacing:-.005em;
+  }
+  .sec-note{font-size:14px;color:var(--ink-dim);max-width:64ch;margin-bottom:22px}
+
+  /* ---------- THE LADDER (GoA scale + each mode plotted) ---------- */
+  .ladder{
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);padding:18px clamp(12px,2.5vw,22px) 8px;
+  }
+  .ladder-key{
+    display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;
+    font-size:11px;color:var(--ink-faint);letter-spacing:.05em;
+    padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line-solid);
+  }
+  .ladder-key span{display:flex;align-items:center;gap:6px}
+  .ladder-key i{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+  /* GoA scale header aligned to tracks */
+  .scale-strip{
+    display:grid;grid-template-columns:172px 1fr;gap:14px;
+    padding:8px 0 2px;
+  }
+  @media(max-width:560px){.scale-strip{grid-template-columns:1fr}
+    .scale-strip .label{display:none}}
+  .scale-strip .ticks{
+    display:grid;grid-template-columns:repeat(5,1fr);
+    border-bottom:1px solid var(--line-solid);padding-bottom:6px;
+  }
+  .scale-strip .ticks span{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-faint);
+    letter-spacing:.04em;text-align:left;padding-left:5px;line-height:1.3;
+    border-left:1px solid #2b3038;
+  }
+  .scale-strip .ticks span:first-child{border-left:none}
+  .scale-strip .ticks em{color:#4d535d;font-style:normal;font-size:9px}
+
+  .row{
+    display:block;
+    border-bottom:1px solid var(--line);
+  }
+  .row:last-child{border-bottom:none}
+  .row .label{min-width:0}
+  .row .label .name{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:18px;
+    text-transform:uppercase;letter-spacing:.01em;line-height:1.05;
+  }
+  .row .label .meta{font-size:12px;color:var(--ink-faint);line-height:1.3;margin-top:2px}
+
+  .track{
+    position:relative;height:38px;border-radius:3px;
+    background:
+      repeating-linear-gradient(90deg, #20242b 0 1px, transparent 1px 20%);
+    border:1px solid #2c313a;
+    display:flex;align-items:stretch;
+  }
+  /* five GoA cells as faint backdrop */
+  .cell{flex:1;border-right:1px dashed #2b3038;position:relative}
+  .cell:last-child{border-right:none}
+  .cell .ct{
+    position:absolute;top:3px;left:5px;font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;color:#454b55;letter-spacing:.03em;
+  }
+  /* filled bar overlay */
+  .fill{
+    position:absolute;top:5px;bottom:5px;left:3px;border-radius:2px;
+    display:flex;align-items:center;justify-content:flex-end;
+    padding-right:22px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+    color:#0c0e11;white-space:nowrap;overflow:hidden;
+    transition:width .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .fill.g{background:linear-gradient(90deg,var(--green-dk),var(--green))}
+  .fill.a{background:linear-gradient(90deg,var(--amber-dk),var(--amber))}
+  .fill.r{background:linear-gradient(90deg,var(--red-dk),var(--red));color:#fff}
+  .fill .lab{opacity:.92}
+  /* marker for "operator still onboard" */
+  .crewdot{
+    position:absolute;top:50%;left:0;transform:translateY(-50%);
+    width:13px;height:13px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #ffffff 0 30%, #cfd3da 55%, #8b9099 100%);
+    border:2.5px solid #0c0e11;
+    box-shadow:0 0 0 1.5px #ffffffcc, 0 1px 4px #000000aa;
+    z-index:3;
+  }
+  .crewdot.ghost{opacity:.7}
+
+  /* legend under ladder */
+  .ladder-foot{
+    display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+    padding:14px 2px 12px;font-size:12px;color:var(--ink-dim);
+  }
+  .ladder-foot .ci{display:flex;align-items:center;gap:7px}
+  .ladder-foot .crewdot{position:static;transform:none}
+
+  /* ---------- WHY (root cause) ---------- */
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.why-grid{grid-template-columns:1fr}}
+  .card{
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);padding:20px;
+  }
+  .card .k{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:10px;
+  }
+  .card.warn .k{color:var(--amber)}
+  .card h4{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:21px;
+    text-transform:uppercase;letter-spacing:-.005em;margin-bottom:9px;line-height:1.05;
+  }
+  .card p{font-size:14px;color:var(--ink-dim);margin-bottom:9px}
+  .card p:last-child{margin-bottom:0}
+  .card p b{color:var(--ink);font-weight:600}
+  .pull{
+    border-left:2px solid var(--amber);padding-left:13px;margin:12px 0 4px;
+    font-family:'Saira Condensed',sans-serif;font-weight:600;font-size:17px;
+    color:var(--ink);line-height:1.15;
+  }
+
+  /* timeline strip */
+  .tl{
+    margin-top:16px;background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);padding:18px clamp(12px,2.5vw,20px);
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  }
+  @media(max-width:680px){.tl{grid-template-columns:1fr 1fr}}
+  @media(max-width:380px){.tl{grid-template-columns:1fr}}
+  .tl .ev{position:relative;padding:4px 14px 4px 0}
+  .tl .yr{
+    font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:26px;
+    color:var(--accent);line-height:1;
+  }
+  .tl .ev.gap .yr{color:var(--amber)}
+  .tl .et{font-size:12.5px;color:var(--ink-dim);margin-top:5px;line-height:1.35}
+  .tl .et b{color:var(--ink)}
+
+  /* ---------- METHOD / CONFIDENCE ---------- */
+  .method{
+    margin-top:40px;border:1px solid var(--line-solid);border-radius:var(--radius);
+    background:var(--steel-deep);padding:20px clamp(14px,2.5vw,22px);
+  }
+  .method h3{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:18px;
+    text-transform:uppercase;letter-spacing:.02em;margin-bottom:4px;
+  }
+  details{border-top:1px solid var(--line-solid);padding:12px 0}
+  details:last-of-type{padding-bottom:0}
+  details:first-of-type{margin-top:8px}
+  summary{
+    cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.04em;
+    color:var(--ink);
+  }
+  summary::-webkit-details-marker{display:none}
+  summary .tier{
+    font-size:10px;padding:2px 7px;border-radius:3px;letter-spacing:.1em;
+    font-weight:600;text-transform:uppercase;
+  }
+  .tier.v{background:var(--accent-wash-2);color:var(--accent);border:1px solid var(--accent-glow)}
+  .tier.m{background:#f4b74022;color:var(--amber);border:1px solid #f4b74044}
+  summary .chev{margin-left:auto;color:var(--ink-faint);transition:transform .2s}
+  details[open] summary .chev{transform:rotate(90deg)}
+  details .body{font-size:13.5px;color:var(--ink-dim);padding:10px 0 2px 0;line-height:1.55}
+  details .body a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-glow)}
+  details .body a:hover{border-bottom-color:var(--accent)}
+  .srclist{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-faint);
+    margin-top:8px;line-height:1.8}
+
+  footer{
+    margin-top:38px;padding-top:18px;border-top:1px solid var(--line-solid);
+    display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);
+    letter-spacing:.04em;
+  }
+  footer a{color:var(--ink-dim);text-decoration:none}
+
+  /* ====================================================
+     INTERACTIVE: LADDER TOGGLE + EXPANDABLE ROWS
+     ==================================================== */
+  .ladder-toggle{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .lt-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-faint);margin-right:2px;
+  }
+  .lt-btn{
+    appearance:none;cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:500;
+    color:var(--ink-dim);background:var(--steel-2);
+    border:1px solid var(--line-solid);border-radius:3px;
+    padding:7px 13px;transition:all .15s;
+  }
+  .lt-btn:hover{border-color:#454b55;color:var(--ink)}
+  .lt-btn.active{
+    background:var(--accent-wash);border-color:var(--accent-dk);color:var(--accent);
+  }
+  .lt-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .lt-hint{
+    font-size:12px;color:var(--ink-faint);margin-left:4px;
+    flex-basis:100%;padding-top:2px;
+  }
+  @media(min-width:560px){.lt-hint{flex-basis:auto;padding-top:0}}
+
+  /* row becomes a button + collapsible detail */
+  .row-head{
+    width:100%;appearance:none;background:none;border:none;cursor:pointer;
+    display:grid;grid-template-columns:172px 1fr;gap:14px;align-items:center;
+    padding:13px 8px;border-radius:4px;
+    text-align:left;transition:background .15s;color:inherit;font:inherit;
+  }
+  .row-head:hover{background:#ffffff06}
+  .row-head:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  @media(max-width:560px){.row-head{grid-template-columns:1fr;gap:8px}}
+  .chev-r{
+    display:inline-block;color:var(--ink-faint);font-weight:400;
+    transition:transform .25s;margin-left:3px;
+  }
+  .row-head[aria-expanded="true"] .chev-r{transform:rotate(90deg);color:var(--accent)}
+  .row-head[aria-expanded="true"]{background:#ffffff08}
+
+  /* ghost (capability) bar sits behind the solid fill */
+  .ghost{
+    position:absolute;top:5px;bottom:5px;left:3px;border-radius:2px;
+    width:0%;
+    background:repeating-linear-gradient(45deg,#ffffff10 0 6px,#ffffff04 6px 12px);
+    border:1px dashed #ffffff2e;
+    transition:width .8s cubic-bezier(.2,.8,.2,1),opacity .3s;
+    opacity:0;z-index:1;
+  }
+  .ladder[data-view="possible"] .ghost{opacity:1}
+  .ladder[data-view="possible"] .ghost::after{
+    content:"could reach";position:absolute;right:7px;top:50%;
+    transform:translateY(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ffffff66;
+    white-space:nowrap;
+  }
+  .fill{z-index:2}
+
+  /* detail panel */
+  .detail{
+    padding:2px 10px 18px 10px;
+    animation:slideD .3s ease;
+  }
+  @media(min-width:560px){.detail{padding-left:186px}}
+  @keyframes slideD{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .detail p{font-size:13.5px;color:var(--ink-dim);margin-bottom:10px;line-height:1.55;max-width:68ch}
+  .detail p:last-child{margin-bottom:0}
+  .detail p b{color:var(--ink);font-weight:600}
+  .d-why{
+    background:var(--steel-deep);border-radius:4px;padding:11px 13px;
+    border-left:2px solid var(--line-solid);
+  }
+  .d-tag{
+    display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    padding:2px 7px;border-radius:3px;margin-right:8px;
+  }
+  .d-tag.ok{background:#34d17a22;color:var(--green)}
+  .d-tag.warn{background:#f4b74022;color:var(--amber)}
+  .d-tag.stop{background:#e8554e22;color:var(--red)}
+
+  /* tooltip on crew dots */
+  .crewdot{cursor:help}
+  .crewdot.static{cursor:default}
+  .tip-pop{
+    position:fixed;z-index:50;max-width:260px;
+    background:#0c0e11;border:1px solid var(--line-solid);border-radius:6px;
+    padding:11px 13px;font-size:12.5px;line-height:1.45;color:var(--ink);
+    box-shadow:0 8px 30px #000000bb;
+    pointer-events:none;opacity:0;transform:translateY(4px);
+    transition:opacity .15s,transform .15s;
+  }
+  .tip-pop.show{opacity:1;transform:none}
+  .tip-pop::before{content:"⚑ ";color:var(--amber)}
+
+  /* ====================================================
+     INTERACTIVE: GoA SELECTOR (reference tab)
+     ==================================================== */
+  .goa-select{
+    display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;
+  }
+  .gs-btn{
+    appearance:none;cursor:pointer;flex:1;min-width:60px;
+    font-family:'IBM Plex Sans',sans-serif;font-size:13px;
+    color:var(--ink-dim);background:var(--steel-2);
+    border:1px solid var(--line-solid);border-radius:4px;
+    padding:9px 8px;transition:all .15s;
+  }
+  .gs-btn b{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.01em}
+  .gs-btn:hover{border-color:#454b55;color:var(--ink)}
+  .gs-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .gs-btn[aria-pressed="true"]{
+    background:var(--accent-wash);border-color:var(--accent-dk);color:var(--accent);
+  }
+  /* matrix column highlight */
+  .matrix.focus .mx-cols span[data-col]{opacity:.32;transition:opacity .2s}
+  .matrix.focus .mx-cols span[data-col].lit{opacity:1}
+  .matrix.focus .mx-head .mx-cols span[data-col].lit{
+    background:var(--accent-wash);
+  }
+  /* card dim/highlight */
+  .goa-stack.focus .goa{opacity:.36;transition:opacity .25s,transform .25s;transform:scale(.99)}
+  .goa-stack.focus .goa.lit{opacity:1;transform:scale(1)}
+  .goa-stack.focus .goa.lit::after{
+    content:"";position:absolute;inset:0;border:1px solid var(--accent-dk);
+    border-radius:var(--radius);pointer-events:none;
+    box-shadow:0 0 0 3px var(--accent-wash);
+  }
+
+  /* ---------- GoA RESPONSIBILITY MATRIX ---------- */
+  .matrix{
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);overflow:hidden;
+  }
+  .mx-head,.mx-row{
+    display:grid;grid-template-columns:200px 1fr;align-items:stretch;
+  }
+  @media(max-width:600px){
+    .mx-head,.mx-row{grid-template-columns:120px 1fr}
+  }
+  .mx-head{
+    background:var(--steel-deep);border-bottom:1px solid var(--line-solid);
+  }
+  .mx-head .mx-fn{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    color:var(--ink-dim);padding:13px 14px;align-self:center;text-transform:uppercase;
+  }
+  .mx-cols{display:grid;grid-template-columns:repeat(5,1fr)}
+  .mx-head .mx-cols span{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14px;
+    text-align:center;padding:13px 4px;color:var(--ink);
+    border-left:1px solid var(--line-solid);
+    display:flex;align-items:center;justify-content:center;
+  }
+  @media(max-width:600px){.mx-head .mx-cols span{font-size:11px}}
+  .mx-row{border-bottom:1px solid var(--line)}
+  .mx-row:last-child{border-bottom:none}
+  .mx-row .mx-fn{
+    font-size:13px;color:var(--ink-dim);padding:0 14px;align-self:center;line-height:1.3;
+    font-weight:500;
+  }
+  @media(max-width:600px){.mx-row .mx-fn{font-size:11.5px;padding:0 10px}}
+  .mx-row .c{
+    border-left:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
+    padding:14px 2px;text-align:center;letter-spacing:.02em;min-height:48px;
+  }
+  @media(max-width:600px){.mx-row .c{font-size:9.5px;padding:12px 1px}}
+  .c.h{background:#e8554e12;color:#f0857f}
+  .c.ha{background:#f4b74014;color:var(--amber)}
+  .c.s{background:#34d17a14;color:var(--green)}
+  .mx-staff{background:var(--steel-deep);border-top:1px solid var(--line-solid)}
+  .mx-staff .mx-fn{font-family:'IBM Plex Mono',monospace;font-size:11px;
+    text-transform:uppercase;letter-spacing:.06em;color:var(--ink)}
+  .mx-staff .c{font-weight:600}
+
+  .mx-atp{background:var(--steel-deep);border-top:1px solid var(--line-solid)}
+  .mx-atp .mx-fn{font-family:'IBM Plex Mono',monospace;font-size:11px;
+    text-transform:uppercase;letter-spacing:.06em;color:var(--ink)}
+  .mx-atp .c{font-weight:600}
+  /* "No" cell — GoA 0 has no ATP at all, distinct from human-owned */
+  .c.n{background:#3a1a1a;color:#ff6b6b;border-left:2px solid #e8554e}
+
+  .mx-key{
+    display:flex;gap:18px;flex-wrap:wrap;padding:14px 2px 0;
+    font-size:12px;color:var(--ink-dim);
+  }
+  .mx-key span{display:flex;align-items:center;gap:7px}
+  .mx-key i.sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+  .sw.h{background:#e8554e55;border:1px solid #f0857f}
+  .sw.ha{background:#f4b74055;border:1px solid var(--amber)}
+  .sw.s{background:#34d17a55;border:1px solid var(--green)}
+  .sw.n{background:#3a1a1a;border:1px solid #e8554e}
+
+  /* ---------- GoA CARD LADDER ---------- */
+  .goa-stack{display:flex;flex-direction:column;gap:10px}
+  .goa{
+    display:grid;grid-template-columns:128px 1fr;gap:0;
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);overflow:hidden;
+    position:relative;
+  }
+  @media(max-width:560px){.goa{grid-template-columns:1fr}}
+  .goa::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;z-index:2}
+  .goa.lvl0::before{background:var(--red)}
+  .goa.lvl1::before{background:linear-gradient(var(--red),var(--amber-dk))}
+  .goa.lvl2::before{background:var(--amber)}
+  .goa.lvl3::before{background:linear-gradient(var(--amber),var(--green-dk))}
+  .goa.lvl4::before{background:var(--green);box-shadow:0 0 12px #34d17a55}
+  .goa-badge{
+    background:var(--steel-deep);padding:18px 16px;display:flex;flex-direction:column;
+    justify-content:center;gap:4px;border-right:1px solid var(--line-solid);
+  }
+  @media(max-width:560px){
+    .goa-badge{flex-direction:row;align-items:baseline;gap:10px;
+      border-right:none;border-bottom:1px solid var(--line-solid);padding:12px 16px}
+  }
+  .goa-badge .g-n{
+    font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:24px;
+    line-height:1;letter-spacing:-.01em;
+  }
+  .goa.lvl0 .g-n{color:#f0857f}
+  .goa.lvl1 .g-n{color:#f0a35f}
+  .goa.lvl2 .g-n{color:var(--amber)}
+  .goa.lvl3 .g-n{color:#8fd9a0}
+  .goa.lvl4 .g-n{color:var(--green)}
+  .goa-badge .g-mode{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-faint);
+    letter-spacing:.04em;text-transform:uppercase;
+  }
+  .goa-body{padding:17px 20px}
+  .goa-body h4{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:19px;
+    text-transform:uppercase;letter-spacing:-.005em;margin-bottom:7px;line-height:1.05;
+  }
+  .goa-body p{font-size:13.5px;color:var(--ink-dim);margin-bottom:10px;line-height:1.5}
+  .goa-body p b{color:var(--ink);font-weight:600}
+  .goa-eg{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);
+    letter-spacing:.03em;border-top:1px solid var(--line);padding-top:9px;
+  }
+  .goa.lvl4 .goa-eg{color:var(--green)}
+
+  .inline-jump{
+    appearance:none;background:none;border:none;cursor:pointer;padding:0;
+    color:var(--accent);font:inherit;border-bottom:1px solid var(--accent-glow);
+  }
+  .inline-jump:hover{border-bottom-color:var(--accent)}
+
+  /* ====================================================
+     WORLD COMPARISON TAB
+     ==================================================== */
+  .ct-select{
+    display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;
+  }
+  .ct-btn{
+    appearance:none;cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:500;
+    color:var(--ink-dim);background:var(--steel-2);
+    border:1px solid var(--line-solid);border-radius:4px;
+    padding:8px 14px;transition:all .15s;
+  }
+  .ct-btn:hover{border-color:#454b55;color:var(--ink)}
+  .ct-btn.active{background:var(--accent-wash);border-color:var(--accent-dk);color:var(--accent)}
+  .ct-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+  .cmp-table{
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);overflow:hidden;
+  }
+  .cmp-head{
+    display:grid;grid-template-columns:160px repeat(3,1fr);
+    background:var(--steel-deep);border-bottom:2px solid var(--line-solid);
+  }
+  @media(max-width:700px){.cmp-head{grid-template-columns:90px repeat(3,1fr)}}
+  @media(max-width:480px){.cmp-head{display:none}}
+  .cmp-fn{font-size:13px;color:var(--ink-dim);padding:13px 14px;align-self:center;font-weight:500}
+  @media(max-width:700px){.cmp-fn{font-size:11.5px;padding:10px 8px}}
+  .cmp-country{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;
+    text-transform:uppercase;letter-spacing:.01em;color:var(--ink);
+    padding:13px 10px;border-left:1px solid var(--line-solid);
+    display:flex;align-items:center;gap:6px;cursor:pointer;
+    transition:background .15s;
+  }
+  .cmp-country:hover{background:var(--accent-wash)}
+  @media(max-width:700px){.cmp-country{font-size:12px;padding:10px 6px}}
+
+  .cmp-row{
+    display:grid;grid-template-columns:160px repeat(3,1fr);
+    border-top:1px solid var(--line);
+  }
+  @media(max-width:700px){.cmp-row{grid-template-columns:90px repeat(3,1fr)}}
+  @media(max-width:480px){
+    .cmp-row{
+      grid-template-columns:1fr;
+      border-top:2px solid var(--line-solid);
+    }
+  }
+  .cmp-row .cmp-fn{
+    display:flex;flex-direction:column;justify-content:center;
+    padding:16px 14px;border-right:1px solid var(--line-solid);gap:3px;
+  }
+  @media(max-width:700px){.cmp-row .cmp-fn{padding:12px 8px}}
+  @media(max-width:480px){
+    .cmp-row .cmp-fn{
+      border-right:none;border-bottom:1px solid var(--line-solid);
+      padding:12px 14px;
+    }
+  }
+  .cmp-mode{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;
+    text-transform:uppercase;letter-spacing:.01em;
+  }
+  .cmp-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-faint);letter-spacing:.02em;margin-top:2px}
+
+  .cmp-cell{
+    padding:14px 12px;border-left:1px solid var(--line);
+    display:flex;flex-direction:column;gap:7px;
+    transition:opacity .25s,background .2s;
+    position:relative;
+  }
+  @media(max-width:700px){.cmp-cell{padding:10px 7px}}
+  @media(max-width:480px){
+    .cmp-cell{
+      border-left:none;border-top:1px solid var(--line);
+    }
+    .cmp-cell::before{
+      content:attr(data-country-label);
+      display:block;
+      font-family:'IBM Plex Mono',monospace;font-size:10px;
+      color:var(--ink-faint);letter-spacing:.06em;text-transform:uppercase;
+      margin-bottom:4px;
+    }
+  }
+  .cmp-grade{
+    font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:16px;
+    line-height:1;letter-spacing:-.01em;
+  }
+  @media(max-width:700px){.cmp-grade{font-size:14px}}
+  .cmp-why{font-size:11.5px;color:var(--ink-dim);line-height:1.4}
+  .cmp-why b{color:var(--ink);font-weight:600}
+  .split-tag{font-size:11px;color:var(--ink-dim);line-height:1.55}
+
+  .cmp-cell.goa4 .cmp-grade{color:var(--green)}
+  .cmp-cell.goa4{background:#34d17a0a}
+  .cmp-cell.goa2 .cmp-grade{color:var(--amber)}
+  .cmp-cell.goa2{background:#f4b7400a}
+  .cmp-cell.goa1 .cmp-grade{color:#f0857f}
+  .cmp-cell.goa0 .cmp-grade{color:var(--ink-faint)}
+  .cmp-cell.goa0{background:var(--steel-deep)}
+  .cmp-cell.leader::after{
+    content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--green-dk),var(--green));
+  }
+  .cmp-why.ok{color:#8fd9a0}
+  .cmp-why.warn{color:#d4b46a}
+  .cmp-why.stop{color:#e08585}
+  .cmp-why.neutral{color:var(--ink-faint)}
+  .star{color:var(--green);font-size:.9em}
+
+  .cmp-table.focus-us [data-col="ca"],
+  .cmp-table.focus-us [data-col="ch"]{ opacity:.25 }
+  .cmp-table.focus-ca [data-col="us"],
+  .cmp-table.focus-ca [data-col="ch"]{ opacity:.25 }
+  .cmp-table.focus-ch [data-col="us"],
+  .cmp-table.focus-ch [data-col="ca"]{ opacity:.25 }
+  .cmp-table [data-col]{ transition:opacity .25s }
+
+  .cmp-legend{
+    display:flex;gap:16px;flex-wrap:wrap;padding:14px 4px 0;
+    font-size:12px;color:var(--ink-dim);
+  }
+  .cmp-legend span{display:flex;align-items:center;gap:6px}
+  .cl{width:11px;height:11px;border-radius:2px;display:inline-block}
+  .cl.g4{background:#34d17a55;border:1px solid var(--green)}
+  .cl.g2{background:#f4b74055;border:1px solid var(--amber)}
+  .cl.g1{background:#e8554e44;border:1px solid #f0857f}
+  .cl.g0{background:var(--steel-deep);border:1px solid var(--line-solid)}
+  .cl.star-eg{background:none;border:none;color:var(--green);width:auto}
+  .cl.star-eg::before{content:"★"}
+
+  .country-cards{display:flex;flex-direction:column;gap:14px}
+  .cc{
+    display:grid;grid-template-columns:52px 1fr;gap:0;
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);overflow:hidden;position:relative;
+  }
+  .cc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;z-index:2}
+  .cc.us::before{background:linear-gradient(180deg,#B22234,#3C3B6E)}
+  .cc.ca::before{background:#FF0000}
+  .cc.ch::before{background:linear-gradient(180deg,#FF0000 40%,#fff 40% 60%,#FF0000 60%)}
+  .cc-flag{
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;background:var(--steel-deep);border-right:1px solid var(--line-solid);padding:18px 4px;
+  }
+  .cc-body{padding:18px 20px}
+  @media(max-width:520px){.cc-flag{font-size:20px;padding:14px 2px}}
+  .cc-body h4{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:20px;
+    text-transform:uppercase;letter-spacing:-.005em;margin-bottom:10px;line-height:1.05;
+  }
+  .cc-body p{font-size:13.5px;color:var(--ink-dim);margin-bottom:10px;line-height:1.55;max-width:70ch}
+  .cc-body p b{color:var(--ink);font-weight:600}
+  .cc-body p em{color:var(--ink-dim)}
+  .cc-stat{
+    display:flex;align-items:baseline;gap:10px;
+    padding:7px 0;border-top:1px solid var(--line);
+  }
+  .cc-stat:first-of-type{margin-top:12px}
+  .cs-n{
+    font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:20px;
+    color:var(--accent);line-height:1;min-width:68px;flex-shrink:0;
+  }
+  .cs-l{font-size:12.5px;color:var(--ink-dim)}
+
+  /* ====================================================
+     PIE TAB (Panel 4)
+     ==================================================== */
+  .pie-layout{
+    display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:center;
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);padding:24px;
+  }
+  @media(max-width:660px){
+    .pie-layout{grid-template-columns:1fr;gap:20px}
+    .pie-wrap{display:flex;justify-content:center}
+  }
+  .pie-wrap canvas{display:block;max-width:260px;max-height:260px}
+  .pie-legend{display:flex;flex-direction:column;gap:10px}
+  .pie-legend-item{
+    display:flex;align-items:center;gap:10px;font-size:13px;
+  }
+  .pie-legend-item .li-swatch{
+    width:14px;height:14px;border-radius:3px;flex-shrink:0;
+  }
+  .pie-legend-item .li-label{color:var(--ink-dim);flex:1}
+  .pie-legend-item .li-pct{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:17px;
+    color:var(--ink);
+  }
+  .pie-legend-item.highlight .li-label{color:var(--ink);font-weight:600}
+  .pie-legend-item.highlight .li-pct{color:var(--accent)}
+
+  .pie-callout{
+    display:flex;align-items:flex-start;gap:18px;
+    margin-top:18px;background:var(--steel-deep);
+    border:1px solid var(--line-solid);border-left:3px solid var(--accent);
+    border-radius:var(--radius);padding:18px 20px;
+  }
+  .ca-callout{border-left-color:var(--amber)}
+  .pc-num{
+    font-family:'Saira Condensed',sans-serif;font-weight:800;
+    font-size:clamp(36px,7vw,52px);color:var(--accent);line-height:1;
+    flex-shrink:0;
+  }
+  .pc-text{font-size:13.5px;color:var(--ink-dim);line-height:1.55;align-self:center}
+  .pc-text b{color:var(--ink);font-weight:600}
+  @media(max-width:520px){.pie-callout{flex-direction:column;gap:10px}}
+
+  .pie-src{
+    margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    color:var(--ink-faint);line-height:1.6;max-width:72ch;
+  }
+
+  /* ====================================================
+     12-COUNTRY STACKED BAR CHART
+     ==================================================== */
+  .country-chart-wrap{
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);padding:20px clamp(12px,2.5vw,22px) 16px;
+  }
+  .cc-legend{
+    display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;
+    font-size:12px;color:var(--ink-dim);
+  }
+  .cc-legend span{display:flex;align-items:center;gap:7px}
+  .cc-sw{width:12px;height:12px;border-radius:2px;display:inline-block;flex-shrink:0}
+  .cc-sw.goa4{background:var(--green)}
+  .cc-sw.goa23{background:var(--amber)}
+  .cc-sw.goa01{background:#3a4250}
+
+  .cc-sort{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    padding-bottom:14px;border-bottom:1px solid var(--line-solid);margin-bottom:14px;
+  }
+  .cc-sort-label{font-family:'IBM Plex Mono',monospace;font-size:11px;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);}
+  .cc-sort-btn{
+    appearance:none;background:var(--steel);border:1px solid var(--line-solid);
+    cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:12px;
+    color:var(--ink-dim);padding:5px 11px;border-radius:3px;transition:all .15s;
+  }
+  .cc-sort-btn:hover{border-color:#454b55;color:var(--ink)}
+  .cc-sort-btn.active{background:var(--accent-wash);border-color:var(--accent-dk);color:var(--accent)}
+
+  .cc-sort-divider{
+    width:1px;height:22px;background:var(--line-solid);margin:0 4px;align-self:center;
+  }
+  .cc-view-btn{
+    appearance:none;background:var(--steel);border:1px solid var(--line-solid);
+    cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:12px;
+    color:var(--ink-dim);padding:5px 11px;border-radius:3px;transition:all .15s;
+    display:flex;align-items:center;gap:5px;
+  }
+  .cc-view-btn:hover{border-color:#454b55;color:var(--ink)}
+  .cc-view-btn[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent-dk);color:var(--accent)}
+
+  /* PIE GRID VIEW */
+  .cc-pie-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:14px;
+    animation:fade .3s ease;
+  }
+  .cc-pie-card{
+    background:var(--steel-deep);border:1px solid var(--line-solid);border-radius:var(--radius);
+    padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;
+    transition:border-color .2s;cursor:default;
+  }
+  .cc-pie-card:hover{border-color:var(--accent-glow)}
+  .cc-pie-card canvas{display:block}
+  .cc-pie-card .cp-name{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;
+    text-transform:uppercase;letter-spacing:.01em;color:var(--ink);text-align:center;
+    line-height:1.1;
+  }
+  .cc-pie-card .cp-stats{
+    display:flex;flex-direction:column;gap:3px;width:100%;
+  }
+  .cc-pie-card .cp-stat{
+    display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-dim);
+  }
+  .cc-pie-card .cp-stat .cp-sw{
+    width:9px;height:9px;border-radius:2px;flex-shrink:0;
+  }
+  .cc-pie-card .cp-stat .cp-val{
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11px;
+    color:var(--ink);margin-left:auto;
+  }
+
+  .cc-bars{display:flex;flex-direction:column;gap:10px}
+  .cc-row{display:grid;grid-template-columns:130px 1fr 52px;gap:10px;align-items:center;
+    transition:opacity .25s}
+  @media(max-width:580px){.cc-row{grid-template-columns:90px 1fr 44px}}
+  .cc-row-label{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;
+    text-transform:uppercase;letter-spacing:.01em;color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  @media(max-width:580px){.cc-row-label{font-size:12px}}
+  .cc-stack{
+    position:relative;height:28px;border-radius:3px;overflow:hidden;
+    background:var(--steel-track);display:flex;
+  }
+  .cc-seg{
+    height:100%;transition:width .9s cubic-bezier(.2,.8,.2,1);
+    display:flex;align-items:center;justify-content:flex-end;
+    padding-right:4px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+    color:rgba(0,0,0,.7);overflow:hidden;white-space:nowrap;
+  }
+  .cc-seg.s4{background:linear-gradient(90deg,var(--green-dk),var(--green))}
+  .cc-seg.s23{background:linear-gradient(90deg,var(--amber-dk),var(--amber))}
+  .cc-seg.s01{background:linear-gradient(90deg,#2a3040,#3a4250)}
+  .cc-seg.s01 .cc-seg-lbl{color:var(--ink-faint)}
+  .cc-total{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);
+    text-align:right;
+  }
+
+  .cc-callouts{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;
+  }
+  @media(max-width:660px){.cc-callouts{grid-template-columns:1fr}}
+  .cc-co{
+    background:var(--steel-deep);border:1px solid var(--line-solid);border-radius:var(--radius);
+    padding:14px 16px;border-left:3px solid var(--accent);
+  }
+  .cc-co.dim{border-left-color:var(--red)}
+  .cco-n{
+    font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:26px;
+    color:var(--accent);line-height:1;margin-bottom:6px;
+  }
+  .cc-co.dim .cco-n{color:#f0857f}
+  .cco-l{font-size:12px;color:var(--ink-dim);line-height:1.4}
+
+  /* ====================================================
+     METRO SPOTLIGHT TAB (Panel 5)
+     ==================================================== */
+  .metro-grid{display:flex;flex-direction:column;gap:10px}
+  .mc{
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);overflow:hidden;
+  }
+  .mc.pioneer{border-color:#34d17a55}
+  .mc-head{
+    width:100%;appearance:none;background:none;border:none;cursor:pointer;
+    display:grid;grid-template-columns:1fr auto 28px;gap:14px;
+    align-items:center;padding:16px 16px 16px 18px;
+    text-align:left;color:inherit;font:inherit;
+    transition:background .15s;
+  }
+  .mc-head:hover{background:#ffffff06}
+  .mc-head[aria-expanded="true"]{background:#ffffff08}
+  .mc-head:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  @media(max-width:640px){
+    .mc-head{grid-template-columns:1fr 28px;gap:8px}
+    .mc-right{grid-column:1/-1;grid-row:2}
+  }
+  .mc-name{
+    font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:19px;
+    text-transform:uppercase;letter-spacing:-.005em;line-height:1.05;
+  }
+  .mc-sub{font-size:12px;color:var(--ink-faint);margin-top:3px;font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .pioneer-badge{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;
+    background:#34d17a22;color:var(--green);border:1px solid #34d17a44;
+    padding:2px 7px;border-radius:3px;vertical-align:middle;margin-left:6px;
+  }
+  .mc-right{display:flex;flex-direction:column;gap:7px;min-width:220px}
+  @media(max-width:640px){.mc-right{min-width:0}}
+  .mc-bar-wrap{display:flex;align-items:center;gap:8px}
+  .mc-bar-label{font-size:11px;color:var(--ink-faint);white-space:nowrap;min-width:140px;font-family:'IBM Plex Mono',monospace}
+  @media(max-width:640px){.mc-bar-label{min-width:100px;font-size:10px}}
+  .mc-track{flex:1;height:12px;background:var(--steel-track);border-radius:2px;overflow:hidden;min-width:60px}
+  .mc-fill{height:100%;border-radius:2px;width:0;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+  .mc-fill.green{background:linear-gradient(90deg,var(--green-dk),var(--green))}
+  .mc-fill.amber{background:linear-gradient(90deg,var(--amber-dk),var(--amber))}
+  .mc-fill.red{background:linear-gradient(90deg,var(--red-dk),var(--red))}
+  .mc-pct{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14px;color:var(--ink);min-width:44px;text-align:right}
+  .mc-chev{
+    color:var(--ink-faint);font-size:20px;font-weight:400;
+    transition:transform .25s;flex-shrink:0;align-self:center;
+    font-family:'Saira Condensed',sans-serif;
+  }
+  .mc-head[aria-expanded="true"] .mc-chev{transform:rotate(90deg);color:var(--accent)}
+
+  .mc-detail{
+    padding:4px 18px 20px;
+    border-top:1px solid var(--line);
+    animation:slideD .3s ease;
+  }
+  .mc-detail p{font-size:13.5px;color:var(--ink-dim);margin-bottom:10px;line-height:1.55;max-width:70ch}
+  .mc-detail p b{color:var(--ink);font-weight:600}
+  .mc-fact{
+    display:flex;align-items:baseline;gap:10px;
+    padding:6px 0;border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--ink-dim);
+  }
+  .mc-fact:first-of-type{margin-top:8px}
+  .mf-k{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--accent);min-width:130px;flex-shrink:0;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .fill,.mc-fill{transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">
+    <span class="dot"></span>
+    <span>Post Millennium Renaissance · Ground transport autonomy</span>
+    <span class="sep"></span>
+    <span>United States · 2026</span>
+  </div>
+
+  <div class="theme-row" role="group" aria-label="Color theme">
+    <span class="theme-row-label">Theme:</span>
+    <button class="theme-btn active" data-theme="stmarks" aria-pressed="true">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#163a6e 50%,#d9a93a 50%)"></span>
+      St Mark's
+    </button>
+    <button class="theme-btn" data-theme="stphils" aria-pressed="false">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#5c1620 50%,#d4a843 50%)"></span>
+      St Phil's
+    </button>
+    <button class="theme-btn" data-theme="stbernards" aria-pressed="false">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#e9ecf0 50%,#1d3a6e 50%)"></span>
+      St Bernard's
+    </button>
+    <button class="theme-btn" data-theme="stthomas" aria-pressed="false">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#ffffff 50%,#7a1f2b 50%);border:1px solid #d8cdcb"></span>
+      St Thomas
+    </button>
+  </div>
+
+  <h1>The car drives itself.<br><span class="dark">The train still</span> <span class="lit">needs a human.</span></h1>
+
+  <p class="standfirst">
+    Intuition says the train is the easy one — fixed rails, no pedestrians, no left turns into traffic.
+    Yet in the United States, a robotaxi will carry you across a city with <b>nobody in the seat</b>,
+    while almost every train you can ride still has a person in the cab. This is a snapshot of that
+    inversion, why it exists, and what it would take to close it.
+  </p>
+
+  <!-- TAB BAR -->
+  <div class="tabs" role="tablist" aria-label="Views">
+    <button class="tab" role="tab" id="tab-paradox" aria-controls="panel-paradox" aria-selected="true">
+      <span class="tn">01</span> The paradox
+    </button>
+    <button class="tab" role="tab" id="tab-goa" aria-controls="panel-goa" aria-selected="false">
+      <span class="tn">02</span> What is GoA?
+    </button>
+    <button class="tab" role="tab" id="tab-world" aria-controls="panel-world" aria-selected="false">
+      <span class="tn">03</span> USA vs. Canada vs. Switzerland
+    </button>
+    <button class="tab" role="tab" id="tab-pie" aria-controls="panel-pie" aria-selected="false">
+      <span class="tn">04</span> By the numbers
+    </button>
+    <button class="tab" role="tab" id="tab-metro" aria-controls="panel-metro" aria-selected="false">
+      <span class="tn">05</span> US metro spotlight
+    </button>
+  </div>
+
+  <!-- ============ PANEL 1: THE PARADOX ============ -->
+  <div class="panel-tab active" id="panel-paradox" role="tabpanel" aria-labelledby="tab-paradox">
+
+  <!-- VERDICT -->
+  <div class="verdict">
+    <div class="panel on">
+      <div class="ptag"><span class="lamp"></span>On public roads</div>
+      <h2>Driverless cars</h2>
+      <div class="big">~500k</div>
+      <div class="sub">paid <b>fully driverless</b> rides per week, no human aboard, across 10+ US metros. Real, commercial, scaling fast.</div>
+    </div>
+    <div class="panel off">
+      <div class="ptag"><span class="lamp"></span>On the national network</div>
+      <h2>Driverless trains</h2>
+      <div class="big">~0%</div>
+      <div class="sub">of light rail, subway, commuter, intercity & freight run with <b>no one in the cab</b>. The lone exception is a closed-guideway system in Honolulu.</div>
+    </div>
+  </div>
+
+  <!-- LADDER -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">A</span>
+      <h3>Every US train mode, plotted on the automation ladder</h3>
+    </div>
+    <p class="sec-note">
+      The rail industry grades automation <b>GoA&nbsp;0&nbsp;→&nbsp;4</b>. GoA 4 means unattended:
+      movement, stopping, and doors all run with no driver and no attendant aboard. The solid bar shows how
+      far each US mode <b>actually goes today</b>. The <span style="white-space:nowrap">●</span> marks where a
+      <b>human is still required in the cab</b>. <b>Tap any mode</b> for the full story.
+    </p>
+
+    <div class="ladder-toggle" role="group" aria-label="What the bars show">
+      <span class="lt-label">Show:</span>
+      <button class="lt-btn active" data-mode="today" aria-pressed="true">Deployed in the US today</button>
+      <button class="lt-btn" data-mode="possible" aria-pressed="false">Technically possible now</button>
+      <span class="lt-hint" id="lt-hint">Solid bars = what runs today.</span>
+    </div>
+
+    <div class="ladder" data-view="today">
+      <div class="ladder-key">
+        <span><i style="background:var(--green)"></i>Reaches driverless (GoA 4)</span>
+        <span><i style="background:var(--amber)"></i>Automation assists, crew aboard</span>
+        <span><i style="background:var(--red)"></i>Essentially manual</span>
+      </div>
+
+      <div class="scale-strip">
+        <div class="label"></div>
+        <div class="ticks">
+          <span>GoA 0<br><em>manual</em></span>
+          <span>GoA 1</span>
+          <span>GoA 2</span>
+          <span>GoA 3</span>
+          <span>GoA 4<br><em>driverless</em></span>
+        </div>
+      </div>
+
+      <!-- Each row: clickable header + GoA track (solid=today, ghost=possible) + expandable detail -->
+      <!-- AUTOMATED GUIDEWAY -->
+      <div class="row" data-mode-row="guideway">
+        <button class="row-head" aria-expanded="false" aria-controls="det-guideway">
+          <div class="label">
+            <div class="name">Automated guideway <span class="chev-r">›</span></div>
+            <div class="meta">Airport trams · Honolulu Skyline</div>
+          </div>
+          <div class="track">
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div>
+            <div class="ghost" data-cap="100%"></div>
+            <div class="fill g" data-w="100%" data-cap="100%"><span class="lab">GoA 4 · no crew</span></div>
+          </div>
+        </button>
+        <div class="detail" id="det-guideway" hidden>
+          <p><b>Already fully driverless.</b> These run at GoA 4 today because they're <b>sealed systems</b> — elevated or fully grade-separated, with platform screen doors, so nothing can wander onto the track. Honolulu's Skyline (opened 2023) is the first US mass-transit GoA 4 line; airport people-movers have run driverless for decades.</p>
+          <p class="d-why"><span class="d-tag ok">Why no human</span> The closed environment removes the perception problem that blocks open-track automation. It also helped that these are new-builds with no legacy workforce to bargain with.</p>
+        </div>
+      </div>
+
+      <!-- LIGHT RAIL -->
+      <div class="row" data-mode-row="light">
+        <button class="row-head" aria-expanded="false" aria-controls="det-light">
+          <div class="label">
+            <div class="name">Light rail / streetcar <span class="chev-r">›</span></div>
+            <div class="meta">Denver RTD, Portland MAX, etc.</div>
+          </div>
+          <div class="track">
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div>
+            <div class="ghost" data-cap="40%"></div>
+            <div class="fill r" data-w="20%" data-cap="40%"><span class="lab">GoA 1</span></div>
+            <div class="crewdot" style="left:18%" data-tip="Operator drives by sight in mixed traffic. No technical path to remove them while the line shares streets with cars and pedestrians."></div>
+          </div>
+        </button>
+        <div class="detail" id="det-light" hidden>
+          <p><b>Essentially manual, and for a real reason.</b> Street-running light rail mixes with car traffic, pedestrians, and cross-streets. The operator drives largely by sight (GoA 0–1). This is the one mode where the human is hardest to remove on <b>physics</b>, not just policy.</p>
+          <p class="d-why"><span class="d-tag warn">Why the human stays</span> An open, shared right-of-way is the worst case for automation — the same reason fully self-driving cars are hard. Grade-separated light-metro sections could go further, but mixed-traffic track can't.</p>
+        </div>
+      </div>
+
+      <!-- SUBWAY / HEAVY RAIL -->
+      <div class="row" data-mode-row="subway">
+        <button class="row-head" aria-expanded="false" aria-controls="det-subway">
+          <div class="label">
+            <div class="name">Subway / heavy-rail metro <span class="chev-r">›</span></div>
+            <div class="meta">NYC, DC Metro, BART</div>
+          </div>
+          <div class="track">
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div>
+            <div class="ghost" data-cap="100%"></div>
+            <div class="fill a" data-w="52%" data-cap="100%"><span class="lab">GoA 2 capable</span></div>
+            <div class="crewdot" style="left:50%" data-tip="The train can already start, run and stop itself. The operator is retained by labor agreement (Section 13c), not because the tech needs them."></div>
+          </div>
+        </button>
+        <div class="detail" id="det-subway" hidden>
+          <p><b>The starkest gap between can and does.</b> BART was <b>designed for driverless operation in 1972</b>; DC Metro had auto-train-operation from 1976. Several lines run automatically today (GoA 2) — the train drives itself — but an operator stays in the cab to close doors and satisfy the labor agreement.</p>
+          <p class="d-why"><span class="d-tag stop">Why the human stays</span> Federal transit funding carries <b>Section 13(c)</b> worker protections that make removing existing rail jobs extremely hard. The capability has existed for 50 years; the bar is legal, not technical. (Switch the toggle above to see the full reach.)</p>
+        </div>
+      </div>
+
+      <!-- COMMUTER -->
+      <div class="row" data-mode-row="commuter">
+        <button class="row-head" aria-expanded="false" aria-controls="det-commuter">
+          <div class="label">
+            <div class="name">Commuter rail <span class="chev-r">›</span></div>
+            <div class="meta">Metra, LIRR, Caltrain</div>
+          </div>
+          <div class="track">
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div>
+            <div class="ghost" data-cap="55%"></div>
+            <div class="fill r" data-w="22%" data-cap="55%"><span class="lab">GoA 1 + PTC</span></div>
+            <div class="crewdot" style="left:20%" data-tip="Engineer drives; Positive Train Control is a safety backstop, not automation. London's Thameslink shows GoA 2 is possible on this kind of line."></div>
+          </div>
+        </button>
+        <div class="detail" id="det-commuter" hidden>
+          <p><b>Manual driving with a modern safety net.</b> An engineer drives; <b>Positive Train Control (PTC)</b> can brake automatically for overspeed or a missed signal, but it doesn't drive the train. That's GoA 1.</p>
+          <p class="d-why"><span class="d-tag warn">What's possible</span> London's Thameslink runs automatic operation (GoA 2) on exactly this kind of main-line railway — so the ceiling is higher than what's deployed here. Shared freight corridors and grade crossings complicate full automation.</p>
+        </div>
+      </div>
+
+      <!-- AMTRAK -->
+      <div class="row" data-mode-row="amtrak">
+        <button class="row-head" aria-expanded="false" aria-controls="det-amtrak">
+          <div class="label">
+            <div class="name">Amtrak / intercity <span class="chev-r">›</span></div>
+            <div class="meta">Acela, long-distance</div>
+          </div>
+          <div class="track">
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div>
+            <div class="ghost" data-cap="48%"></div>
+            <div class="fill r" data-w="24%" data-cap="48%"><span class="lab">GoA 1 + PTC</span></div>
+            <div class="crewdot" style="left:22%" data-tip="Long open routes with grade crossings and shared track. PTC provides protection; the engineer does the driving."></div>
+          </div>
+        </button>
+        <div class="detail" id="det-amtrak" hidden>
+          <p><b>Human-driven, protected by PTC.</b> Intercity trains cover long, open routes — much of it on track shared with freight, much of it with road crossings at grade. An engineer drives; PTC is the safety layer.</p>
+          <p class="d-why"><span class="d-tag warn">What's possible</span> Higher automation is technically feasible on dedicated, sealed high-speed corridors (as Europe and Asia show), but the open, mixed US network is a harder case than a closed metro.</p>
+        </div>
+      </div>
+
+      <!-- FREIGHT -->
+      <div class="row" data-mode-row="freight">
+        <button class="row-head" aria-expanded="false" aria-controls="det-freight">
+          <div class="label">
+            <div class="name">Class I freight <span class="chev-r">›</span></div>
+            <div class="meta">UP, BNSF, CSX, NS</div>
+          </div>
+          <div class="track">
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div>
+            <div class="ghost" data-cap="62%"></div>
+            <div class="fill a" data-w="30%" data-cap="62%"><span class="lab">Driver-assist</span></div>
+            <div class="crewdot" style="left:28%" data-tip="Crew required network-wide. One exception: a crewless battery short-haul pilot (Parallel Systems) has been cleared by regulators in Georgia."></div>
+          </div>
+        </button>
+        <div class="detail" id="det-freight" hidden>
+          <p><b>Driver-assist, with the first real crack appearing.</b> Freight runs with energy-management and braking-assist systems on top of PTC, but a crew is required across the network. The hard part is perceiving <b>miles</b> of open right-of-way — trespassers, grade crossings, obstacles.</p>
+          <p class="d-why"><span class="d-tag ok">The exception</span> Regulators have cleared a <b>crewless short-haul pilot</b> (Parallel Systems, Georgia) using small battery-electric vehicles. It's the national network's first move toward removing the crew — narrow, but real.</p>
+        </div>
+      </div>
+
+      <div class="ladder-foot">
+        <div class="ci"><span class="crewdot static"></span> Human still legally required in the cab</div>
+        <div class="ci" id="foot-note" style="color:var(--ink-faint)">
+          Tip: tap a mode to expand it, or switch the toggle to compare today vs. what's technically possible.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">B</span>
+      <h3>So why is the "easy" problem the one that's stuck?</h3>
+    </div>
+    <p class="sec-note">
+      It isn't the technology. Driverless metro tech has existed for <b>40 years</b> and runs on 60+ lines
+      worldwide. The US gap is mostly law, labor structure, and where the track runs.
+    </p>
+
+    <div class="why-grid">
+      <div class="card warn">
+        <div class="k">The real bottleneck</div>
+        <h4>A 1964 labor clause, not a hard engineering limit</h4>
+        <p>
+          Federal transit funding carries <b>Section 13(c)</b>, a worker-protection rule that makes it
+          extraordinarily hard to remove existing rail jobs. So automation appears precisely where that
+          rule <b>doesn't</b> reach.
+        </p>
+        <p>
+          BART was <b>designed</b> for driverless running when it opened in 1972; DC Metro had auto-operation
+          capability from 1976. In both cases the onboard operator was a <b>labor concession</b>, not a
+          technical necessity.
+        </p>
+        <div class="pull">The trains could already drive themselves. We decided to keep a person there.</div>
+      </div>
+
+      <div class="card">
+        <div class="k">Why cars leapt ahead</div>
+        <h4>Open road, light rules, deep capital</h4>
+        <p>
+          Robotaxis face no equivalent of 13(c) and no incumbent "driver's union" gating deployment.
+          A single company put <b>~2,500 driverless vehicles</b> on the road and crossed
+          <b>~500k paid rides a week</b> in under three years.
+        </p>
+        <p>
+          Trains carry a heavier safety-case burden too: an open freight right-of-way must perceive
+          grade crossings, trespassers and obstacles for <b>miles</b> ahead — far harder than a closed
+          metro guideway, which is exactly why Honolulu's <b>sealed, elevated</b> line could go fully
+          driverless while a freight main can't.
+        </p>
+        <p style="color:var(--ink-faint);font-size:13px">
+          The closed-vs-open distinction is the whole game: airport trams and Skyline run in environments
+          nothing can wander into. The national network is the opposite.
+        </p>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="tl">
+      <div class="ev">
+        <div class="yr">1972</div>
+        <div class="et"><b>BART opens</b> already engineered for driverless operation — operator added by agreement.</div>
+      </div>
+      <div class="ev">
+        <div class="yr">1985</div>
+        <div class="et"><b>Vancouver SkyTrain</b> runs fully driverless — the North American template, just over the border.</div>
+      </div>
+      <div class="ev">
+        <div class="yr">2023</div>
+        <div class="et"><b>Honolulu Skyline</b> opens as the first US mass-transit GoA 4 line — because it was a brand-new system with no legacy crew.</div>
+      </div>
+      <div class="ev gap">
+        <div class="yr">2025</div>
+        <div class="et"><b>Freight's first pilot:</b> regulators clear a crewless battery short-haul test in Georgia. The mainline gap finally cracks.</div>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /panel-paradox -->
+
+  <!-- ============ PANEL 2: WHAT IS GoA? ============ -->
+  <div class="panel-tab" id="panel-goa" role="tabpanel" aria-labelledby="tab-goa">
+
+    <section style="margin-top:34px">
+      <div class="sec-head">
+        <span class="sec-num">↑↓</span>
+        <h3>The Grades of Automation, defined</h3>
+      </div>
+      <p class="sec-note">
+        Rail doesn't grade automation by how smart the train is — it grades by <b>who is responsible</b>
+        for each job. The international standard (IEC&nbsp;62290-1, used by the UITP transit association)
+        tracks four functions and asks, at each level, whether a <b>human</b> or the <b>system</b> owns them:
+        setting the train in motion, stopping it, closing the doors, and handling things when something
+        goes wrong. As you climb GoA 0 → 4, those four jobs move one by one from the person to the machine.
+      </p>
+
+      <!-- GoA SELECTOR -->
+      <div class="goa-select" role="group" aria-label="Choose a grade of automation">
+        <button class="gs-btn" data-goa="all" aria-pressed="true">All</button>
+        <button class="gs-btn" data-goa="0" aria-pressed="false"><b>GoA 0</b></button>
+        <button class="gs-btn" data-goa="1" aria-pressed="false"><b>GoA 1</b></button>
+        <button class="gs-btn" data-goa="2" aria-pressed="false"><b>GoA 2</b></button>
+        <button class="gs-btn" data-goa="3" aria-pressed="false"><b>GoA 3</b></button>
+        <button class="gs-btn" data-goa="4" aria-pressed="false"><b>GoA 4</b></button>
+      </div>
+
+      <!-- RESPONSIBILITY MATRIX -->
+      <div class="matrix">
+        <div class="mx-head">
+          <div class="mx-fn">Who is responsible for…</div>
+          <div class="mx-cols">
+            <span data-col="0">GoA 0</span><span data-col="1">GoA 1</span><span data-col="2">GoA 2</span><span data-col="3">GoA 3</span><span data-col="4">GoA 4</span>
+          </div>
+        </div>
+
+        <div class="mx-row">
+          <div class="mx-fn">Setting the train<br>in motion / speed</div>
+          <div class="mx-cols">
+            <span class="c h" data-col="0">Human</span>
+            <span class="c h" data-col="1">Human</span>
+            <span class="c s" data-col="2">System</span>
+            <span class="c s" data-col="3">System</span>
+            <span class="c s" data-col="4">System</span>
+          </div>
+        </div>
+        <div class="mx-row">
+          <div class="mx-fn">Stopping the train</div>
+          <div class="mx-cols">
+            <span class="c h" data-col="0">Human</span>
+            <span class="c h" data-col="1">Human</span>
+            <span class="c s" data-col="2">System</span>
+            <span class="c s" data-col="3">System</span>
+            <span class="c s" data-col="4">System</span>
+          </div>
+        </div>
+        <div class="mx-row">
+          <div class="mx-fn">Closing the doors</div>
+          <div class="mx-cols">
+            <span class="c h" data-col="0">Human</span>
+            <span class="c h" data-col="1">Human</span>
+            <span class="c h" data-col="2">Human</span>
+            <span class="c s" data-col="3">System</span>
+            <span class="c s" data-col="4">System</span>
+          </div>
+        </div>
+        <div class="mx-row">
+          <div class="mx-fn">Handling disruption<br>(faults, emergencies)</div>
+          <div class="mx-cols">
+            <span class="c h" data-col="0">Human</span>
+            <span class="c h" data-col="1">Human</span>
+            <span class="c h" data-col="2">Human</span>
+            <span class="c ha" data-col="3">Attendant</span>
+            <span class="c s" data-col="4">System</span>
+          </div>
+        </div>
+
+        <div class="mx-row mx-atp">
+          <div class="mx-fn">Can system override<br>a human mistake?<br><span style="font-size:10px;color:var(--ink-faint);font-style:normal">(ATP / emergency brake)</span></div>
+          <div class="mx-cols">
+            <span class="c n" data-col="0">No</span>
+            <span class="c s" data-col="1">Yes</span>
+            <span class="c s" data-col="2">Yes</span>
+            <span class="c s" data-col="3">Yes</span>
+            <span class="c s" data-col="4">Yes</span>
+          </div>
+        </div>
+
+        <div class="mx-row mx-staff">
+          <div class="mx-fn">Staff on board?</div>
+          <div class="mx-cols">
+            <span class="c h" data-col="0">Driver</span>
+            <span class="c h" data-col="1">Driver</span>
+            <span class="c h" data-col="2">Driver</span>
+            <span class="c ha" data-col="3">Attendant</span>
+            <span class="c s" data-col="4">None</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-key">
+        <span><i class="sw h"></i>Human owns it</span>
+        <span><i class="sw ha"></i>On-board attendant (not a driver)</span>
+        <span><i class="sw s"></i>Automated system owns it</span>
+        <span><i class="sw n"></i>No protection — system cannot intervene</span>
+      </div>
+    </section>
+
+    <!-- GoA CARD LADDER -->
+    <section style="margin-top:38px">
+      <div class="sec-head">
+        <h3 style="font-size:clamp(18px,3.2vw,24px)">Each grade in plain terms</h3>
+      </div>
+
+      <div class="goa-stack">
+
+        <div class="goa lvl0" data-goa="0">
+          <div class="goa-badge"><span class="g-n">GoA 0</span><span class="g-mode">On-sight</span></div>
+          <div class="goa-body">
+            <h4>Manual driving — no signaling, no protection</h4>
+            <p>A person drives entirely by what they can see — signals, obstacles, hazards — with <b>no system watching over them and no automatic backstop</b>. If the driver misses a stop signal or overspeeds, nothing intervenes. This is how a <b>streetcar in mixed traffic</b> runs. Speeds stay low because the human is the only safeguard.</p>
+            <p style="font-size:12.5px;color:var(--ink-faint)">This is the key distinction from GoA 1: at GoA 0 the system <em>cannot</em> override the driver. At GoA 1 it can — that single addition (Automatic Train Protection) is what separates on-sight from protected manual operation.</p>
+            <div class="goa-eg">US example · most street-running light rail &amp; trams</div>
+          </div>
+        </div>
+
+        <div class="goa lvl1" data-goa="1">
+          <div class="goa-badge"><span class="g-n">GoA 1</span><span class="g-mode">Protected manual</span></div>
+          <div class="goa-body">
+            <h4>Human drives, a safety system can intervene</h4>
+            <p>The driver still controls the train, but an <b>Automatic Train Protection</b> layer can brake automatically if they pass a stop signal or overspeed. The US calls its version <b>Positive Train Control (PTC)</b>. The human is in charge; the system is a backstop.</p>
+            <div class="goa-eg">US example · Amtrak, commuter rail, most freight</div>
+          </div>
+        </div>
+
+        <div class="goa lvl2" data-goa="2">
+          <div class="goa-badge"><span class="g-n">GoA 2</span><span class="g-mode">STO · semi-automatic</span></div>
+          <div class="goa-body">
+            <h4>The train drives itself, a driver still rides along</h4>
+            <p>Starting, accelerating, and stopping are <b>automatic</b>. A driver remains in the cab to close the doors and take over if something goes wrong. Metros have run this way for <b>40+ years</b>. Several US subway lines are GoA-2 <em>capable</em> but keep the operator aboard.</p>
+            <div class="goa-eg">US example · automated subway lines (operator retained)</div>
+          </div>
+        </div>
+
+        <div class="goa lvl3" data-goa="3">
+          <div class="goa-badge"><span class="g-n">GoA 3</span><span class="g-mode">DTO · driverless</span></div>
+          <div class="goa-body">
+            <h4>No driver — but a staff member is still on the train</h4>
+            <p>There's <b>nobody in a cab</b>. An attendant rides on board to manage the doors, help passengers, and handle emergencies, but does not drive. The cab itself can be removed from the design. Rare in the US.</p>
+            <div class="goa-eg">US example · effectively none in mainline service</div>
+          </div>
+        </div>
+
+        <div class="goa lvl4" data-goa="4">
+          <div class="goa-badge"><span class="g-n">GoA 4</span><span class="g-mode">UTO · unattended</span></div>
+          <div class="goa-body">
+            <h4>Fully automatic, with no staff aboard at all</h4>
+            <p>Movement, stopping, doors, and disruption response are <b>all handled by the system</b> — no driver, no attendant. This only works in <b>sealed environments</b> nothing can wander into, which is why it runs on airport trams and Honolulu's elevated Skyline, but not on an open freight main.</p>
+            <div class="goa-eg">US example · airport people-movers · Honolulu Skyline</div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="sec-note" style="margin-top:24px;margin-bottom:0">
+        Worth knowing: GoA 4 is <b>not new or experimental</b>. More than 70 metro lines across 40+ cities
+        worldwide run unattended today, and the first driverless train experiments date to the <b>1920s</b>.
+        The US gap (see <button class="inline-jump" data-goto="paradox">the paradox tab</button>) is about
+        labor law and open track — not about whether the technology works.
+      </p>
+    </section>
+
+  </div><!-- /panel-goa -->
+
+  <!-- ============ PANEL 3: WORLD COMPARISON ============ -->
+  <div class="panel-tab" id="panel-world" role="tabpanel" aria-labelledby="tab-world">
+
+    <section style="margin-top:34px">
+      <div class="sec-head">
+        <span class="sec-num">🌐</span>
+        <h3>USA · Canada · Switzerland — mode by mode</h3>
+      </div>
+      <p class="sec-note">
+        Same GoA scale, three different countries. The bars show today's deployed reality, not
+        ambition. The <b>Why</b> tag inside each cell is the honest reason the bar stops where it does.
+        Click any country name to highlight its column.
+      </p>
+
+      <!-- COUNTRY SELECTOR -->
+      <div class="ct-select" role="group" aria-label="Highlight a country">
+        <button class="ct-btn active" data-country="all">All</button>
+        <button class="ct-btn" data-country="us">🇺🇸 USA</button>
+        <button class="ct-btn" data-country="ca">🇨🇦 Canada</button>
+        <button class="ct-btn" data-country="ch">🇨🇭 Switzerland</button>
+      </div>
+
+      <!-- COMPARISON SCORECARD -->
+      <div class="cmp-table" id="cmp-table">
+
+        <!-- HEADER -->
+        <div class="cmp-head">
+          <div class="cmp-fn">Mode</div>
+          <div class="cmp-country" data-col="us">🇺🇸 USA</div>
+          <div class="cmp-country" data-col="ca">🇨🇦 Canada</div>
+          <div class="cmp-country" data-col="ch">🇨🇭 Switzerland</div>
+        </div>
+
+        <!-- AUTOMATED GUIDEWAY / CLOSED METRO -->
+        <div class="cmp-row" data-mode="guideway">
+          <div class="cmp-fn">
+            <div class="cmp-mode">Automated metro / guideway</div>
+            <div class="cmp-meta">Closed, grade-separated systems</div>
+          </div>
+          <div class="cmp-cell goa4" data-col="us" data-country-label="🇺🇸 USA">
+            <div class="cmp-grade">GoA 4</div>
+            <div class="cmp-why ok">✓ Honolulu Skyline (2023); airport people-movers for decades</div>
+          </div>
+          <div class="cmp-cell goa4 leader" data-col="ca" data-country-label="🇨🇦 Canada">
+            <div class="cmp-grade">GoA 4 <span class="star">★</span></div>
+            <div class="cmp-why ok">Vancouver SkyTrain driverless since <b>1985</b> — world's longest fully automated rapid transit system</div>
+          </div>
+          <div class="cmp-cell goa0" data-col="ch" data-country-label="🇨🇭 Switzerland">
+            <div class="cmp-grade">—</div>
+            <div class="cmp-why neutral">No closed automated metro system exists in Switzerland. Cities are served by tram and light rail</div>
+          </div>
+        </div>
+
+        <!-- LIGHT RAIL / TRAM -->
+        <div class="cmp-row" data-mode="lrt">
+          <div class="cmp-fn">
+            <div class="cmp-mode">Light rail / tram</div>
+            <div class="cmp-meta">Urban surface rail</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="us" data-country-label="🇺🇸 USA">
+            <div class="cmp-grade">GoA 0–1</div>
+            <div class="cmp-why warn">Mixed traffic = on-sight driving. Technology limit, not just policy</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="ca" data-country-label="🇨🇦 Canada">
+            <div class="cmp-grade">GoA 0–1</div>
+            <div class="cmp-why warn">Street-running systems (Toronto streetcar, etc.) require on-sight operators. Same physics limit as USA</div>
+          </div>
+          <div class="cmp-cell goa2 leader" data-col="ch" data-country-label="🇨🇭 Switzerland">
+            <div class="cmp-grade">GoA 2 <span class="star">★</span></div>
+            <div class="cmp-why ok">Waldenburgerbahn (Basel area) reached GoA 2 Jan 2026 — first in Switzerland. BLT now expanding CBTC to tram network. GoA 4 targeted by 2030</div>
+          </div>
+        </div>
+
+        <!-- SUBWAY / HEAVY METRO -->
+        <div class="cmp-row" data-mode="subway">
+          <div class="cmp-fn">
+            <div class="cmp-mode">Urban subway / heavy metro</div>
+            <div class="cmp-meta">Existing underground lines</div>
+          </div>
+          <div class="cmp-cell goa2" data-col="us" data-country-label="🇺🇸 USA">
+            <div class="cmp-grade">GoA 1–2*</div>
+            <div class="cmp-why stop">GoA 2 capable; operator retained by Section 13(c) labor law. BART built driverless-ready in 1972</div>
+          </div>
+          <div class="cmp-cell goa2 split" data-col="ca" data-country-label="🇨🇦 Canada">
+            <div class="cmp-grade">GoA 1 / GoA 4</div>
+            <div class="cmp-why split-tag">
+              <span class="d-tag stop" style="font-size:10px">TTC (Toronto)</span> GoA 1 — union opposed automation since 1985<br>
+              <span class="d-tag ok" style="font-size:10px">SkyTrain (Vancouver)</span> GoA 4 since 1985 — no legacy operator agreement
+            </div>
+          </div>
+          <div class="cmp-cell goa0" data-col="ch" data-country-label="🇨🇭 Switzerland">
+            <div class="cmp-grade">—</div>
+            <div class="cmp-why neutral">No heavy metro. Swiss cities use tram + regional rail as primary urban transit</div>
+          </div>
+        </div>
+
+        <!-- COMMUTER / REGIONAL RAIL -->
+        <div class="cmp-row" data-mode="commuter">
+          <div class="cmp-fn">
+            <div class="cmp-mode">Commuter / regional rail</div>
+            <div class="cmp-meta">Metra, LIRR · GO Transit · SBB S-Bahn</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="us" data-country-label="🇺🇸 USA">
+            <div class="cmp-grade">GoA 1 + PTC</div>
+            <div class="cmp-why stop">Driver + Positive Train Control safety layer. Section 13(c) limits change</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="ca" data-country-label="🇨🇦 Canada">
+            <div class="cmp-grade">GoA 1</div>
+            <div class="cmp-why warn">GO Transit runs human-driven. ETCS being introduced on Kitchener Line (Metrolinx), foundation for future GoA 2</div>
+          </div>
+          <div class="cmp-cell goa1 leader" data-col="ch">
+            <div class="cmp-grade">GoA 1 + ETCS <span class="star">★</span></div>
+            <div class="cmp-why ok">SBB S-Bahn runs on full ETCS Level 2 (complete by 2025). Foundation for GoA 2 ATO under smartrail 4.0 (rollout 2027–2038)</div>
+          </div>
+        </div>
+
+        <!-- INTERCITY / LONG DISTANCE -->
+        <div class="cmp-row" data-mode="intercity">
+          <div class="cmp-fn">
+            <div class="cmp-mode">Intercity / long-distance rail</div>
+            <div class="cmp-meta">Amtrak · VIA Rail · SBB IC</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="us" data-country-label="🇺🇸 USA">
+            <div class="cmp-grade">GoA 1 + PTC</div>
+            <div class="cmp-why stop">Human engineer, open mixed-use network. No automation roadmap on mainline</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="ca" data-country-label="🇨🇦 Canada">
+            <div class="cmp-grade">GoA 1</div>
+            <div class="cmp-why warn">VIA Rail runs on CN/CP freight corridors — human crew, signalling similar to US. High-Frequency Rail corridor proposal in planning</div>
+          </div>
+          <div class="cmp-cell goa1 leader" data-col="ch">
+            <div class="cmp-grade">GoA 1 + ETCS <span class="star">★</span></div>
+            <div class="cmp-why ok">SBB IC on ETCS Level 2. GoA 2 ATO over ETCS tested (Lausanne–Villeneuve 2018). Targeted for GoA 2 deployment under smartrail 4.0</div>
+          </div>
+        </div>
+
+        <!-- FREIGHT -->
+        <div class="cmp-row" data-mode="freight">
+          <div class="cmp-fn">
+            <div class="cmp-mode">Freight rail</div>
+            <div class="cmp-meta">Class I / CN, CP / SBB Cargo</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="us" data-country-label="🇺🇸 USA">
+            <div class="cmp-grade">GoA 1 + assist</div>
+            <div class="cmp-why warn">Driver-assist + PTC. First crewless pilot (Parallel Systems, Georgia) underway</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="ca" data-country-label="🇨🇦 Canada">
+            <div class="cmp-grade">GoA 1</div>
+            <div class="cmp-why warn">CN and CPKC run human crews network-wide. Remote-control yard shunting is in use. No mainline crewless pilot</div>
+          </div>
+          <div class="cmp-cell goa1" data-col="ch" data-country-label="🇨🇭 Switzerland">
+            <div class="cmp-grade">GoA 1</div>
+            <div class="cmp-why warn">SBB Cargo runs human crews. Remote-controlled shunter trials conducted 2023–24 at Zürich-Mülligen yard</div>
+          </div>
+        </div>
+
+      </div><!-- /cmp-table -->
+
+      <div class="cmp-legend">
+        <span><i class="cl g4"></i>GoA 4 deployed</span>
+        <span><i class="cl g2"></i>GoA 2 deployed</span>
+        <span><i class="cl g1"></i>GoA 1 (manual + safety system)</span>
+        <span><i class="cl g0"></i>No equivalent mode</span>
+        <span><i class="cl star-eg"></i>★ Leads in this category</span>
+      </div>
+    </section>
+
+    <!-- COUNTRY DEEP-DIVES -->
+    <section style="margin-top:44px">
+      <div class="sec-head">
+        <h3 style="font-size:clamp(18px,3.2vw,24px)">Why each country is where it is</h3>
+      </div>
+
+      <div class="country-cards">
+
+        <div class="cc us" id="cc-us">
+          <div class="cc-flag">🇺🇸</div>
+          <div class="cc-body">
+            <h4>United States — the legal bottleneck</h4>
+            <p>The US has the technology and in some cases built systems that were ready for it in 1972. The constraint is <b>Section 13(c)</b> of the Federal Transit Act: worker protections that make removing rail jobs from federally funded projects legally very difficult. Automation happens only where that clause doesn't apply — new-builds like Honolulu and airport people-movers. The subway systems most ready to automate (BART, DC Metro) are the ones most locked by existing labor agreements.</p>
+            <div class="cc-stat"><span class="cs-n">1</span><span class="cs-l">GoA 4 mass-transit line (Honolulu, 2023)</span></div>
+            <div class="cc-stat"><span class="cs-n">~0%</span><span class="cs-l">of mainline, commuter, or freight running driverless</span></div>
+            <div class="cc-stat"><span class="cs-n">50 yrs</span><span class="cs-l">since BART was built driverless-capable (1972)</span></div>
+          </div>
+        </div>
+
+        <div class="cc ca" id="cc-ca">
+          <div class="cc-flag">🇨🇦</div>
+          <div class="cc-body">
+            <h4>Canada — the same country, two opposite stories</h4>
+            <p>Canada is the clearest proof that the bottleneck is institutional, not geographic or technical. <b>Vancouver's SkyTrain</b> has run fully driverless since 1985 — 40 years, 80+ km, 427,000 rides a day — because it was a greenfield system with no legacy workforce to negotiate with. <b>Toronto's TTC</b> tells the opposite story: the Scarborough RT literally drove itself but kept a human in the cab for union reasons, <em>exactly</em> mirroring the US. The Ontario Line (2031) will be GoA 4 because it's another new-start. VIA Rail and CN/CP freight mirror the US — human crews, GoA 1.</p>
+            <div class="cc-stat"><span class="cs-n">80+ km</span><span class="cs-l">GoA 4 driverless transit (SkyTrain) — world's longest automated rapid transit system</span></div>
+            <div class="cc-stat"><span class="cs-n">1985</span><span class="cs-l">Year SkyTrain started — 38 years before Honolulu</span></div>
+            <div class="cc-stat"><span class="cs-n">2031</span><span class="cs-l">Ontario Line opens GoA 4 in Toronto — another new-start unlocking what the TTC couldn't</span></div>
+          </div>
+        </div>
+
+        <div class="cc ch" id="cc-ch">
+          <div class="cc-flag">🇨🇭</div>
+          <div class="cc-body">
+            <h4>Switzerland — the network-first, whole-system approach</h4>
+            <p>Switzerland has no Section 13(c) equivalent and no closed metro to start with, but it's taking a fundamentally different path: automate the <em>whole</em> network systematically rather than cherry-picking closed-system wins. <b>SBB's smartrail 4.0</b> programme targets GoA 4 across intercity, regional, and freight by 2027–2038 — meaning even the mainline Bern–Zurich IC is in scope. The constraint isn't labor law; it's the genuine engineering challenge of open, mixed-traffic mainline track where trains share corridors with freight, cross roads at grade, and run across national borders. GoA 4 on an open mainline requires perception systems that don't yet exist at commercial scale. Switzerland is building toward that, not waiting for a shortcut.</p>
+            <div class="cc-stat"><span class="cs-n">GoA 2</span><span class="cs-l">First Swiss railway to reach it: Waldenburgerbahn, January 2026</span></div>
+            <div class="cc-stat"><span class="cs-n">100%</span><span class="cs-l">of SBB mainline on ETCS Level 2 — the digital foundation for GoA 2 ATO</span></div>
+            <div class="cc-stat"><span class="cs-n">2027–38</span><span class="cs-l">smartrail 4.0 rollout targets GoA 4 network-wide — the most ambitious national programme of the three</span></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- WHAT THE CONTRAST TEACHES -->
+    <section style="margin-top:40px">
+      <div class="card" style="border-color:var(--accent-glow)">
+        <div class="k">The lesson across all three</div>
+        <h4>Two different barriers, one outcome</h4>
+        <p>The US and Canada share the same institutional barrier: legacy labor agreements on existing systems, and legal protection that freezes that state in place. Both countries achieve GoA 4 only on new-builds where that protection doesn't apply — Honolulu, SkyTrain, the future Ontario Line.</p>
+        <p>Switzerland faces a different, genuinely technical barrier: open mainline track is harder to automate than a sealed metro. But Switzerland is attacking the harder problem systematically, and has no equivalent of Section 13(c) preventing it from retrofitting existing systems once the technology is ready.</p>
+        <div class="pull">Vancouver proved in 1985 what the US won't let its subway systems become. Switzerland is building what neither North American country has attempted: a whole-network automation roadmap that includes the mainline.</div>
+      </div>
+    </section>
+
+    <!-- SOURCES NOTE FOR THIS TAB -->
+    <section style="margin-top:28px">
+      <p style="font-size:12.5px;color:var(--ink-faint);line-height:1.6;max-width:70ch">
+        <b style="color:var(--ink-dim)">Sources for this tab:</b>
+        SkyTrain Wikipedia (ridership, 1985 opening, world's longest);
+        Alstom press release July 2025 (Mark V trains);
+        urban-transport-magazine.com / railwaypro.com (Waldenburgerbahn GoA 2, Jan 2026);
+        railtech.com (smartrail 4.0, GoA 4 target 2027–38);
+        railwaygazette.com (Waldenburgerbahn GoA 4 target 2030);
+        railjournal.com (SBB no plans for driverless mainline);
+        Wikipedia Toronto subway (TTC union opposition, Scarborough RT driver retention);
+        toronto.ca / metrolinx.com (Ontario Line GoA 4, ~2031);
+        ifp.org (Section 13(c) analysis, Vancouver precedent).
+        Confidence tier: GoA levels for deployed systems = Verified.
+        Switzerland smartrail 4.0 targets and Canada GO Transit ETCS = Modeled from programme documentation.
+      </p>
+    </section>
+
+  </div><!-- /panel-world -->
+
+  <!-- ============ PANEL 4: PIE / BY THE NUMBERS ============ -->
+  <div class="panel-tab" id="panel-pie" role="tabpanel" aria-labelledby="tab-pie">
+
+    <section style="margin-top:34px">
+      <div class="sec-head">
+        <span class="sec-num">A</span>
+        <h3>Where the money goes — US transit operating costs</h3>
+      </div>
+      <p class="sec-note">
+        Labor is the dominant cost in running a transit system. This is the budget context that makes
+        automation a financial argument, not just a technology argument. When <b>59 cents of every
+        operating dollar</b> pays wages and benefits, removing a cab operator is a structural budget
+        conversation — not a gadget upgrade.
+      </p>
+
+      <div class="pie-layout">
+        <div class="pie-wrap">
+          <canvas id="pieA" width="260" height="260" aria-label="US transit operating cost breakdown"></canvas>
+        </div>
+        <div class="pie-legend" id="legendA">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <div class="pie-callout">
+        <div class="pc-num">59%</div>
+        <div class="pc-text">
+          of US transit operating costs go to <b>labor</b> — wages, benefits, and paid absences —
+          according to APTA's 2025 data from the National Transit Database. Automation's primary
+          financial case is here. Paris cut operating costs by <b>30%</b> when it converted Metro
+          Line 1 to GoA 4. One study estimated automation could cut US rail transit operating costs
+          by <b>up to 46%</b>.
+        </div>
+      </div>
+
+      <p class="pie-src">Source: American Public Transportation Association (APTA) via IFP.org analysis of FTA National Transit Database 2025. Remaining categories estimated from FTA NTD operating expense object class breakdowns (vehicle maintenance ~15%, non-vehicle maintenance ~8%, general admin ~10%, purchased transport ~8%). Tier: <span class="tier m">Modeled</span> — labor % is Verified; sub-category splits are approximate from NTD object classes.</p>
+    </section>
+
+    <section style="margin-top:48px">
+      <div class="sec-head">
+        <span class="sec-num">B</span>
+        <h3>Canada's internal divide — rapid transit km by automation level</h3>
+      </div>
+      <p class="sec-note">
+        Within a single country, same decade, nearly identical technology — two cities made opposite
+        choices. Vancouver built driverless. Toronto kept a human in the cab. The chart shows what
+        that means in track kilometers operating today.
+      </p>
+
+      <div class="pie-layout">
+        <div class="pie-wrap">
+          <canvas id="pieB" width="260" height="260" aria-label="Canada rapid transit automation split"></canvas>
+        </div>
+        <div class="pie-legend" id="legendB">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <div class="pie-callout ca-callout">
+        <div class="pc-num" style="color:var(--accent)">80 km</div>
+        <div class="pc-text">
+          of <b>fully driverless</b> rapid transit in Canada — Vancouver's SkyTrain, GoA 4 since 1985,
+          now the world's longest automated rapid transit system. Toronto's TTC subway runs <b>99 km</b>
+          of heavy metro at GoA 1 — same era, same continent, human in the cab — because the
+          Scarborough RT's operators were retained by labor agreement when it opened in 1985, and
+          that precedent held. The Ontario Line (~15 km, GoA 4) opens ~2031.
+        </div>
+      </div>
+
+      <p class="pie-src">Sources: SkyTrain Wikipedia (79.6 km, GoA 4); Toronto subway Wikipedia (99.4 km total system, GoA 1 heavy rail lines). Note: Toronto's Line 5 Eglinton (opened 2026, GoA 2 underground section) is excluded as a light rail line for comparability with SkyTrain's rapid transit classification. Tier: <span class="tier v">Verified</span>.</p>
+    </section>
+
+    <!-- SECTION C: 12-COUNTRY BREAKDOWN -->
+    <section style="margin-top:52px">
+      <div class="sec-head">
+        <span class="sec-num">C</span>
+        <h3>Urban metro km by GoA — 16 countries compared</h3>
+      </div>
+      <p class="sec-note">
+        Same GoA 0–4 scale, applied to urban metro systems only — no mainline, no freight, no commuter rail.
+        This is the cleanest cross-country comparison possible: sealed, grade-separated passenger systems where
+        the technology is proven and the only question is how far each country has deployed it.
+        Each bar represents <b>total urban metro km</b>, split by automation grade. Sort and toggle views below.
+      </p>
+
+      <div class="country-chart-wrap">
+        <div class="cc-legend">
+          <span><i class="cc-sw goa4"></i>GoA 4 — fully driverless</span>
+          <span><i class="cc-sw goa23"></i>GoA 2/3 — semi-auto, driver/attendant aboard</span>
+          <span><i class="cc-sw goa01"></i>GoA 0/1 — manual / protected manual</span>
+        </div>
+        <div class="cc-sort">
+          <span class="cc-sort-label">Sort by:</span>
+          <button class="cc-sort-btn active" data-sort="goa4">% GoA 4</button>
+          <button class="cc-sort-btn" data-sort="total">Total km</button>
+          <button class="cc-sort-btn" data-sort="alpha">Country</button>
+          <span class="cc-sort-divider"></span>
+          <button class="cc-view-btn" data-view="bars" aria-pressed="true" title="Bar chart view">▬ Bars</button>
+          <button class="cc-view-btn" data-view="pies" aria-pressed="false" title="Pie chart view">◉ Pies</button>
+        </div>
+        <div class="cc-bars" id="cc-bars">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <div class="cc-callouts">
+        <div class="cc-co">
+          <div class="cco-n">176 km</div>
+          <div class="cco-l">Riyadh, Saudi Arabia — world's longest GoA 4 metro, 100% driverless, opened 2024–25</div>
+        </div>
+        <div class="cc-co">
+          <div class="cco-n">~100 km</div>
+          <div class="cco-l">Singapore — NEL, DTL, TEL fully GoA 4; NSL and EWL upgraded to GoA 2 CBTC</div>
+        </div>
+        <div class="cc-co dim">
+          <div class="cco-n">~5 km</div>
+          <div class="cco-l">USA — Honolulu Skyline only GoA 4 mass-transit line; ~60 km GoA 2 (CBTC lines in NYC, DC, SF)</div>
+        </div>
+      </div>
+
+      <p class="pie-src" style="margin-top:16px">
+        <b>Sources &amp; confidence:</b>
+        Riyadh 176 km — Gulf News / Guinness World Records 2025 (<span class="tier v" style="font-size:10px">Verified</span>).
+        Dubai 101 km (Red/Green/Tram) — Railway Technology (<span class="tier v" style="font-size:10px">Verified</span>).
+        Copenhagen Metro 43 km GoA4 — Wikipedia, Grokipedia (<span class="tier v" style="font-size:10px">Verified</span>).
+        Sydney Metro 52 km GoA4 — Wikipedia / Sydney Metro official (<span class="tier v" style="font-size:10px">Verified</span>).
+        Canada 80 km GoA4 (SkyTrain) + 99 km GoA1 (TTC) — Wikipedia (<span class="tier v" style="font-size:10px">Verified</span>).
+        Singapore NEL/DTL/TEL ~100 km GoA4, NSL/EWL/CCL ~140 km GoA2 — Wikipedia, SGTrains (<span class="tier m" style="font-size:10px">Modeled</span> — line km summed from individual line articles).
+        France Lines 1,4,14 ~61 km GoA4, Grand Paris Express phase 1 partial; remaining ~185 km mix of GoA1/2 — Paris Metro Wikipedia + railwaypro.com (<span class="tier m" style="font-size:10px">Modeled</span>).
+        Germany Nuremberg U2/U3 ~19 km GoA4; Berlin/Munich GoA2 ~30 km estimated; rest GoA1 (<span class="tier m" style="font-size:10px">Modeled</span>).
+        Japan Toei Oedo ~40 km GoA4; Tokyo Metro ~190 km GoA2 (all lines have ATO); some GoA1 — Grokipedia/Wikipedia (<span class="tier m" style="font-size:10px">Modeled</span> — Oedo alone confirmed GoA4; Metro GoA2 extent estimated).
+        UK DLR ~38 km GoA4, Jubilee/Victoria/Elizabeth partial GoA2-3 ~40 km estimated; rest GoA1 (<span class="tier m" style="font-size:10px">Modeled</span>).
+        USA Honolulu ~5 km GoA4; CBTC lines (L/7/Queens Blvd + DC ATO + SF partial) ~60 km GoA2; rest GoA1 (<span class="tier m" style="font-size:10px">Modeled</span> — GoA2 share is approximate).
+        Switzerland Waldenburgerbahn ~13 km GoA2; everything else GoA1 (<span class="tier v" style="font-size:10px">Verified</span>).
+        Qatar 76 km GoA4 (Doha Metro, all 3 lines) — Wikipedia / Doha Metro official (<span class="tier v" style="font-size:10px">Verified</span>).
+        Spain Barcelona L9/L10 ~30 km GoA4 (open sections); Line 11 GoA3 ~2.3 km; rest GoA1 — Barcelona Metro Wikipedia (<span class="tier m" style="font-size:10px">Modeled</span> — central L9/L10 section not yet open).
+        Mexico Lines 1 (18.6 km) &amp; 12 (~18 km) CBTC GoA2 (Siemens/Alstom); total network ~226 km — railway-technology.com Dec 2025 (<span class="tier m" style="font-size:10px">Modeled</span> — GoA2 line count estimated from confirmed CBTC deployments).
+        China ~900 km GoA4 (Shanghai Lines 10/14/15/18/Pujiang ~169 km confirmed GoA4; Beijing, Guangzhou, Shenzhen, Chengdu and others add ~730 km estimated); ~500 km GoA2; remainder GoA1 across 10,976 km total — Shanghai Metro Wikipedia, Grokipedia urban rail China, Railway Gazette China metro report Mar 2025 (<span class="tier m" style="font-size:10px">Modeled</span> — national GoA4 total is a fast-moving estimate; China adds hundreds of km per year).
+        <br><b>Important scope note:</b> Urban metro only. Mainline, commuter, freight, and light-rail-in-mixed-traffic excluded. Total km figures include only closed, grade-separated rapid transit.
+      </p>
+    </section>
+
+  </div><!-- /panel-pie -->
+
+  <!-- ============ PANEL 5: US METRO SPOTLIGHT ============ -->
+  <div class="panel-tab" id="panel-metro" role="tabpanel" aria-labelledby="tab-metro">
+
+    <section style="margin-top:34px">
+      <div class="sec-head">
+        <span class="sec-num">C</span>
+        <h3>Six major US systems — how far each has actually gone</h3>
+      </div>
+      <p class="sec-note">
+        The national average hides a wide spread. A few systems are GoA 2 on most lines. Some major
+        cities are running 100-year-old signal technology. And the Philadelphia area — quietly — is
+        home to the <b>first ATO line ever built in the United States</b>, still running today.
+        Click any system card for the full story.
+      </p>
+
+      <div class="metro-grid" id="metro-grid">
+
+        <!-- NYC -->
+        <div class="mc" data-sys="nyc">
+          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-nyc">
+            <div class="mc-left">
+              <div class="mc-name">New York City Subway</div>
+              <div class="mc-sub">MTA · 472 stations · 245 route miles</div>
+            </div>
+            <div class="mc-right">
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">CBTC (GoA 2)</div>
+                <div class="mc-track"><div class="mc-fill amber" data-w="15%"></div></div>
+                <div class="mc-pct">~15%</div>
+              </div>
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">Fixed-block (GoA 1)</div>
+                <div class="mc-track"><div class="mc-fill red" data-w="85%"></div></div>
+                <div class="mc-pct">~85%</div>
+              </div>
+            </div>
+            <span class="mc-chev">›</span>
+          </button>
+          <div class="mc-detail" id="mc-det-nyc" hidden>
+            <p><b>Opened 1904. Signaling technology from the same era still runs 85% of the system.</b> The L train (Canarsie Line) was the first to get CBTC in 2000–2006 — a self-contained line made it the pilot. The 7 (Flushing) followed in 2018, and Queens Boulevard lines (E/F/M/R) after that. Those three corridors, covering roughly 15% of route miles, now operate GoA 2. The other 85% runs on block signals with mechanical relays — technology that predates the automobile.</p>
+            <p>The MTA's 2025–29 capital plan funds CBTC on 8 more lines and 75+ miles. At the current pace, full-system CBTC is a 2040s project. Signal failures cause <b>more than half of all subway delays</b>.</p>
+            <div class="mc-fact"><span class="mf-k">Opened</span> 1904</div>
+            <div class="mc-fact"><span class="mf-k">First CBTC line</span> L train, 2006</div>
+            <div class="mc-fact"><span class="mf-k">Bottleneck</span> Section 13(c) + cost + complexity of 24/7 system with 36 lines</div>
+          </div>
+        </div>
+
+        <!-- DC METRO -->
+        <div class="mc" data-sys="dc">
+          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-dc">
+            <div class="mc-left">
+              <div class="mc-name">DC Metro (WMATA)</div>
+              <div class="mc-sub">WMATA · 98 stations · 6 lines</div>
+            </div>
+            <div class="mc-right">
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">ATO / GoA 2</div>
+                <div class="mc-track"><div class="mc-fill green" data-w="100%"></div></div>
+                <div class="mc-pct">100%</div>
+              </div>
+            </div>
+            <span class="mc-chev">›</span>
+          </button>
+          <div class="mc-detail" id="mc-det-dc" hidden>
+            <p><b>The most dramatic recent reversal in US rail automation.</b> Metro was designed and built in the 1970s for automatic train operation — it's a GoA 2 system at its core. After a fatal 2009 crash (attributed to a sensor failure, not ATO itself), Metro switched to full manual GoA 1 operation for 15 years. In December 2024 ATO returned to the Red Line. By June 2025 it was restored system-wide — <b>100% of lines back to GoA 2</b> for the first time since 2009.</p>
+            <p>Train operators remain in the cab (GoA 2, not GoA 4). ATO controls speed and braking; the operator closes doors and monitors conditions. End-to-end Red Line travel time dropped by 8 minutes after ATO return.</p>
+            <div class="mc-fact"><span class="mf-k">Opened</span> 1976 — designed for ATO from day one</div>
+            <div class="mc-fact"><span class="mf-k">Manual period</span> 2009–2024 (15 years) after fatal crash</div>
+            <div class="mc-fact"><span class="mf-k">ATO restored</span> Dec 2024 (Red), May 2025 (Green/Yellow), Jun 2025 (Blue/Orange/Silver)</div>
+          </div>
+        </div>
+
+        <!-- CHICAGO L -->
+        <div class="mc" data-sys="chi">
+          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-chi">
+            <div class="mc-left">
+              <div class="mc-name">Chicago 'L'</div>
+              <div class="mc-sub">CTA · 146 stations · 8 lines · 224 track miles</div>
+            </div>
+            <div class="mc-right">
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">GoA 1 (manual)</div>
+                <div class="mc-track"><div class="mc-fill red" data-w="100%"></div></div>
+                <div class="mc-pct">100%</div>
+              </div>
+            </div>
+            <span class="mc-chev">›</span>
+          </button>
+          <div class="mc-detail" id="mc-det-chi" hidden>
+            <p><b>The largest US rapid transit system with zero CBTC deployment — and 24-hour service on two lines.</b> The L operates 8 lines on fixed-block signals throughout. No CBTC program is currently funded or contracted. The Red and Blue Lines run 24 hours, one of only four cities worldwide offering that (alongside New York, London, and Copenhagen).</p>
+            <p>The $2.1 billion Red/Purple Line modernization completed July 2025 rebuilt stations and track structures — but upgraded the physical infrastructure, not the signaling automation. The L's signal systems date from the mid-20th century.</p>
+            <div class="mc-fact"><span class="mf-k">Opened</span> 1892 — oldest elevated rapid transit in the US</div>
+            <div class="mc-fact"><span class="mf-k">CBTC status</span> None deployed, none contracted</div>
+            <div class="mc-fact"><span class="mf-k">Notable</span> 24-hr service on Red &amp; Blue lines; ~385,500 weekday riders (2025)</div>
+          </div>
+        </div>
+
+        <!-- BART -->
+        <div class="mc" data-sys="bart">
+          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-bart">
+            <div class="mc-left">
+              <div class="mc-name">BART (San Francisco Bay Area)</div>
+              <div class="mc-sub">BART · 50 stations · 131 route miles</div>
+            </div>
+            <div class="mc-right">
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">CBTC rollout (GoA 2) — in progress</div>
+                <div class="mc-track"><div class="mc-fill amber" data-w="5%"></div></div>
+                <div class="mc-pct">~5% live</div>
+              </div>
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">Legacy fixed-block (GoA 1)</div>
+                <div class="mc-track"><div class="mc-fill red" data-w="95%"></div></div>
+                <div class="mc-pct">~95%</div>
+              </div>
+            </div>
+            <span class="mc-chev">›</span>
+          </button>
+          <div class="mc-detail" id="mc-det-bart" hidden>
+            <p><b>The system built for driverless in 1972 is still not driverless in 2026.</b> BART opened with ATO capability and was designed from the ground up for automation — operators were a labor concession. The original signaling now runs past its design life. In 2020 BART awarded a <b>$798M CBTC contract to Hitachi Rail</b>, the largest signaling upgrade in North American history. The first section (Millbrae corridor) entered test-and-build mode in late 2024; mainline phases target 28 trains/hour by 2030 and 30/hour by 2032.</p>
+            <p>Today BART runs GoA 1 on virtually all mainline track. The Oakland Airport Connector — a 3-mile people-mover — operates GoA 4 driverless separately.</p>
+            <div class="mc-fact"><span class="mf-k">Opened</span> 1972 — built ATO-capable from day one</div>
+            <div class="mc-fact"><span class="mf-k">CBTC contract</span> $798M, Hitachi Rail, awarded 2020</div>
+            <div class="mc-fact"><span class="mf-k">GoA 2 target</span> Transbay Tube at 28 trains/hr by 2030</div>
+          </div>
+        </div>
+
+        <!-- BOSTON MBTA -->
+        <div class="mc" data-sys="bos">
+          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-bos">
+            <div class="mc-left">
+              <div class="mc-name">Boston MBTA ('The T')</div>
+              <div class="mc-sub">MBTA · 109 stations · Red, Orange, Blue, Green lines</div>
+            </div>
+            <div class="mc-right">
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">Commuter rail: PTC / GoA 1</div>
+                <div class="mc-track"><div class="mc-fill amber" data-w="100%"></div></div>
+                <div class="mc-pct">PTC 100%</div>
+              </div>
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">Subway: Fixed-block GoA 1</div>
+                <div class="mc-track"><div class="mc-fill red" data-w="100%"></div></div>
+                <div class="mc-pct">GoA 1</div>
+              </div>
+            </div>
+            <span class="mc-chev">›</span>
+          </button>
+          <div class="mc-detail" id="mc-det-bos" hidden>
+            <p><b>PTC complete across all 12 commuter rail lines as of January 2025 — a federal mandate milestone.</b> But PTC is GoA 1: it can stop a train that misses a signal, but the engineer still drives. The subway (Red, Orange, Blue, Green lines) runs on fixed-block signaling at GoA 1 throughout. No CBTC deployment or contract exists.</p>
+            <p>The MBTA is in the middle of a $9.6B five-year capital plan focused on station renovation, fleet replacement, and accessibility — not automation upgrades. It is the fourth-busiest rapid transit system in the US with ~326,500 daily rapid transit riders (2025).</p>
+            <div class="mc-fact"><span class="mf-k">PTC complete</span> January 2025 — all 12 commuter rail lines</div>
+            <div class="mc-fact"><span class="mf-k">Subway automation</span> GoA 1 throughout, no CBTC program</div>
+            <div class="mc-fact"><span class="mf-k">Notable</span> 4th-busiest US rapid transit; ~851,600 total daily system riders</div>
+          </div>
+        </div>
+
+        <!-- PATCO -->
+        <div class="mc pioneer" data-sys="patco">
+          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-patco">
+            <div class="mc-left">
+              <div class="mc-name">PATCO Speedline <span class="pioneer-badge">Pioneer ★</span></div>
+              <div class="mc-sub">Philadelphia–Lindenwold · 14 stations · 14.2 miles</div>
+            </div>
+            <div class="mc-right">
+              <div class="mc-bar-wrap">
+                <div class="mc-bar-label">ATO / GoA 2</div>
+                <div class="mc-track"><div class="mc-fill green" data-w="100%"></div></div>
+                <div class="mc-pct">100%</div>
+              </div>
+            </div>
+            <span class="mc-chev">›</span>
+          </button>
+          <div class="mc-detail" id="mc-det-patco" hidden>
+            <p><b>The first Automatic Train Operation line ever built in the United States — opened February 1969.</b> The PATCO Speedline between Philadelphia and Lindenwold, NJ crossed the Delaware River with ATO from its first day of service. It predates BART by three years. The line still operates ATO today, running nearly 24/7, carrying about 18,500 weekday riders.</p>
+            <p>PATCO is a GoA 2 system: trains accelerate and brake automatically, but an operator rides in the cab. It has run this way continuously for 57 years — longer than any other US rapid transit line with automation. It's a remarkable footnote: Philadelphia's commuter-scale rail line has more automation history than New York's entire subway system.</p>
+            <div class="mc-fact"><span class="mf-k">Opened</span> January 4, 1969 — <b>first ATO line in the USA</b></div>
+            <div class="mc-fact"><span class="mf-k">Continuous ATO</span> 57+ years and counting</div>
+            <div class="mc-fact"><span class="mf-k">Ridership</span> ~5.9M annual (2025), ~18,500 weekday</div>
+          </div>
+        </div>
+
+      </div><!-- /metro-grid -->
+
+      <p class="sec-note" style="margin-top:24px;font-size:13px">
+        <b>Note on SF trolleys / cable cars:</b> San Francisco's iconic cable cars and historic streetcars operate at GoA 0 — manually operated, no automation, by deliberate design. MUNI Metro's light rail is GoA 1. They're excluded from the grid above as a separate category from rapid transit.
+      </p>
+    </section>
+
+  </div><!-- /panel-metro -->
+
+  <!-- METHOD -->
+  <div class="method">
+    <h3>Confidence &amp; sources</h3>
+    <p style="font-size:13.5px;color:var(--ink-dim);margin-top:4px">
+      Tiered honestly. "Verified" = directly stated in named, dated sources. "Modeled" = my characterization
+      of a range or a category-level claim, not a single reported figure.
+    </p>
+
+    <details open>
+      <summary><span class="tier v">Verified</span> Cars: ~500k driverless rides/week, ~2,500 vehicles<span class="chev">›</span></summary>
+      <div class="body">
+        Waymo crossed roughly 500,000 paid, fully driverless rides per week (early 2026 reporting), operating
+        ~2,500 robotaxis across 10+ US metros, with 200M+ autonomous miles logged. These are no-human-aboard
+        trips. Tesla's Austin service still carries a safety monitor and is excluded from the "driverless" count.
+        <div class="srclist">
+          · thedriverlessdigest.com — Waymo 2025/2026 stats<br>
+          · cnbc.com — 450k weekly paid rides (Dec 2025)<br>
+          · carboncredits.com — fleet size, miles
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tier v">Verified</span> Honolulu Skyline is the only US mass-transit GoA 4 line<span class="chev">›</span></summary>
+      <div class="body">
+        Hitachi Rail and multiple outlets confirm Skyline (opened 2023) as the first true mass-transit GoA 4
+        (unattended) system in the US, distinct from airport people-movers. It runs on a sealed, elevated
+        guideway with platform screen doors — a closed environment, which is what makes GoA 4 feasible.
+        <div class="srclist">
+          · hitachi.com / railwayage.com / masstransitmag.com — Skyline opening<br>
+          · railwaynews.net — GoA 4 / technical profile
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tier v">Verified</span> The bottleneck is Section 13(c), not technology<span class="chev">›</span></summary>
+      <div class="body">
+        BART (1972) was designed for driverless operation and DC Metro (1976) had auto-train-operation capability;
+        onboard operators were labor concessions. Automation proceeds where federal transit labor protection
+        (Section 13(c)) doesn't apply — new-starts like Skyline and FAA-funded airport movers. GoA 4 is mature,
+        running on 60+ lines worldwide since SkyTrain in 1985.
+        <div class="srclist">
+          · ifp.org — "Close America's Transit Automation Gap" (13(c) analysis, BART/WMATA design history)
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tier v">Verified</span> GoA definitions &amp; responsibility matrix<span class="chev">›</span></summary>
+      <div class="body">
+        The five Grades of Automation and the four responsibility functions (motion, stopping, doors,
+        disruption) follow international standard IEC 62290-1 as defined by the UITP. GoA 2 = STO
+        (driver aboard, auto drive/stop); GoA 3 = DTO (no driver, attendant aboard); GoA 4 = UTO
+        (no staff aboard). 70+ metro lines in 40+ cities run GoA 4; first driverless experiments date to
+        the 1920s. The matrix's human/system/attendant split is taken directly from these definitions.
+        <div class="srclist">
+          · railjournal.com — UITP/GoA five-grade breakdown, Thameslink GoA 2<br>
+          · questglobal.com — IEC 62290-1 function allocation<br>
+          · en.wikipedia.org / rail-kn.com — STO / DTO / UTO modes, 1920s history
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tier m">Modeled</span> "~0%" and the per-mode ladder positions<span class="chev">›</span></summary>
+      <div class="body">
+        No public dataset reports a clean "% of US trains running driverless" by mode — because for mainline
+        rail the answer is effectively zero, so the bars encode automation <em>grade</em> (GoA), not a fleet
+        share. Light rail / commuter / Amtrak sit at GoA 1 with a required operator. Subways are GoA 2-<em>capable</em>
+        (auto operation on some lines) but keep an operator aboard. Freight is "driver-assist": PTC plus
+        energy-management and braking systems, crew required, with one crewless short-haul pilot (Parallel
+        Systems, cleared by FRA, Georgia). Bar widths are my proportional rendering of these grades, not
+        measured percentages — treat them as a map of "how far each mode goes," not exact values.
+        <div class="srclist">
+          · railwayage.com — freight automation / incremental approach, Wabtec, MxV Rail<br>
+          · mordorintelligence.com — North American lines at GoA 1; freight "consist management"<br>
+          · railroads.dot.gov (FRA) — ATO sensor-platform program
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <footer>
+    <span>Snapshot · 2026 · figures move quickly — re-check before citing</span>
+    <a href="https://postmillenniumrenaissance.com">postmillenniumrenaissance.com</a>
+  </footer>
+
+</div>
+
+<script>
+  // ---------- THEME SWITCHER ----------
+  (function(){
+    var root = document.documentElement;
+    var btns = document.querySelectorAll('.theme-btn');
+    btns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var t = btn.getAttribute('data-theme');
+        root.setAttribute('data-theme', t);
+        btns.forEach(function(b){
+          var on = b===btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-pressed', on ? 'true':'false');
+        });
+        // redraw any canvases that already rendered, so they pick up the new palette
+        if(typeof piesRendered !== 'undefined' && piesRendered){
+          if(typeof ccViewMode !== 'undefined' && ccViewMode==='pies'){
+            if(typeof renderCountryPies === 'function') renderCountryPies();
+          } else {
+            if(typeof renderCountryBars === 'function') renderCountryBars();
+          }
+          if(typeof drawPie === 'function'){
+            drawPie('pieA','legendA',[
+              {label:'Labor (wages & benefits)',pct:59,color:getComputedStyle(root).getPropertyValue('--green').trim(),highlight:true},
+              {label:'Vehicle maintenance',pct:15,color:'#f4b740'},
+              {label:'General administration',pct:10,color:'#5b8dd9'},
+              {label:'Non-vehicle maintenance',pct:8,color:'#9b6dd6'},
+              {label:'Purchased transportation',pct:8,color:'#e8554e'}
+            ]);
+            drawPie('pieB','legendB',[
+              {label:'Manned (GoA 1) — Toronto TTC',pct:55,color:'#e8554e'},
+              {label:'Driverless (GoA 4) — Vancouver SkyTrain',pct:45,color:getComputedStyle(root).getPropertyValue('--green').trim(),highlight:true}
+            ],true);
+          }
+        }
+      });
+    });
+  })();
+
+  // ---------- TAB SWITCHING ----------
+  (function(){
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    var panels = {
+      paradox: document.getElementById('panel-paradox'),
+      goa: document.getElementById('panel-goa'),
+      world: document.getElementById('panel-world'),
+      pie: document.getElementById('panel-pie'),
+      metro: document.getElementById('panel-metro')
+    };
+    function select(name){
+      tabs.forEach(function(t){
+        var on = t.getAttribute('aria-controls') === 'panel-'+name;
+        t.setAttribute('aria-selected', on ? 'true':'false');
+      });
+      Object.keys(panels).forEach(function(k){
+        panels[k].classList.toggle('active', k===name);
+      });
+      if(name==='paradox'){ runFills(); }
+      if(name==='pie'){ renderPies(); }
+      if(name==='metro'){ runMetroBars(); }
+    }
+    tabs.forEach(function(t){
+      t.addEventListener('click', function(){
+        select(t.getAttribute('aria-controls').replace('panel-',''));
+      });
+      // keyboard arrow support
+      t.addEventListener('keydown', function(e){
+        var i = tabs.indexOf(t);
+        if(e.key==='ArrowRight'){ tabs[(i+1)%tabs.length].focus(); }
+        if(e.key==='ArrowLeft'){ tabs[(i-1+tabs.length)%tabs.length].focus(); }
+      });
+    });
+    // inline jump links ("the paradox tab")
+    document.querySelectorAll('.inline-jump').forEach(function(b){
+      b.addEventListener('click', function(){
+        select(b.getAttribute('data-goto'));
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    });
+    window.__selectTab = select;
+  })();
+
+  // ---------- FILL BAR ANIMATION (solid + ghost) ----------
+  var reduce = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ladderEl = document.querySelector('.ladder');
+
+  function runFills(){
+    var fills = document.querySelectorAll('#panel-paradox .fill');
+    fills.forEach(function(f){
+      var w = f.getAttribute('data-w') || '0%';
+      f.style.width = '0%';
+      if(reduce){ f.style.width = w; }
+      else { requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ f.style.width = w; });
+      }); }
+    });
+    setGhosts();
+  }
+  // ghost bars track the capability width whenever "possible" view is on
+  function setGhosts(){
+    var possible = ladderEl.getAttribute('data-view') === 'possible';
+    document.querySelectorAll('#panel-paradox .ghost').forEach(function(g){
+      g.style.width = possible ? (g.getAttribute('data-cap')||'0%') : '0%';
+    });
+  }
+
+  (function(){
+    document.querySelectorAll('.fill').forEach(function(f){ f.style.width='0%'; });
+    if('IntersectionObserver' in window && !reduce){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ runFills(); io.disconnect(); }
+        });
+      }, {threshold:.25});
+      io.observe(ladderEl);
+    } else {
+      setTimeout(runFills, 120);
+    }
+  })();
+
+  // ---------- LADDER: TODAY vs POSSIBLE TOGGLE ----------
+  (function(){
+    var btns = document.querySelectorAll('.lt-btn');
+    var hint = document.getElementById('lt-hint');
+    var foot = document.getElementById('foot-note');
+    var hints = {
+      today: 'Solid bars = what runs today.',
+      possible: 'Striped extension = how far each mode could reach with proven, existing technology. The gap is the story.'
+    };
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        var mode = b.getAttribute('data-mode');
+        btns.forEach(function(x){
+          var on = x===b;
+          x.classList.toggle('active', on);
+          x.setAttribute('aria-pressed', on?'true':'false');
+        });
+        ladderEl.setAttribute('data-view', mode);
+        hint.textContent = hints[mode];
+        if(mode==='possible'){
+          foot.innerHTML = 'Notice how far <b>subway</b> could reach (full GoA 4 — the tech has existed since the 1970s) yet barely moves in practice. That gap is labor law, not engineering.';
+        } else {
+          foot.innerHTML = 'Tip: tap a mode to expand it, or switch the toggle to compare today vs. what\u2019s technically possible.';
+        }
+        setGhosts();
+      });
+    });
+  })();
+
+  // ---------- LADDER: EXPANDABLE ROWS ----------
+  (function(){
+    document.querySelectorAll('.row-head').forEach(function(head){
+      head.addEventListener('click', function(){
+        var id = head.getAttribute('aria-controls');
+        var det = document.getElementById(id);
+        var open = head.getAttribute('aria-expanded')==='true';
+        head.setAttribute('aria-expanded', open?'false':'true');
+        if(det) det.hidden = open;
+      });
+    });
+  })();
+
+  // ---------- CREW DOT TOOLTIPS ----------
+  (function(){
+    var pop = document.createElement('div');
+    pop.className = 'tip-pop';
+    document.body.appendChild(pop);
+    var dots = document.querySelectorAll('.crewdot[data-tip]');
+    function show(d, x, y){
+      pop.textContent = d.getAttribute('data-tip');
+      pop.classList.add('show');
+      var r = pop.getBoundingClientRect();
+      var px = Math.min(Math.max(8, x - r.width/2), window.innerWidth - r.width - 8);
+      var py = y - r.height - 14;
+      if(py < 8) py = y + 18;
+      pop.style.left = px+'px';
+      pop.style.top = py+'px';
+    }
+    function hide(){ pop.classList.remove('show'); }
+    dots.forEach(function(d){
+      d.addEventListener('mouseenter', function(e){
+        var r = d.getBoundingClientRect();
+        show(d, r.left + r.width/2, r.top);
+      });
+      d.addEventListener('mouseleave', hide);
+      // tap on touch devices: stop the row from toggling, show tip briefly
+      d.addEventListener('click', function(e){
+        e.stopPropagation();
+        var r = d.getBoundingClientRect();
+        show(d, r.left + r.width/2, r.top);
+        setTimeout(hide, 3200);
+      });
+    });
+    window.addEventListener('scroll', hide, {passive:true});
+  })();
+
+  // ---------- PIE CHARTS + COUNTRY BAR CHART ----------
+  var piesRendered = false;
+
+  // 12-country dataset: [flag, name, goa4, goa23, goa01, notes]
+  var COUNTRIES = [
+    {flag:'🇸🇦', name:'Saudi Arabia', g4:176, g23:0,   g01:0,    note:'Riyadh Metro — 100% GoA4, Guinness record'},
+    {flag:'🇦🇪', name:'UAE',          g4:101, g23:0,   g01:0,    note:'Dubai Metro+Tram — 100% GoA4'},
+    {flag:'🇶🇦', name:'Qatar',        g4:76,  g23:0,   g01:0,    note:'Doha Metro — 3 lines, 100% GoA4 since 2019'},
+    {flag:'🇸🇬', name:'Singapore',    g4:100, g23:140, g01:0,    note:'NEL/DTL/TEL GoA4; NSL/EWL/CCL GoA2'},
+    {flag:'🇩🇰', name:'Denmark',      g4:43,  g23:0,   g01:170,  note:'Copenhagen Metro GoA4; S-bane GoA2 (→GoA4 by 2033)'},
+    {flag:'🇦🇺', name:'Australia',    g4:52,  g23:0,   g01:23,   note:'Sydney Metro GoA4; other rail GoA1'},
+    {flag:'🇨🇦', name:'Canada',       g4:80,  g23:0,   g01:99,   note:'SkyTrain GoA4; TTC GoA1'},
+    {flag:'🇫🇷', name:'France',       g4:61,  g23:50,  g01:135,  note:'Lines 1,4,14 GoA4; others GoA1-2'},
+    {flag:'🇩🇪', name:'Germany',      g4:19,  g23:30,  g01:150,  note:'Nuremberg GoA4; Berlin/Munich GoA2; rest GoA1'},
+    {flag:'🇯🇵', name:'Japan',        g4:40,  g23:190, g01:192,  note:'Toei Oedo GoA4; Tokyo Metro GoA2; some GoA1'},
+    {flag:'🇬🇧', name:'UK',           g4:37,  g23:40,  g01:350,  note:'DLR GoA4; Jubilee/Elizabeth GoA2-3; rest GoA1'},
+    {flag:'🇪🇸', name:'Spain',        g4:30,  g23:5,   g01:215,  note:'Barcelona L9/L10 partial GoA4; Madrid Line 11 GoA3; rest GoA1'},
+    {flag:'🇺🇸', name:'USA',          g4:5,   g23:60,  g01:1100, note:'Honolulu GoA4; CBTC lines GoA2; rest GoA1'},
+    {flag:'🇲🇽', name:'Mexico',       g4:0,   g23:37,  g01:189,  note:'Lines 1 & 12 CBTC GoA2 (Siemens/Alstom); rest GoA1'},
+    {flag:'🇨🇳', name:'China',        g4:900, g23:500, g01:9576, note:'~900km GoA4 (Shanghai, Beijing, Guangzhou etc.); ~500km GoA2; vast GoA1 remainder'},
+    {flag:'🇨🇭', name:'Switzerland',  g4:0,   g23:13,  g01:118,  note:'Waldenburgerbahn GoA2; all else GoA1'},
+  ];
+
+  var ccSortMode = 'goa4';
+  var ccViewMode = 'bars';
+
+  // ---- STACKED BAR VIEW ----
+  function renderCountryBars(){
+    var wrap = document.getElementById('cc-bars');
+    if(!wrap) return;
+    // sort
+    var data = COUNTRIES.slice().sort(function(a,b){
+      if(ccSortMode==='goa4') return (b.g4/(b.g4+b.g23+b.g01)) - (a.g4/(a.g4+a.g23+a.g01));
+      if(ccSortMode==='total') return (b.g4+b.g23+b.g01) - (a.g4+a.g23+a.g01);
+      return a.name.localeCompare(b.name);
+    });
+    var maxTotal = Math.max.apply(null, data.map(function(d){return d.g4+d.g23+d.g01;}));
+    wrap.innerHTML = '';
+    data.forEach(function(d,i){
+      var total = d.g4+d.g23+d.g01;
+      var p4 = d.g4/total*100, p23 = d.g23/total*100, p01 = d.g01/total*100;
+      var barW = Math.max(10, total/maxTotal*100).toFixed(1);
+      var row = document.createElement('div');
+      row.className = 'cc-row';
+      row.title = d.name+': '+d.note;
+      var delay = i * 35;
+      row.innerHTML =
+        '<div class="cc-row-label">'+d.flag+' '+d.name+'</div>'+
+        '<div style="display:flex;align-items:center;gap:6px;min-width:0">'+
+          '<div class="cc-stack" style="width:'+barW+'%;min-width:24px">'+
+            '<div class="cc-seg s4" data-w="'+p4.toFixed(1)+'%" style="width:0%">'+
+              (d.g4>5?'<span class="cc-seg-lbl">'+d.g4+'</span>':'')+
+            '</div>'+
+            '<div class="cc-seg s23" data-w="'+p23.toFixed(1)+'%" style="width:0%">'+
+              (d.g23>15?'<span class="cc-seg-lbl">'+d.g23+'</span>':'')+
+            '</div>'+
+            '<div class="cc-seg s01" data-w="'+p01.toFixed(1)+'%" style="width:0%">'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="cc-total">'+total+' km</div>';
+      wrap.appendChild(row);
+      // animate after short delay
+      setTimeout(function(){
+        row.querySelectorAll('.cc-seg').forEach(function(seg){
+          seg.style.width = reduce ? seg.getAttribute('data-w') :
+            (requestAnimationFrame(function(){ seg.style.width=seg.getAttribute('data-w'); }),'');
+          if(!reduce) requestAnimationFrame(function(){
+            requestAnimationFrame(function(){ seg.style.width=seg.getAttribute('data-w'); });
+          });
+        });
+      }, reduce ? 0 : delay);
+    });
+  }
+
+  // sort buttons
+  document.querySelectorAll('.cc-sort-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      ccSortMode = btn.getAttribute('data-sort');
+      document.querySelectorAll('.cc-sort-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      if(!piesRendered) return;
+      if(ccViewMode === 'pies') renderCountryPies();
+      else renderCountryBars();
+    });
+  });
+
+  // view toggle buttons (bars / pies)
+  document.querySelectorAll('.cc-view-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      ccViewMode = btn.getAttribute('data-view');
+      document.querySelectorAll('.cc-view-btn').forEach(function(b){
+        b.setAttribute('aria-pressed', b===btn ? 'true':'false');
+      });
+      if(!piesRendered) return;
+      if(ccViewMode==='pies') renderCountryPies();
+      else renderCountryBars();
+    });
+  });
+
+  // ---- PIE GRID VIEW ----
+  function renderCountryPies(){
+    var wrap = document.getElementById('cc-bars');
+    if(!wrap) return;
+    var cs = getComputedStyle(document.documentElement);
+    var deepCol = cs.getPropertyValue('--steel-deep').trim() || '#13151a';
+    var faintCol = cs.getPropertyValue('--ink-faint').trim() || '#6b7280';
+    var greenCol = cs.getPropertyValue('--green').trim() || '#34d17a';
+    // sort by same mode as bars (goa4 % or total or alpha)
+    var data = COUNTRIES.slice().sort(function(a,b){
+      if(ccSortMode==='goa4') return (b.g4/(b.g4+b.g23+b.g01)) - (a.g4/(a.g4+a.g23+a.g01));
+      if(ccSortMode==='total') return (b.g4+b.g23+b.g01) - (a.g4+a.g23+a.g01);
+      return a.name.localeCompare(b.name);
+    });
+    wrap.innerHTML = '<div class="cc-pie-grid" id="cc-pie-grid"></div>';
+    var grid = document.getElementById('cc-pie-grid');
+    data.forEach(function(d, i){
+      var total = d.g4 + d.g23 + d.g01;
+      var card = document.createElement('div');
+      card.className = 'cc-pie-card';
+      var cid = 'cp-'+i;
+      card.innerHTML =
+        '<canvas id="'+cid+'" width="120" height="120"></canvas>'+
+        '<div class="cp-name">'+d.flag+' '+d.name+'</div>'+
+        '<div class="cp-stats">'+
+          '<div class="cp-stat"><span class="cp-sw" style="background:var(--green)"></span>GoA 4<span class="cp-val">'+d.g4+' km</span></div>'+
+          '<div class="cp-stat"><span class="cp-sw" style="background:var(--amber)"></span>GoA 2/3<span class="cp-val">'+d.g23+' km</span></div>'+
+          '<div class="cp-stat"><span class="cp-sw" style="background:#3a4250"></span>GoA 0/1<span class="cp-val">'+d.g01+' km</span></div>'+
+        '</div>';
+      grid.appendChild(card);
+      // draw mini donut
+      setTimeout(function(){
+        var canvas = document.getElementById(cid);
+        if(!canvas || !canvas.getContext) return;
+        var ctx = canvas.getContext('2d');
+        var W=120, H=120, cx=60, cy=60, r=48, ir=32;
+        var slices = [
+          {v:d.g4, c:greenCol, dk:'#1c8f4f'},
+          {v:d.g23,c:'#f4b740', dk:'#c8881a'},
+          {v:d.g01,c:'#3a4250', dk:'#2a3040'}
+        ];
+        var start = -Math.PI/2;
+        var prog=0, frames=reduce?1:40;
+        function frame(){
+          prog = Math.min(prog+1/frames,1);
+          ctx.clearRect(0,0,W,H);
+          var a=start;
+          slices.forEach(function(s){
+            if(s.v===0) return;
+            var sweep=(s.v/total)*Math.PI*2*prog;
+            ctx.beginPath(); ctx.moveTo(cx,cy);
+            ctx.arc(cx,cy,r,a,a+sweep); ctx.closePath();
+            ctx.fillStyle=s.c; ctx.fill();
+            // gap
+            ctx.beginPath(); ctx.moveTo(cx,cy);
+            ctx.arc(cx,cy,r,a+sweep,a+sweep+0.015); ctx.closePath();
+            ctx.fillStyle=deepCol; ctx.fill();
+            a+=sweep;
+          });
+          // hole
+          ctx.beginPath(); ctx.arc(cx,cy,ir,0,Math.PI*2);
+          ctx.fillStyle=deepCol; ctx.fill();
+          // center pct label
+          if(prog===1){
+            var pct4 = total>0 ? Math.round(d.g4/total*100) : 0;
+            ctx.textAlign='center'; ctx.textBaseline='middle';
+            ctx.fillStyle = pct4>0 ? greenCol : faintCol;
+            ctx.font='bold 18px "Saira Condensed",sans-serif';
+            ctx.fillText(pct4+'%',cx,cy-5);
+            ctx.font='10px "IBM Plex Mono",monospace';
+            ctx.fillStyle=faintCol;
+            ctx.fillText('GoA4',cx,cy+10);
+          }
+          if(prog<1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }, reduce ? 0 : i*40);
+    });
+  }
+
+  function renderPies(){
+    if(piesRendered) return;
+    piesRendered = true;
+    drawPie('pieA','legendA',[
+      {label:'Labor (wages & benefits)',pct:59,color:'#34d17a',highlight:true},
+      {label:'Vehicle maintenance',pct:15,color:'#f4b740'},
+      {label:'General administration',pct:10,color:'#5b8dd9'},
+      {label:'Non-vehicle maintenance',pct:8,color:'#9b6dd6'},
+      {label:'Purchased transportation',pct:8,color:'#e8554e'}
+    ]);
+    drawPie('pieB','legendB',[
+      {label:'Manned (GoA 1) — Toronto TTC',pct:55,color:'#e8554e'},
+      {label:'Driverless (GoA 4) — Vancouver SkyTrain',pct:45,color:'#34d17a',highlight:true}
+    ],true);
+    renderCountryBars();
+  }
+
+  function drawPie(canvasId, legendId, slices, useKm){
+    var canvas = document.getElementById(canvasId);
+    if(!canvas || !canvas.getContext) return;
+    var legend = document.getElementById(legendId);
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width, H = canvas.height;
+    var cx = W/2, cy = H/2, r = Math.min(W,H)/2 - 18, ir = r*0.52;
+    var total = slices.reduce(function(a,s){return a+s.pct;},0);
+    var start = -Math.PI/2;
+    var cs = getComputedStyle(document.documentElement);
+    var bgCol = cs.getPropertyValue('--steel-2').trim() || '#1d2025';
+    var inkCol = cs.getPropertyValue('--ink').trim() || '#e8e9ec';
+    var faintCol = cs.getPropertyValue('--ink-faint').trim() || '#9aa0ab';
+    // animate
+    var prog = 0, frames = reduce ? 1 : 48;
+    function frame(){
+      prog = Math.min(prog + 1/frames, 1);
+      ctx.clearRect(0,0,W,H);
+      var a = start;
+      slices.forEach(function(s){
+        var sweep = (s.pct/total)*Math.PI*2*prog;
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r,a,a+sweep);
+        ctx.closePath();
+        ctx.fillStyle = s.color;
+        ctx.fill();
+        a += sweep;
+        // gap
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r,a,a+0.012);
+        ctx.closePath();
+        ctx.fillStyle = bgCol;
+        ctx.fill();
+      });
+      // donut hole
+      ctx.beginPath();
+      ctx.arc(cx,cy,ir,0,Math.PI*2);
+      ctx.fillStyle = bgCol;
+      ctx.fill();
+      // center label
+      if(prog===1){
+        ctx.fillStyle = inkCol;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = 'bold 28px "Saira Condensed", sans-serif';
+        ctx.fillText(useKm?'179 km':'100%',cx,cy-8);
+        ctx.font = '12px "IBM Plex Mono", monospace';
+        ctx.fillStyle = faintCol;
+        ctx.fillText(useKm?'rapid transit':'US transit ops',cx,cy+14);
+      }
+      if(prog<1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    // build legend
+    legend.innerHTML = '';
+    slices.forEach(function(s){
+      var item = document.createElement('div');
+      item.className = 'pie-legend-item' + (s.highlight?' highlight':'');
+      var km = useKm ? Math.round(s.pct/100*179) + ' km' : '';
+      item.innerHTML = '<div class="li-swatch" style="background:'+s.color+'"></div>'+
+        '<span class="li-label">'+s.label+'</span>'+
+        '<span class="li-pct">'+(useKm?km:s.pct+'%')+'</span>';
+      legend.appendChild(item);
+    });
+  }
+
+  // ---------- METRO CARDS: bar animation ----------
+  var metroBarsRun = false;
+  function runMetroBars(){
+    if(metroBarsRun) return;
+    metroBarsRun = true;
+    var fills = document.querySelectorAll('.mc-fill');
+    fills.forEach(function(f){ f.style.width='0%'; });
+    if(reduce){
+      fills.forEach(function(f){ f.style.width=f.getAttribute('data-w'); });
+    } else {
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          fills.forEach(function(f){ f.style.width=f.getAttribute('data-w'); });
+        });
+      });
+    }
+  }
+
+  // ---------- METRO CARDS: expand/collapse ----------
+  (function(){
+    document.querySelectorAll('.mc-head').forEach(function(head){
+      head.addEventListener('click',function(){
+        var id = head.getAttribute('aria-controls');
+        var det = document.getElementById(id);
+        var open = head.getAttribute('aria-expanded')==='true';
+        // close all others
+        document.querySelectorAll('.mc-head').forEach(function(h){
+          if(h!==head){
+            h.setAttribute('aria-expanded','false');
+            var d = document.getElementById(h.getAttribute('aria-controls'));
+            if(d) d.hidden=true;
+          }
+        });
+        head.setAttribute('aria-expanded',open?'false':'true');
+        if(det) det.hidden=open;
+      });
+    });
+  })();
+  // ---------- WORLD TAB: COUNTRY SELECTOR ----------
+  (function(){
+    var btns = document.querySelectorAll('.ct-btn');
+    var table = document.getElementById('cmp-table');
+    if(!table) return;
+    var colHeaders = table.querySelectorAll('[data-col]');
+    function setCountry(c){
+      btns.forEach(function(b){
+        var on = b.getAttribute('data-country')===c;
+        b.classList.toggle('active', on);
+      });
+      table.classList.remove('focus-us','focus-ca','focus-ch');
+      if(c!=='all'){ table.classList.add('focus-'+c); }
+    }
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){ setCountry(b.getAttribute('data-country')); });
+    });
+    colHeaders.forEach(function(h){
+      h.addEventListener('click', function(){
+        var c = h.getAttribute('data-col');
+        var already = table.classList.contains('focus-'+c);
+        setCountry(already ? 'all' : c);
+        btns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-country')===(already?'all':c)); });
+      });
+    });
+  })();
+
+  // ---------- GoA SELECTOR (reference tab) ----------
+  (function(){
+    var btns = document.querySelectorAll('.gs-btn');
+    var matrix = document.querySelector('.matrix');
+    var stack = document.querySelector('.goa-stack');
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        var g = b.getAttribute('data-goa');
+        btns.forEach(function(x){
+          var on = x===b;
+          x.setAttribute('aria-pressed', on?'true':'false');
+        });
+        if(g==='all'){
+          matrix.classList.remove('focus');
+          stack.classList.remove('focus');
+          document.querySelectorAll('[data-col].lit').forEach(function(c){c.classList.remove('lit');});
+          document.querySelectorAll('.goa.lit').forEach(function(c){c.classList.remove('lit');});
+          return;
+        }
+        matrix.classList.add('focus');
+        stack.classList.add('focus');
+        document.querySelectorAll('.matrix [data-col]').forEach(function(c){
+          c.classList.toggle('lit', c.getAttribute('data-col')===g);
+        });
+        document.querySelectorAll('.goa').forEach(function(c){
+          var lit = c.getAttribute('data-goa')===g;
+          c.classList.toggle('lit', lit);
+          if(lit) c.scrollIntoView({behavior:'smooth', block:'nearest'});
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>
