@@ -1,9 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="stmarks">
+<html lang="en" data-theme="amtrak">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Rail Automation Paradox · USA</title>
+<meta name="description" content="Robotaxis run ~500k fully driverless rides a week in the US, yet almost every train still has a human in the cab. If self-driving cars are a good idea, why didn't we start with self-driving trains? An interactive look at the inverted automation gap.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Rail Automation Paradox">
+<meta property="og:description" content="Robotaxis: ~500k driverless rides a week. US trains running with no one in the cab: ~0%. BART could drive itself in 1972. What happened?">
+<meta property="og:url" content="https://www.postmillenniumrenaissance.com/autonomy-paradox.html">
+<meta property="og:site_name" content="Post Millennium Renaissance">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Rail Automation Paradox">
+<meta name="twitter:description" content="Robotaxis: ~500k driverless rides a week. US trains with no one in the cab: ~0%. BART could drive itself in 1972.">
+
 <style>
   /* ============================================================
      DESIGN SYSTEM
@@ -23,8 +33,8 @@
     --steel-2:#1d2025;
     --steel-3:#262a31;
     --steel-glow:#1e2229;
-    --steel-deep:var(--steel-deep);
-    --steel-track:var(--steel-track);
+    --steel-deep:#101216;
+    --steel-track:#1a1d22;
     --line:#34394330;
     --line-solid:#363b44;
     --ink:#e8e9ec;
@@ -50,36 +60,41 @@
   }
 
   /* ============================================================
-     SCHOOL THEMES
-     Swap the accent + surface variables; GoA green/amber/red
-     stay fixed so chart meaning never changes between themes.
+     LIVERY THEMES
+     Named for railroad paint schemes. Swap the accent + surface
+     variables; GoA green/amber/red stay fixed so chart meaning
+     never changes between themes.
+     amtrak  = Amtrak Phase III — charcoal steel, Phase III blue
+     bnsf    = BNSF — deep cascade-green black, heritage orange
+     up      = Union Pacific — harbor mist gray, armour-yellow wash
+     cn      = CN — noodle red on white
      ============================================================ */
-  html[data-theme="stmarks"]{
+  html[data-theme="amtrak"]{
     --accent:#3a7bd5; --accent-dk:#1d4e8f; --accent-glow:#3a7bd555;
     --accent-wash:#3a7bd516; --accent-wash-2:#3a7bd518; --accent-ink:#0c0e11;
   }
-  html[data-theme="stphils"]{
-    --steel:#1a1316; --steel-2:#241a1e; --steel-3:#2e2126; --steel-glow:#241921;
-    --steel-deep:#170f12; --steel-track:#231a1d;
-    --line-solid:#3d2c30; --line:#3d2c3030;
-    --accent:#d4a843; --accent-dk:#8f6f1f; --accent-glow:#d4a84355;
-    --accent-wash:#d4a84318; --accent-wash-2:#d4a8431c; --accent-ink:#1a1316;
+  html[data-theme="bnsf"]{
+    --steel:#131714; --steel-2:#1a201c; --steel-3:#232b26; --steel-glow:#1b221d;
+    --steel-deep:#0e120f; --steel-track:#181f1a;
+    --line-solid:#2e3a32; --line:#2e3a3230;
+    --accent:#f47b20; --accent-dk:#b5520a; --accent-glow:#f47b2055;
+    --accent-wash:#f47b2018; --accent-wash-2:#f47b201c; --accent-ink:#131714;
   }
-  html[data-theme="stbernards"]{
+  html[data-theme="up"]{
     --steel:#eef0f3; --steel-2:#ffffff; --steel-3:#e4e7ec; --steel-glow:#f8f9fb;
     --steel-deep:#e2e6ec; --steel-track:#dde2e9;
     --line-solid:#ccd2db; --line:#ccd2db40;
     --ink:#1b2430; --ink-dim:#4a5568; --ink-faint:#7c8896;
-    --accent:#1d3a6e; --accent-dk:#0f2247; --accent-glow:#1d3a6e44;
-    --accent-wash:#1d3a6e12; --accent-wash-2:#1d3a6e16; --accent-ink:#ffffff;
+    --accent:#8a6b00; --accent-dk:#5c4700; --accent-glow:#c8a30044;
+    --accent-wash:#ffb61222; --accent-wash-2:#ffb61228; --accent-ink:#ffffff;
   }
-  html[data-theme="stthomas"]{
+  html[data-theme="cn"]{
     --steel:#f7f5f4; --steel-2:#ffffff; --steel-3:#ece6e5; --steel-glow:#fdfbfa;
     --steel-deep:#efe7e6; --steel-track:#e7dddc;
     --line-solid:#d8cdcb; --line:#d8cdcb40;
     --ink:#241416; --ink-dim:#5c4448; --ink-faint:#8a7376;
-    --accent:#7a1f2b; --accent-dk:#4f0f17; --accent-glow:#7a1f2b3d;
-    --accent-wash:#7a1f2b10; --accent-wash-2:#7a1f2b14; --accent-ink:#ffffff;
+    --accent:#b30f26; --accent-dk:#7d0a1d; --accent-glow:#b30f263d;
+    --accent-wash:#b30f2610; --accent-wash-2:#b30f2614; --accent-ink:#ffffff;
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
@@ -1080,6 +1095,80 @@
   @media (prefers-reduced-motion: reduce){
     .fill,.mc-fill{transition:none}
   }
+
+  /* ---------- KICKER + LIVE COUNTER + SHARE ---------- */
+  .kicker{
+    margin:14px 0 6px;padding:16px clamp(14px,2.5vw,22px);
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-left:3px solid var(--accent);border-radius:var(--radius);
+    display:flex;align-items:center;justify-content:space-between;
+    gap:14px;flex-wrap:wrap;
+  }
+  .kicker .kick-line{
+    font-family:'Saira Condensed',sans-serif;font-weight:600;
+    font-size:clamp(16px,2.8vw,21px);line-height:1.3;color:var(--ink);
+  }
+  .kicker .kick-line b{color:var(--accent)}
+  .kicker .kick-count{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-dim);
+    margin-top:4px;
+  }
+  .kicker .kick-count .num{
+    color:var(--accent);font-weight:600;font-size:14px;letter-spacing:.03em;
+  }
+  .share-btn{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.05em;
+    padding:9px 16px;border-radius:var(--radius);cursor:pointer;
+    background:var(--accent);color:var(--accent-ink);border:1px solid var(--accent-dk);
+    font-weight:600;white-space:nowrap;flex-shrink:0;
+  }
+  .share-btn:hover{background:var(--accent-dk);color:#fff}
+  .share-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .share-btn.copied{background:var(--green);border-color:var(--green-dk);color:#0c0e11}
+
+  /* ---------- QUIZ: WHICH IS HARDER? ---------- */
+  .quiz{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+  .qz{
+    background:var(--steel-2);border:1px solid var(--line-solid);
+    border-radius:var(--radius);padding:16px clamp(14px,2.5vw,20px);
+  }
+  .qz .qz-num{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px;
+  }
+  .qz .qz-q{
+    font-family:'Saira Condensed',sans-serif;font-weight:600;
+    font-size:clamp(16px,2.6vw,19px);color:var(--ink);margin-bottom:12px;line-height:1.35;
+  }
+  .qz-btns{display:flex;gap:10px;flex-wrap:wrap}
+  .qz-btn{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;
+    padding:9px 18px;border-radius:var(--radius);cursor:pointer;
+    background:var(--steel-3);color:var(--ink);border:1px solid var(--line-solid);
+  }
+  .qz-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .qz-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .qz.answered .qz-btn{cursor:default;opacity:.55}
+  .qz.answered .qz-btn:hover{border-color:var(--line-solid);color:var(--ink)}
+  .qz.answered .qz-btn.picked{opacity:1;border-width:2px}
+  .qz.answered .qz-btn.picked.right{border-color:var(--green);color:var(--green)}
+  .qz.answered .qz-btn.picked.wrong{border-color:var(--red);color:var(--red)}
+  .qz-reveal{margin-top:12px;font-size:13.5px;line-height:1.55;color:var(--ink-dim)}
+  .qz-reveal .verdict-tag{
+    display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    padding:2px 8px;border-radius:3px;margin-bottom:6px;
+  }
+  .qz-reveal .verdict-tag.correct{background:var(--green);color:#0c0e11}
+  .qz-reveal .verdict-tag.incorrect{background:var(--red);color:#fff}
+  .qz-reveal b{color:var(--ink)}
+  .qz-score{
+    background:var(--steel-deep);border:1px solid var(--line-solid);
+    border-radius:var(--radius);padding:14px 18px;
+    font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-dim);
+  }
+  .qz-score .num{color:var(--accent);font-weight:600;font-size:16px}
+  .qz-score .qz-verdict{margin-top:6px;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -1094,21 +1183,21 @@
 
   <div class="theme-row" role="group" aria-label="Color theme">
     <span class="theme-row-label">Theme:</span>
-    <button class="theme-btn active" data-theme="stmarks" aria-pressed="true">
-      <span class="theme-swatch" style="background:linear-gradient(135deg,#163a6e 50%,#d9a93a 50%)"></span>
-      St Mark's
+    <button class="theme-btn active" data-theme="amtrak" aria-pressed="true">
+      <span class="theme-swatch" style="background:linear-gradient(180deg,#16181c 30%,#c62828 30%,#c62828 53%,#f2f2f2 53%,#f2f2f2 70%,#2d6cc8 70%)"></span>
+      Amtrak Phase III
     </button>
-    <button class="theme-btn" data-theme="stphils" aria-pressed="false">
-      <span class="theme-swatch" style="background:linear-gradient(135deg,#5c1620 50%,#d4a843 50%)"></span>
-      St Phil's
+    <button class="theme-btn" data-theme="bnsf" aria-pressed="false">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#131714 50%,#f47b20 50%)"></span>
+      BNSF
     </button>
-    <button class="theme-btn" data-theme="stbernards" aria-pressed="false">
-      <span class="theme-swatch" style="background:linear-gradient(135deg,#e9ecf0 50%,#1d3a6e 50%)"></span>
-      St Bernard's
+    <button class="theme-btn" data-theme="cn" aria-pressed="false">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#ffffff 50%,#b30f26 50%);border:1px solid #d8cdcb"></span>
+      CN
     </button>
-    <button class="theme-btn" data-theme="stthomas" aria-pressed="false">
-      <span class="theme-swatch" style="background:linear-gradient(135deg,#ffffff 50%,#7a1f2b 50%);border:1px solid #d8cdcb"></span>
-      St Thomas
+    <button class="theme-btn" data-theme="up" aria-pressed="false">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#e9ecf0 50%,#ffb612 50%);border:1px solid #ccd2db"></span>
+      Union Pacific
     </button>
   </div>
 
@@ -1157,6 +1246,15 @@
       <div class="big">~0%</div>
       <div class="sub">of light rail, subway, commuter, intercity & freight run with <b>no one in the cab</b>. The lone exception is a closed-guideway system in Honolulu.</div>
     </div>
+  </div>
+
+  <!-- KICKER + LIVE COUNTER + SHARE -->
+  <div class="kicker">
+    <div>
+      <div class="kick-line">BART could drive itself in <b>1972</b>. Waymo's founders weren't born yet.</div>
+      <div class="kick-count">Days since a US train was engineered to run driverless: <span class="num" id="bart-days">—</span></div>
+    </div>
+    <button class="share-btn" id="share-stat" type="button">Share this stat</button>
   </div>
 
   <!-- LADDER -->
@@ -1399,6 +1497,92 @@
         <div class="yr">2025</div>
         <div class="et"><b>Freight's first pilot:</b> regulators clear a crewless battery short-haul test in Georgia. The mainline gap finally cracks.</div>
       </div>
+    </div>
+  </section>
+
+  <!-- QUIZ: WHICH IS HARDER? -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">C</span>
+      <h3>Quiz: which is harder to automate?</h3>
+    </div>
+    <p class="sec-note">
+      Five real-world scenarios. For each one, pick which vehicle has the <b>harder</b> job handling it
+      autonomously. Most people get at least one wrong — and the misses explain the whole paradox.
+    </p>
+
+    <div class="quiz" id="quiz">
+
+      <div class="qz" data-answer="car">
+        <div class="qz-num">Scenario 1 of 5</div>
+        <div class="qz-q">A child chases a ball into the path of the vehicle. Which is harder to automate?</div>
+        <div class="qz-btns">
+          <button class="qz-btn" data-pick="car" type="button">Driverless car</button>
+          <button class="qz-btn" data-pick="train" type="button">Driverless train</button>
+        </div>
+        <div class="qz-reveal" hidden>
+          <span class="verdict-tag"></span><br>
+          <b>The car.</b> It must detect, classify, and predict the child's path in a fraction of a second, then choose between braking and swerving amid other traffic. A metro train on a sealed guideway never faces this — the environment is engineered so nothing can wander in. That's exactly why closed guideways went driverless <b>decades</b> before roads did.
+        </div>
+      </div>
+
+      <div class="qz" data-answer="train">
+        <div class="qz-num">Scenario 2 of 5</div>
+        <div class="qz-q">The vehicle needs to stop for an obstacle it just detected. Which is harder?</div>
+        <div class="qz-btns">
+          <button class="qz-btn" data-pick="car" type="button">Driverless car</button>
+          <button class="qz-btn" data-pick="train" type="button">Driverless train</button>
+        </div>
+        <div class="qz-reveal" hidden>
+          <span class="verdict-tag"></span><br>
+          <b>The train.</b> A loaded freight train can need <b>a mile or more</b> to stop — its cameras and sensors would have to reliably see hazards farther ahead than any current perception system manages, in rain, at night, around curves. A car stops in a couple hundred feet. Physics, not software, is the constraint here.
+        </div>
+      </div>
+
+      <div class="qz" data-answer="car">
+        <div class="qz-num">Scenario 3 of 5</div>
+        <div class="qz-q">Navigating the route itself — deciding where to go and how to get there. Which is harder?</div>
+        <div class="qz-btns">
+          <button class="qz-btn" data-pick="car" type="button">Driverless car</button>
+          <button class="qz-btn" data-pick="train" type="button">Driverless train</button>
+        </div>
+        <div class="qz-reveal" hidden>
+          <span class="verdict-tag"></span><br>
+          <b>The car.</b> Unprotected left turns, construction zones, hand signals from a traffic cop, double-parked delivery vans. A train's "navigation" is solved by the track and the signaling system — this is the part of the intuition that's completely correct. Trains genuinely are the easy case <b>on this axis</b>.
+        </div>
+      </div>
+
+      <div class="qz" data-answer="train">
+        <div class="qz-num">Scenario 4 of 5</div>
+        <div class="qz-q">A rural grade crossing at dusk: a stalled pickup is on the tracks / in the road ahead. Which is harder?</div>
+        <div class="qz-btns">
+          <button class="qz-btn" data-pick="car" type="button">Driverless car</button>
+          <button class="qz-btn" data-pick="train" type="button">Driverless train</button>
+        </div>
+        <div class="qz-reveal" hidden>
+          <span class="verdict-tag"></span><br>
+          <b>The train.</b> The car simply stops — it has the distance. The train, by the time its sensors could confirm the truck, may already be past its braking point. The US has <b>~200,000</b> grade crossings on an open network. This is why the freight mainline is the last frontier, while Honolulu's sealed elevated line — zero crossings — went fully driverless in 2023.
+        </div>
+      </div>
+
+      <div class="qz" data-answer="train">
+        <div class="qz-num">Scenario 5 of 5</div>
+        <div class="qz-q">Getting legal permission to remove the human. Which is harder?</div>
+        <div class="qz-btns">
+          <button class="qz-btn" data-pick="car" type="button">Driverless car</button>
+          <button class="qz-btn" data-pick="train" type="button">Driverless train</button>
+        </div>
+        <div class="qz-reveal" hidden>
+          <span class="verdict-tag"></span><br>
+          <b>The train — by far.</b> Robotaxis needed state permits and no more. Removing a transit rail operator collides with <b>Section 13(c)</b>, a 1964 federal labor protection attached to transit funding. The technology cleared its bar in the 1970s; the law never moved. This one isn't an engineering question at all.
+        </div>
+      </div>
+
+      <div class="qz-score" id="qz-score" hidden>
+        Score: <span class="num" id="qz-score-num">0/5</span>
+        <div class="qz-verdict" id="qz-score-text"></div>
+      </div>
+
     </div>
   </section>
 
@@ -2801,6 +2985,118 @@
         });
       });
     });
+  })();
+
+  // ---------- LIVE COUNTER: DAYS SINCE BART ----------
+  (function(){
+    var el = document.getElementById('bart-days');
+    if(!el) return;
+    // BART opened for revenue service Sept 11, 1972, engineered for driverless operation
+    var bart = new Date(1972, 8, 11);
+    var days = Math.floor((Date.now() - bart.getTime()) / 86400000);
+    el.textContent = days.toLocaleString('en-US');
+  })();
+
+  // ---------- SHARE STAT ----------
+  (function(){
+    var btn = document.getElementById('share-stat');
+    if(!btn) return;
+    var shareText = 'Driverless cars in the US: ~500,000 paid rides a week with nobody in the seat. ' +
+      'US trains running with no one in the cab: ~0%. BART was engineered to drive itself in 1972. ' +
+      'The Rail Automation Paradox:';
+    var shareUrl = 'https://www.postmillenniumrenaissance.com/autonomy-paradox.html';
+    btn.addEventListener('click', function(){
+      if(navigator.share){
+        navigator.share({ title:'The Rail Automation Paradox', text:shareText, url:shareUrl })
+          .catch(function(){ /* user cancelled — fine */ });
+      } else if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(shareText + ' ' + shareUrl).then(function(){
+          var old = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1800);
+        });
+      }
+    });
+  })();
+
+  // ---------- QUIZ: WHICH IS HARDER? ----------
+  (function(){
+    var quiz = document.getElementById('quiz');
+    if(!quiz) return;
+    var cards = Array.prototype.slice.call(quiz.querySelectorAll('.qz'));
+    var scoreBox = document.getElementById('qz-score');
+    var scoreNum = document.getElementById('qz-score-num');
+    var scoreText = document.getElementById('qz-score-text');
+    var answered = 0, correct = 0;
+
+    cards.forEach(function(card){
+      var answer = card.getAttribute('data-answer');
+      card.querySelectorAll('.qz-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          if(card.classList.contains('answered')) return;
+          card.classList.add('answered');
+          var pick = btn.getAttribute('data-pick');
+          var right = pick === answer;
+          btn.classList.add('picked', right ? 'right' : 'wrong');
+          var reveal = card.querySelector('.qz-reveal');
+          var tag = reveal.querySelector('.verdict-tag');
+          tag.textContent = right ? 'Correct' : 'Not quite';
+          tag.classList.add(right ? 'correct' : 'incorrect');
+          reveal.hidden = false;
+          answered++;
+          if(right) correct++;
+          if(answered === cards.length){
+            scoreNum.textContent = correct + '/' + cards.length;
+            var msg;
+            if(correct === 5){
+              msg = 'Perfect — and notice what your answers add up to: cars are harder in traffic, trains are harder on an open corridor, and the biggest obstacle of all is a 1964 labor law. The "paradox" is really three different problems wearing one hat.';
+            } else if(correct >= 3){
+              msg = 'Solid. The misses are the interesting part: the intuition "trains are easy" is true on a sealed metro guideway and false on the open freight network — and the legal question is harder than either.';
+            } else {
+              msg = 'The common intuition — trains are the easy case — turns out to be true only on closed guideways. On the open national network, stopping distance and 200,000 grade crossings flip the difficulty, and Section 13(c) outranks both.';
+            }
+            scoreText.textContent = msg;
+            scoreBox.hidden = false;
+            scoreBox.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'nearest'});
+          }
+        });
+      });
+    });
+  })();
+
+  // ---------- LADDER TOGGLE: ONE-TIME AUTO DEMO ----------
+  // Flip to "possible" once and back, so nobody misses the capability gap.
+  // Skips if the user prefers reduced motion or has already touched the toggle.
+  (function(){
+    if(reduce) return;
+    var btnPossible = document.querySelector('.lt-btn[data-mode="possible"]');
+    var btnToday = document.querySelector('.lt-btn[data-mode="today"]');
+    if(!btnPossible || !btnToday || !ladderEl) return;
+    var userTouched = false;
+    document.querySelectorAll('.lt-btn').forEach(function(b){
+      b.addEventListener('pointerdown', function(){ userTouched = true; }, {once:true});
+    });
+    if('IntersectionObserver' in window){
+      var demoDone = false;
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting && !demoDone){
+            demoDone = true;
+            io.disconnect();
+            setTimeout(function(){
+              if(userTouched) return;
+              btnPossible.click();
+              setTimeout(function(){
+                if(userTouched) return;
+                btnToday.click();
+              }, 2600);
+            }, 1600);
+          }
+        });
+      }, {threshold:.4});
+      io.observe(ladderEl);
+    }
   })();
 </script>
 </body>
