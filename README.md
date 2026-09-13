@@ -4,7 +4,7 @@
 **Author:** Jon (redfoxrun / PostMillennium Renaissance MTB)
 **Published at:** [postmillenniumrenaissance.com](https://postmillenniumrenaissance.com)
 **File:** `autonomy-paradox.html` — single self-contained HTML file, no build step, no dependencies beyond Google Fonts CDN
-**Lines:** ~2,807
+**Lines:** ~3,070
 
 ---
 
@@ -83,14 +83,14 @@ Six expandable system cards showing automation grade and percentage across major
 
 ## Theme Switcher
 
-Four named color themes, selectable via pill buttons at the top of every page. GoA chart colors (green/amber/red for GoA4/GoA2/GoA1) never change between themes — they carry semantic meaning that must remain consistent. Only UI chrome (tabs, headlines, active buttons, focus rings, borders) shifts with the theme.
+Four named color themes ("liveries," after railroad paint schemes), selectable via pill buttons at the top of every page. GoA chart colors (green/amber/red for GoA4/GoA2/GoA1) never change between themes — they carry semantic meaning that must remain consistent. Only UI chrome (tabs, headlines, active buttons, focus rings, borders) shifts with the theme.
 
 | Theme | Background | Accent | Notes |
 |-------|-----------|--------|-------|
-| **St Mark's** | Dark steel (default) | Blue `#3a7bd5` | Keeps the "dispatch board" dark aesthetic |
-| **St Phil's** | Maroon-tinted dark | Gold `#d4a843` | Warmest and most visually distinct |
-| **St Bernard's** | White / light grey | Navy `#1d3a6e` | Full light theme; print-friendly |
-| **St Thomas** | Warm off-white | Maroon `#7a1f2b` | Similar to St Bernard's, warmer tone |
+| **Amtrak Phase III** | Dark charcoal steel (default) | Phase III blue `#3a7bd5` | Keeps the "dispatch board" dark aesthetic |
+| **BNSF** | Deep cascade-green-tinted black | Heritage orange `#f47b20` | Warmest and most visually distinct dark theme |
+| **CN** | White / light grey | CN noodle red `#b30f26` | Full light theme; print-friendly |
+| **Union Pacific** | Harbor-mist grey | Armour yellow / gold `#8a6b00` | Full light theme, warmer accent than CN |
 
 Canvas charts (donuts, pie grid) redraw automatically on theme switch so donut holes and center labels match the active panel background color rather than showing as dark holes in a light theme.
 
@@ -178,14 +178,35 @@ Color system built on CSS custom properties (`--steel`, `--steel-2`, `--accent`,
 The three donut pies and the 16-country pie grid draw to `<canvas>` elements using the 2D Canvas API (no charting library). At draw-time, each function reads live CSS custom properties via `getComputedStyle(document.documentElement)` so donut holes, gaps, and center labels always match the active theme's panel background color.
 
 ### Data model
-The 16-country dataset lives in a plain JavaScript array (`COUNTRIES`) near the top of the script block, making it easy to update without touching the rendering logic:
+All content data lives in one block at the top of the script, ending with an
+`// END OF DATA` marker — everything below that line is rendering logic, not
+content. Five arrays/objects live there:
 
-```js
-{flag:'🇨🇦', name:'Canada', g4:80, g23:0, g01:99,
- note:'SkyTrain GoA4; TTC GoA1'}
-```
-
-Each entry has `g4` (GoA4 km), `g23` (GoA2/3 km), `g01` (GoA0/1 km), and a `note` string that surfaces as a tooltip on hover.
+- **`PIE_DATASETS`** — the two donut charts on the "By the numbers" tab. A
+  `color` value starting with `--` (e.g. `'--green'`) is a CSS custom
+  property name, resolved live off the active theme at draw time
+  (`resolveColor()`), so the donuts and the theme switcher can never show
+  numbers that disagree — there's only one copy of each chart's data.
+- **`COUNTRIES`** — the 16-country urban-metro dataset:
+  ```js
+  {flag:'🇨🇦', name:'Canada', g4:80, g23:0, g01:99,
+   note:'SkyTrain GoA4; TTC GoA1'}
+  ```
+  `g4`/`g23`/`g01` are km of urban metro at each GoA band; `note` surfaces as
+  a hover tooltip. Add a country by appending one entry.
+- **`WORLD_COUNTRIES`** + **`WORLD_COMPARISON`** — the USA/Canada/Switzerland
+  scorecard on the World Comparison tab. `WORLD_COUNTRIES` is the three
+  countries (code, flag, label); `WORLD_COMPARISON` is one entry per
+  transport mode with a `cells` object keyed by country code. A cell is
+  either `{grade, cls, why, whyCls}` or, for a mode that splits by
+  city/system (Canada's subway), `{grade, cls, split:[{tag, tagCls, text}]}`.
+  `renderWorldComparison()` builds the whole table from these two arrays —
+  adding a fourth country means adding one entry to `WORLD_COUNTRIES` and one
+  cell per mode in `WORLD_COMPARISON`, not re-typing table markup.
+- **`METRO_SYSTEMS`** — the six US Metro Spotlight cards, each with `bars`
+  (progress-bar rows), `paragraphs`, and `facts`. `renderMetroCards()` builds
+  the whole accordion from this array. Adding a seventh system (LA Metro,
+  MARTA, etc.) is one new array entry.
 
 ---
 
@@ -226,7 +247,8 @@ Each entry has `g4` (GoA4 km), `g23` (GoA2/3 km), `g01` (GoA0/1 km), and a `note
 | v1.5 | Added 16-country GoA chart (stacked bars + pie grid, 3 sort modes, bar/pie toggle) |
 | v1.6 | Expanded to 16 countries: added Qatar, Spain, Mexico, China |
 | v1.7 | Fixed sort-in-pie-mode bug (sort buttons now work in both bar and pie views) |
-| v1.8 | Added 4-theme color switcher (St Mark's, St Phil's, St Bernard's, St Thomas) with full CSS variable architecture and live canvas redraws |
+| v1.8 | Added 4-theme color switcher (Amtrak Phase III, BNSF, CN, Union Pacific liveries) with full CSS variable architecture and live canvas redraws |
+| v1.9 | Data cleanup pass: World Comparison table and Metro Spotlight cards converted from hand-typed markup to data-driven registries (`WORLD_COMPARISON`, `METRO_SYSTEMS`); donut chart data de-duplicated into `PIE_DATASETS` (was defined twice — once for first paint, once for theme-switch redraw — with real risk of the two drifting apart); removed a dead no-op branch in the country bar-chart animation; added missing `og:image`/`twitter:image` tags; synced this README's theme table and line count to the shipped file |
 
 ---
 

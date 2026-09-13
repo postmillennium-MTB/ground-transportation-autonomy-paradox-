@@ -13,9 +13,13 @@
 <meta property="og:description" content="Robotaxis: ~500k driverless rides a week. US trains running with no one in the cab: ~0%. BART could drive itself in 1972. What happened?">
 <meta property="og:url" content="https://www.postmillenniumrenaissance.com/autonomy-paradox.html">
 <meta property="og:site_name" content="Post Millennium Renaissance">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://postmillenniumrenaissance.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Rail Automation Paradox">
 <meta name="twitter:description" content="Robotaxis: ~500k driverless rides a week. US trains with no one in the cab: ~0%. BART could drive itself in 1972.">
+<meta name="twitter:image" content="https://postmillenniumrenaissance.com/og-image.jpg">
 
 <style>
   /* ============================================================
@@ -1786,140 +1790,9 @@
       </div>
 
       <!-- COMPARISON SCORECARD -->
-      <div class="cmp-table" id="cmp-table">
-
-        <!-- HEADER -->
-        <div class="cmp-head">
-          <div class="cmp-fn">Mode</div>
-          <div class="cmp-country" data-col="us">🇺🇸 USA</div>
-          <div class="cmp-country" data-col="ca">🇨🇦 Canada</div>
-          <div class="cmp-country" data-col="ch">🇨🇭 Switzerland</div>
-        </div>
-
-        <!-- AUTOMATED GUIDEWAY / CLOSED METRO -->
-        <div class="cmp-row" data-mode="guideway">
-          <div class="cmp-fn">
-            <div class="cmp-mode">Automated metro / guideway</div>
-            <div class="cmp-meta">Closed, grade-separated systems</div>
-          </div>
-          <div class="cmp-cell goa4" data-col="us" data-country-label="🇺🇸 USA">
-            <div class="cmp-grade">GoA 4</div>
-            <div class="cmp-why ok">✓ Honolulu Skyline (2023); airport people-movers for decades</div>
-          </div>
-          <div class="cmp-cell goa4 leader" data-col="ca" data-country-label="🇨🇦 Canada">
-            <div class="cmp-grade">GoA 4 <span class="star">★</span></div>
-            <div class="cmp-why ok">Vancouver SkyTrain driverless since <b>1985</b> — world's longest fully automated rapid transit system</div>
-          </div>
-          <div class="cmp-cell goa0" data-col="ch" data-country-label="🇨🇭 Switzerland">
-            <div class="cmp-grade">—</div>
-            <div class="cmp-why neutral">No closed automated metro system exists in Switzerland. Cities are served by tram and light rail</div>
-          </div>
-        </div>
-
-        <!-- LIGHT RAIL / TRAM -->
-        <div class="cmp-row" data-mode="lrt">
-          <div class="cmp-fn">
-            <div class="cmp-mode">Light rail / tram</div>
-            <div class="cmp-meta">Urban surface rail</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="us" data-country-label="🇺🇸 USA">
-            <div class="cmp-grade">GoA 0–1</div>
-            <div class="cmp-why warn">Mixed traffic = on-sight driving. Technology limit, not just policy</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="ca" data-country-label="🇨🇦 Canada">
-            <div class="cmp-grade">GoA 0–1</div>
-            <div class="cmp-why warn">Street-running systems (Toronto streetcar, etc.) require on-sight operators. Same physics limit as USA</div>
-          </div>
-          <div class="cmp-cell goa2 leader" data-col="ch" data-country-label="🇨🇭 Switzerland">
-            <div class="cmp-grade">GoA 2 <span class="star">★</span></div>
-            <div class="cmp-why ok">Waldenburgerbahn (Basel area) reached GoA 2 Jan 2026 — first in Switzerland. BLT now expanding CBTC to tram network. GoA 4 targeted by 2030</div>
-          </div>
-        </div>
-
-        <!-- SUBWAY / HEAVY METRO -->
-        <div class="cmp-row" data-mode="subway">
-          <div class="cmp-fn">
-            <div class="cmp-mode">Urban subway / heavy metro</div>
-            <div class="cmp-meta">Existing underground lines</div>
-          </div>
-          <div class="cmp-cell goa2" data-col="us" data-country-label="🇺🇸 USA">
-            <div class="cmp-grade">GoA 1–2*</div>
-            <div class="cmp-why stop">GoA 2 capable; operator retained by Section 13(c) labor law. BART built driverless-ready in 1972</div>
-          </div>
-          <div class="cmp-cell goa2 split" data-col="ca" data-country-label="🇨🇦 Canada">
-            <div class="cmp-grade">GoA 1 / GoA 4</div>
-            <div class="cmp-why split-tag">
-              <span class="d-tag stop" style="font-size:10px">TTC (Toronto)</span> GoA 1 — union opposed automation since 1985<br>
-              <span class="d-tag ok" style="font-size:10px">SkyTrain (Vancouver)</span> GoA 4 since 1985 — no legacy operator agreement
-            </div>
-          </div>
-          <div class="cmp-cell goa0" data-col="ch" data-country-label="🇨🇭 Switzerland">
-            <div class="cmp-grade">—</div>
-            <div class="cmp-why neutral">No heavy metro. Swiss cities use tram + regional rail as primary urban transit</div>
-          </div>
-        </div>
-
-        <!-- COMMUTER / REGIONAL RAIL -->
-        <div class="cmp-row" data-mode="commuter">
-          <div class="cmp-fn">
-            <div class="cmp-mode">Commuter / regional rail</div>
-            <div class="cmp-meta">Metra, LIRR · GO Transit · SBB S-Bahn</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="us" data-country-label="🇺🇸 USA">
-            <div class="cmp-grade">GoA 1 + PTC</div>
-            <div class="cmp-why stop">Driver + Positive Train Control safety layer. Section 13(c) limits change</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="ca" data-country-label="🇨🇦 Canada">
-            <div class="cmp-grade">GoA 1</div>
-            <div class="cmp-why warn">GO Transit runs human-driven. ETCS being introduced on Kitchener Line (Metrolinx), foundation for future GoA 2</div>
-          </div>
-          <div class="cmp-cell goa1 leader" data-col="ch">
-            <div class="cmp-grade">GoA 1 + ETCS <span class="star">★</span></div>
-            <div class="cmp-why ok">SBB S-Bahn runs on full ETCS Level 2 (complete by 2025). Foundation for GoA 2 ATO under smartrail 4.0 (rollout 2027–2038)</div>
-          </div>
-        </div>
-
-        <!-- INTERCITY / LONG DISTANCE -->
-        <div class="cmp-row" data-mode="intercity">
-          <div class="cmp-fn">
-            <div class="cmp-mode">Intercity / long-distance rail</div>
-            <div class="cmp-meta">Amtrak · VIA Rail · SBB IC</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="us" data-country-label="🇺🇸 USA">
-            <div class="cmp-grade">GoA 1 + PTC</div>
-            <div class="cmp-why stop">Human engineer, open mixed-use network. No automation roadmap on mainline</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="ca" data-country-label="🇨🇦 Canada">
-            <div class="cmp-grade">GoA 1</div>
-            <div class="cmp-why warn">VIA Rail runs on CN/CP freight corridors — human crew, signalling similar to US. High-Frequency Rail corridor proposal in planning</div>
-          </div>
-          <div class="cmp-cell goa1 leader" data-col="ch">
-            <div class="cmp-grade">GoA 1 + ETCS <span class="star">★</span></div>
-            <div class="cmp-why ok">SBB IC on ETCS Level 2. GoA 2 ATO over ETCS tested (Lausanne–Villeneuve 2018). Targeted for GoA 2 deployment under smartrail 4.0</div>
-          </div>
-        </div>
-
-        <!-- FREIGHT -->
-        <div class="cmp-row" data-mode="freight">
-          <div class="cmp-fn">
-            <div class="cmp-mode">Freight rail</div>
-            <div class="cmp-meta">Class I / CN, CP / SBB Cargo</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="us" data-country-label="🇺🇸 USA">
-            <div class="cmp-grade">GoA 1 + assist</div>
-            <div class="cmp-why warn">Driver-assist + PTC. First crewless pilot (Parallel Systems, Georgia) underway</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="ca" data-country-label="🇨🇦 Canada">
-            <div class="cmp-grade">GoA 1</div>
-            <div class="cmp-why warn">CN and CPKC run human crews network-wide. Remote-control yard shunting is in use. No mainline crewless pilot</div>
-          </div>
-          <div class="cmp-cell goa1" data-col="ch" data-country-label="🇨🇭 Switzerland">
-            <div class="cmp-grade">GoA 1</div>
-            <div class="cmp-why warn">SBB Cargo runs human crews. Remote-controlled shunter trials conducted 2023–24 at Zürich-Mülligen yard</div>
-          </div>
-        </div>
-
-      </div><!-- /cmp-table -->
+      <!-- Header + rows are rendered by renderWorldComparison() from the
+           WORLD_COUNTRIES / WORLD_COMPARISON data at the top of the script. -->
+      <div class="cmp-table" id="cmp-table"></div>
 
       <div class="cmp-legend">
         <span><i class="cl g4"></i>GoA 4 deployed</span>
@@ -2164,174 +2037,9 @@
         Click any system card for the full story.
       </p>
 
-      <div class="metro-grid" id="metro-grid">
-
-        <!-- NYC -->
-        <div class="mc" data-sys="nyc">
-          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-nyc">
-            <div class="mc-left">
-              <div class="mc-name">New York City Subway</div>
-              <div class="mc-sub">MTA · 472 stations · 245 route miles</div>
-            </div>
-            <div class="mc-right">
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">CBTC (GoA 2)</div>
-                <div class="mc-track"><div class="mc-fill amber" data-w="15%"></div></div>
-                <div class="mc-pct">~15%</div>
-              </div>
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">Fixed-block (GoA 1)</div>
-                <div class="mc-track"><div class="mc-fill red" data-w="85%"></div></div>
-                <div class="mc-pct">~85%</div>
-              </div>
-            </div>
-            <span class="mc-chev">›</span>
-          </button>
-          <div class="mc-detail" id="mc-det-nyc" hidden>
-            <p><b>Opened 1904. Signaling technology from the same era still runs 85% of the system.</b> The L train (Canarsie Line) was the first to get CBTC in 2000–2006 — a self-contained line made it the pilot. The 7 (Flushing) followed in 2018, and Queens Boulevard lines (E/F/M/R) after that. Those three corridors, covering roughly 15% of route miles, now operate GoA 2. The other 85% runs on block signals with mechanical relays — technology that predates the automobile.</p>
-            <p>The MTA's 2025–29 capital plan funds CBTC on 8 more lines and 75+ miles. At the current pace, full-system CBTC is a 2040s project. Signal failures cause <b>more than half of all subway delays</b>.</p>
-            <div class="mc-fact"><span class="mf-k">Opened</span> 1904</div>
-            <div class="mc-fact"><span class="mf-k">First CBTC line</span> L train, 2006</div>
-            <div class="mc-fact"><span class="mf-k">Bottleneck</span> Section 13(c) + cost + complexity of 24/7 system with 36 lines</div>
-          </div>
-        </div>
-
-        <!-- DC METRO -->
-        <div class="mc" data-sys="dc">
-          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-dc">
-            <div class="mc-left">
-              <div class="mc-name">DC Metro (WMATA)</div>
-              <div class="mc-sub">WMATA · 98 stations · 6 lines</div>
-            </div>
-            <div class="mc-right">
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">ATO / GoA 2</div>
-                <div class="mc-track"><div class="mc-fill green" data-w="100%"></div></div>
-                <div class="mc-pct">100%</div>
-              </div>
-            </div>
-            <span class="mc-chev">›</span>
-          </button>
-          <div class="mc-detail" id="mc-det-dc" hidden>
-            <p><b>The most dramatic recent reversal in US rail automation.</b> Metro was designed and built in the 1970s for automatic train operation — it's a GoA 2 system at its core. After a fatal 2009 crash (attributed to a sensor failure, not ATO itself), Metro switched to full manual GoA 1 operation for 15 years. In December 2024 ATO returned to the Red Line. By June 2025 it was restored system-wide — <b>100% of lines back to GoA 2</b> for the first time since 2009.</p>
-            <p>Train operators remain in the cab (GoA 2, not GoA 4). ATO controls speed and braking; the operator closes doors and monitors conditions. End-to-end Red Line travel time dropped by 8 minutes after ATO return.</p>
-            <div class="mc-fact"><span class="mf-k">Opened</span> 1976 — designed for ATO from day one</div>
-            <div class="mc-fact"><span class="mf-k">Manual period</span> 2009–2024 (15 years) after fatal crash</div>
-            <div class="mc-fact"><span class="mf-k">ATO restored</span> Dec 2024 (Red), May 2025 (Green/Yellow), Jun 2025 (Blue/Orange/Silver)</div>
-          </div>
-        </div>
-
-        <!-- CHICAGO L -->
-        <div class="mc" data-sys="chi">
-          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-chi">
-            <div class="mc-left">
-              <div class="mc-name">Chicago 'L'</div>
-              <div class="mc-sub">CTA · 146 stations · 8 lines · 224 track miles</div>
-            </div>
-            <div class="mc-right">
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">GoA 1 (manual)</div>
-                <div class="mc-track"><div class="mc-fill red" data-w="100%"></div></div>
-                <div class="mc-pct">100%</div>
-              </div>
-            </div>
-            <span class="mc-chev">›</span>
-          </button>
-          <div class="mc-detail" id="mc-det-chi" hidden>
-            <p><b>The largest US rapid transit system with zero CBTC deployment — and 24-hour service on two lines.</b> The L operates 8 lines on fixed-block signals throughout. No CBTC program is currently funded or contracted. The Red and Blue Lines run 24 hours, one of only four cities worldwide offering that (alongside New York, London, and Copenhagen).</p>
-            <p>The $2.1 billion Red/Purple Line modernization completed July 2025 rebuilt stations and track structures — but upgraded the physical infrastructure, not the signaling automation. The L's signal systems date from the mid-20th century.</p>
-            <div class="mc-fact"><span class="mf-k">Opened</span> 1892 — oldest elevated rapid transit in the US</div>
-            <div class="mc-fact"><span class="mf-k">CBTC status</span> None deployed, none contracted</div>
-            <div class="mc-fact"><span class="mf-k">Notable</span> 24-hr service on Red &amp; Blue lines; ~385,500 weekday riders (2025)</div>
-          </div>
-        </div>
-
-        <!-- BART -->
-        <div class="mc" data-sys="bart">
-          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-bart">
-            <div class="mc-left">
-              <div class="mc-name">BART (San Francisco Bay Area)</div>
-              <div class="mc-sub">BART · 50 stations · 131 route miles</div>
-            </div>
-            <div class="mc-right">
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">CBTC rollout (GoA 2) — in progress</div>
-                <div class="mc-track"><div class="mc-fill amber" data-w="5%"></div></div>
-                <div class="mc-pct">~5% live</div>
-              </div>
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">Legacy fixed-block (GoA 1)</div>
-                <div class="mc-track"><div class="mc-fill red" data-w="95%"></div></div>
-                <div class="mc-pct">~95%</div>
-              </div>
-            </div>
-            <span class="mc-chev">›</span>
-          </button>
-          <div class="mc-detail" id="mc-det-bart" hidden>
-            <p><b>The system built for driverless in 1972 is still not driverless in 2026.</b> BART opened with ATO capability and was designed from the ground up for automation — operators were a labor concession. The original signaling now runs past its design life. In 2020 BART awarded a <b>$798M CBTC contract to Hitachi Rail</b>, the largest signaling upgrade in North American history. The first section (Millbrae corridor) entered test-and-build mode in late 2024; mainline phases target 28 trains/hour by 2030 and 30/hour by 2032.</p>
-            <p>Today BART runs GoA 1 on virtually all mainline track. The Oakland Airport Connector — a 3-mile people-mover — operates GoA 4 driverless separately.</p>
-            <div class="mc-fact"><span class="mf-k">Opened</span> 1972 — built ATO-capable from day one</div>
-            <div class="mc-fact"><span class="mf-k">CBTC contract</span> $798M, Hitachi Rail, awarded 2020</div>
-            <div class="mc-fact"><span class="mf-k">GoA 2 target</span> Transbay Tube at 28 trains/hr by 2030</div>
-          </div>
-        </div>
-
-        <!-- BOSTON MBTA -->
-        <div class="mc" data-sys="bos">
-          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-bos">
-            <div class="mc-left">
-              <div class="mc-name">Boston MBTA ('The T')</div>
-              <div class="mc-sub">MBTA · 109 stations · Red, Orange, Blue, Green lines</div>
-            </div>
-            <div class="mc-right">
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">Commuter rail: PTC / GoA 1</div>
-                <div class="mc-track"><div class="mc-fill amber" data-w="100%"></div></div>
-                <div class="mc-pct">PTC 100%</div>
-              </div>
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">Subway: Fixed-block GoA 1</div>
-                <div class="mc-track"><div class="mc-fill red" data-w="100%"></div></div>
-                <div class="mc-pct">GoA 1</div>
-              </div>
-            </div>
-            <span class="mc-chev">›</span>
-          </button>
-          <div class="mc-detail" id="mc-det-bos" hidden>
-            <p><b>PTC complete across all 12 commuter rail lines as of January 2025 — a federal mandate milestone.</b> But PTC is GoA 1: it can stop a train that misses a signal, but the engineer still drives. The subway (Red, Orange, Blue, Green lines) runs on fixed-block signaling at GoA 1 throughout. No CBTC deployment or contract exists.</p>
-            <p>The MBTA is in the middle of a $9.6B five-year capital plan focused on station renovation, fleet replacement, and accessibility — not automation upgrades. It is the fourth-busiest rapid transit system in the US with ~326,500 daily rapid transit riders (2025).</p>
-            <div class="mc-fact"><span class="mf-k">PTC complete</span> January 2025 — all 12 commuter rail lines</div>
-            <div class="mc-fact"><span class="mf-k">Subway automation</span> GoA 1 throughout, no CBTC program</div>
-            <div class="mc-fact"><span class="mf-k">Notable</span> 4th-busiest US rapid transit; ~851,600 total daily system riders</div>
-          </div>
-        </div>
-
-        <!-- PATCO -->
-        <div class="mc pioneer" data-sys="patco">
-          <button class="mc-head" aria-expanded="false" aria-controls="mc-det-patco">
-            <div class="mc-left">
-              <div class="mc-name">PATCO Speedline <span class="pioneer-badge">Pioneer ★</span></div>
-              <div class="mc-sub">Philadelphia–Lindenwold · 14 stations · 14.2 miles</div>
-            </div>
-            <div class="mc-right">
-              <div class="mc-bar-wrap">
-                <div class="mc-bar-label">ATO / GoA 2</div>
-                <div class="mc-track"><div class="mc-fill green" data-w="100%"></div></div>
-                <div class="mc-pct">100%</div>
-              </div>
-            </div>
-            <span class="mc-chev">›</span>
-          </button>
-          <div class="mc-detail" id="mc-det-patco" hidden>
-            <p><b>The first Automatic Train Operation line ever built in the United States — opened February 1969.</b> The PATCO Speedline between Philadelphia and Lindenwold, NJ crossed the Delaware River with ATO from its first day of service. It predates BART by three years. The line still operates ATO today, running nearly 24/7, carrying about 18,500 weekday riders.</p>
-            <p>PATCO is a GoA 2 system: trains accelerate and brake automatically, but an operator rides in the cab. It has run this way continuously for 57 years — longer than any other US rapid transit line with automation. It's a remarkable footnote: Philadelphia's commuter-scale rail line has more automation history than New York's entire subway system.</p>
-            <div class="mc-fact"><span class="mf-k">Opened</span> January 4, 1969 — <b>first ATO line in the USA</b></div>
-            <div class="mc-fact"><span class="mf-k">Continuous ATO</span> 57+ years and counting</div>
-            <div class="mc-fact"><span class="mf-k">Ridership</span> ~5.9M annual (2025), ~18,500 weekday</div>
-          </div>
-        </div>
-
-      </div><!-- /metro-grid -->
+      <!-- Cards are rendered by renderMetroCards() from the METRO_SYSTEMS
+           data at the top of the script. -->
+      <div class="metro-grid" id="metro-grid"></div><!-- /metro-grid -->
 
       <p class="sec-note" style="margin-top:24px;font-size:13px">
         <b>Note on SF trolleys / cable cars:</b> San Francisco's iconic cable cars and historic streetcars operate at GoA 0 — manually operated, no automation, by deliberate design. MUNI Metro's light rail is GoA 1. They're excluded from the grid above as a separate category from rapid transit.
@@ -2431,6 +2139,236 @@
 </div>
 
 <script>
+  // ============================================================
+  // DATA
+  // Every dataset the page renders lives here, in one place, so
+  // updating a number never means hunting through render logic.
+  // A color value starting with "--" is a CSS custom property name,
+  // resolved live at draw time (see resolveColor()) so charts always
+  // match the active theme instead of being redrawn from a second
+  // hard-coded copy of the same numbers.
+  // ============================================================
+
+  // Donut datasets for the "By the numbers" tab. Read by drawAllPies(),
+  // called both on first paint and again after a theme switch — so
+  // there is exactly one place these numbers can drift from.
+  var PIE_DATASETS = {
+    A: { // US transit operating cost breakdown
+      useKm:false,
+      slices:[
+        {label:'Labor (wages & benefits)',pct:59,color:'--green',highlight:true},
+        {label:'Vehicle maintenance',pct:15,color:'#f4b740'},
+        {label:'General administration',pct:10,color:'#5b8dd9'},
+        {label:'Non-vehicle maintenance',pct:8,color:'#9b6dd6'},
+        {label:'Purchased transportation',pct:8,color:'#e8554e'}
+      ]
+    },
+    B: { // Canada rapid transit automation split (SkyTrain vs. TTC), shown in km
+      useKm:true,
+      slices:[
+        {label:'Manned (GoA 1) — Toronto TTC',pct:55,color:'#e8554e'},
+        {label:'Driverless (GoA 4) — Vancouver SkyTrain',pct:45,color:'--green',highlight:true}
+      ]
+    }
+  };
+
+  // 16-country dataset for the urban-metro comparison chart.
+  // [flag, name, goa4, goa23, goa01, notes] — km of urban metro at each grade band.
+  var COUNTRIES = [
+    {flag:'🇸🇦', name:'Saudi Arabia', g4:176, g23:0,   g01:0,    note:'Riyadh Metro — 100% GoA4, Guinness record'},
+    {flag:'🇦🇪', name:'UAE',          g4:101, g23:0,   g01:0,    note:'Dubai Metro+Tram — 100% GoA4'},
+    {flag:'🇶🇦', name:'Qatar',        g4:76,  g23:0,   g01:0,    note:'Doha Metro — 3 lines, 100% GoA4 since 2019'},
+    {flag:'🇸🇬', name:'Singapore',    g4:100, g23:140, g01:0,    note:'NEL/DTL/TEL GoA4; NSL/EWL/CCL GoA2'},
+    {flag:'🇩🇰', name:'Denmark',      g4:43,  g23:0,   g01:170,  note:'Copenhagen Metro GoA4; S-bane GoA2 (→GoA4 by 2033)'},
+    {flag:'🇦🇺', name:'Australia',    g4:52,  g23:0,   g01:23,   note:'Sydney Metro GoA4; other rail GoA1'},
+    {flag:'🇨🇦', name:'Canada',       g4:80,  g23:0,   g01:99,   note:'SkyTrain GoA4; TTC GoA1'},
+    {flag:'🇫🇷', name:'France',       g4:61,  g23:50,  g01:135,  note:'Lines 1,4,14 GoA4; others GoA1-2'},
+    {flag:'🇩🇪', name:'Germany',      g4:19,  g23:30,  g01:150,  note:'Nuremberg GoA4; Berlin/Munich GoA2; rest GoA1'},
+    {flag:'🇯🇵', name:'Japan',        g4:40,  g23:190, g01:192,  note:'Toei Oedo GoA4; Tokyo Metro GoA2; some GoA1'},
+    {flag:'🇬🇧', name:'UK',           g4:37,  g23:40,  g01:350,  note:'DLR GoA4; Jubilee/Elizabeth GoA2-3; rest GoA1'},
+    {flag:'🇪🇸', name:'Spain',        g4:30,  g23:5,   g01:215,  note:'Barcelona L9/L10 partial GoA4; Madrid Line 11 GoA3; rest GoA1'},
+    {flag:'🇺🇸', name:'USA',          g4:5,   g23:60,  g01:1100, note:'Honolulu GoA4; CBTC lines GoA2; rest GoA1'},
+    {flag:'🇲🇽', name:'Mexico',       g4:0,   g23:37,  g01:189,  note:'Lines 1 & 12 CBTC GoA2 (Siemens/Alstom); rest GoA1'},
+    {flag:'🇨🇳', name:'China',        g4:900, g23:500, g01:9576, note:'~900km GoA4 (Shanghai, Beijing, Guangzhou etc.); ~500km GoA2; vast GoA1 remainder'},
+    {flag:'🇨🇭', name:'Switzerland',  g4:0,   g23:13,  g01:118,  note:'Waldenburgerbahn GoA2; all else GoA1'},
+  ];
+
+  // The three countries in the "USA vs. Canada vs. Switzerland" scorecard.
+  // Drives the table header and every cell's mobile-view label.
+  var WORLD_COUNTRIES = [
+    {code:'us', flag:'🇺🇸', label:'USA'},
+    {code:'ca', flag:'🇨🇦', label:'Canada'},
+    {code:'ch', flag:'🇨🇭', label:'Switzerland'}
+  ];
+
+  // One entry per transport mode. Each cell is either a plain {grade, cls, why,
+  // whyCls} or, for a country whose modes split by city/system (Canada's subway),
+  // a {grade, cls, split:[{tag, tagCls, text}, ...]} — rendered as stacked tags
+  // instead of one line. "leader" adds the gold-bar ★ treatment for the mode's
+  // international pace-setter.
+  var WORLD_COMPARISON = [
+    {
+      mode:'guideway', name:'Automated metro / guideway', meta:'Closed, grade-separated systems',
+      cells:{
+        us:{grade:'GoA 4', cls:'goa4', why:'✓ Honolulu Skyline (2023); airport people-movers for decades', whyCls:'ok'},
+        ca:{grade:'GoA 4', cls:'goa4', leader:true, why:'Vancouver SkyTrain driverless since <b>1985</b> — world\'s longest fully automated rapid transit system', whyCls:'ok'},
+        ch:{grade:'—', cls:'goa0', why:'No closed automated metro system exists in Switzerland. Cities are served by tram and light rail', whyCls:'neutral'}
+      }
+    },
+    {
+      mode:'lrt', name:'Light rail / tram', meta:'Urban surface rail',
+      cells:{
+        us:{grade:'GoA 0–1', cls:'goa1', why:'Mixed traffic = on-sight driving. Technology limit, not just policy', whyCls:'warn'},
+        ca:{grade:'GoA 0–1', cls:'goa1', why:'Street-running systems (Toronto streetcar, etc.) require on-sight operators. Same physics limit as USA', whyCls:'warn'},
+        ch:{grade:'GoA 2', cls:'goa2', leader:true, why:'Waldenburgerbahn (Basel area) reached GoA 2 Jan 2026 — first in Switzerland. BLT now expanding CBTC to tram network. GoA 4 targeted by 2030', whyCls:'ok'}
+      }
+    },
+    {
+      mode:'subway', name:'Urban subway / heavy metro', meta:'Existing underground lines',
+      cells:{
+        us:{grade:'GoA 1–2*', cls:'goa2', why:'GoA 2 capable; operator retained by Section 13(c) labor law. BART built driverless-ready in 1972', whyCls:'stop'},
+        ca:{grade:'GoA 1 / GoA 4', cls:'goa2', split:[
+          {tag:'TTC (Toronto)', tagCls:'stop', text:'GoA 1 — union opposed automation since 1985'},
+          {tag:'SkyTrain (Vancouver)', tagCls:'ok', text:'GoA 4 since 1985 — no legacy operator agreement'}
+        ]},
+        ch:{grade:'—', cls:'goa0', why:'No heavy metro. Swiss cities use tram + regional rail as primary urban transit', whyCls:'neutral'}
+      }
+    },
+    {
+      mode:'commuter', name:'Commuter / regional rail', meta:'Metra, LIRR · GO Transit · SBB S-Bahn',
+      cells:{
+        us:{grade:'GoA 1 + PTC', cls:'goa1', why:'Driver + Positive Train Control safety layer. Section 13(c) limits change', whyCls:'stop'},
+        ca:{grade:'GoA 1', cls:'goa1', why:'GO Transit runs human-driven. ETCS being introduced on Kitchener Line (Metrolinx), foundation for future GoA 2', whyCls:'warn'},
+        ch:{grade:'GoA 1 + ETCS', cls:'goa1', leader:true, why:'SBB S-Bahn runs on full ETCS Level 2 (complete by 2025). Foundation for GoA 2 ATO under smartrail 4.0 (rollout 2027–2038)', whyCls:'ok'}
+      }
+    },
+    {
+      mode:'intercity', name:'Intercity / long-distance rail', meta:'Amtrak · VIA Rail · SBB IC',
+      cells:{
+        us:{grade:'GoA 1 + PTC', cls:'goa1', why:'Human engineer, open mixed-use network. No automation roadmap on mainline', whyCls:'stop'},
+        ca:{grade:'GoA 1', cls:'goa1', why:'VIA Rail runs on CN/CP freight corridors — human crew, signalling similar to US. High-Frequency Rail corridor proposal in planning', whyCls:'warn'},
+        ch:{grade:'GoA 1 + ETCS', cls:'goa1', leader:true, why:'SBB IC on ETCS Level 2. GoA 2 ATO over ETCS tested (Lausanne–Villeneuve 2018). Targeted for GoA 2 deployment under smartrail 4.0', whyCls:'ok'}
+      }
+    },
+    {
+      mode:'freight', name:'Freight rail', meta:'Class I / CN, CP / SBB Cargo',
+      cells:{
+        us:{grade:'GoA 1 + assist', cls:'goa1', why:'Driver-assist + PTC. First crewless pilot (Parallel Systems, Georgia) underway', whyCls:'warn'},
+        ca:{grade:'GoA 1', cls:'goa1', why:'CN and CPKC run human crews network-wide. Remote-control yard shunting is in use. No mainline crewless pilot', whyCls:'warn'},
+        ch:{grade:'GoA 1', cls:'goa1', why:'SBB Cargo runs human crews. Remote-controlled shunter trials conducted 2023–24 at Zürich-Mülligen yard', whyCls:'warn'}
+      }
+    }
+  ];
+
+  // The six US Metro Spotlight cards. "pioneer" adds the ★ badge (PATCO —
+  // first ATO line in the US). Each bar's pct is a CSS width string ("15%");
+  // pctText is what's shown next to it and can differ (e.g. "~15%").
+  var METRO_SYSTEMS = [
+    {
+      id:'nyc', pioneer:false,
+      name:'New York City Subway', sub:'MTA · 472 stations · 245 route miles',
+      bars:[
+        {label:'CBTC (GoA 2)', pct:'15%', pctText:'~15%', color:'amber'},
+        {label:'Fixed-block (GoA 1)', pct:'85%', pctText:'~85%', color:'red'}
+      ],
+      paragraphs:[
+        "<b>Opened 1904. Signaling technology from the same era still runs 85% of the system.</b> The L train (Canarsie Line) was the first to get CBTC in 2000–2006 — a self-contained line made it the pilot. The 7 (Flushing) followed in 2018, and Queens Boulevard lines (E/F/M/R) after that. Those three corridors, covering roughly 15% of route miles, now operate GoA 2. The other 85% runs on block signals with mechanical relays — technology that predates the automobile.",
+        "The MTA's 2025–29 capital plan funds CBTC on 8 more lines and 75+ miles. At the current pace, full-system CBTC is a 2040s project. Signal failures cause <b>more than half of all subway delays</b>."
+      ],
+      facts:[
+        {k:'Opened', v:'1904'},
+        {k:'First CBTC line', v:'L train, 2006'},
+        {k:'Bottleneck', v:'Section 13(c) + cost + complexity of 24/7 system with 36 lines'}
+      ]
+    },
+    {
+      id:'dc', pioneer:false,
+      name:'DC Metro (WMATA)', sub:'WMATA · 98 stations · 6 lines',
+      bars:[{label:'ATO / GoA 2', pct:'100%', pctText:'100%', color:'green'}],
+      paragraphs:[
+        "<b>The most dramatic recent reversal in US rail automation.</b> Metro was designed and built in the 1970s for automatic train operation — it's a GoA 2 system at its core. After a fatal 2009 crash (attributed to a sensor failure, not ATO itself), Metro switched to full manual GoA 1 operation for 15 years. In December 2024 ATO returned to the Red Line. By June 2025 it was restored system-wide — <b>100% of lines back to GoA 2</b> for the first time since 2009.",
+        "Train operators remain in the cab (GoA 2, not GoA 4). ATO controls speed and braking; the operator closes doors and monitors conditions. End-to-end Red Line travel time dropped by 8 minutes after ATO return."
+      ],
+      facts:[
+        {k:'Opened', v:'1976 — designed for ATO from day one'},
+        {k:'Manual period', v:'2009–2024 (15 years) after fatal crash'},
+        {k:'ATO restored', v:'Dec 2024 (Red), May 2025 (Green/Yellow), Jun 2025 (Blue/Orange/Silver)'}
+      ]
+    },
+    {
+      id:'chi', pioneer:false,
+      name:"Chicago 'L'", sub:'CTA · 146 stations · 8 lines · 224 track miles',
+      bars:[{label:'GoA 1 (manual)', pct:'100%', pctText:'100%', color:'red'}],
+      paragraphs:[
+        "<b>The largest US rapid transit system with zero CBTC deployment — and 24-hour service on two lines.</b> The L operates 8 lines on fixed-block signals throughout. No CBTC program is currently funded or contracted. The Red and Blue Lines run 24 hours, one of only four cities worldwide offering that (alongside New York, London, and Copenhagen).",
+        "The $2.1 billion Red/Purple Line modernization completed July 2025 rebuilt stations and track structures — but upgraded the physical infrastructure, not the signaling automation. The L's signal systems date from the mid-20th century."
+      ],
+      facts:[
+        {k:'Opened', v:'1892 — oldest elevated rapid transit in the US'},
+        {k:'CBTC status', v:'None deployed, none contracted'},
+        {k:'Notable', v:'24-hr service on Red & Blue lines; ~385,500 weekday riders (2025)'}
+      ]
+    },
+    {
+      id:'bart', pioneer:false,
+      name:'BART (San Francisco Bay Area)', sub:'BART · 50 stations · 131 route miles',
+      bars:[
+        {label:'CBTC rollout (GoA 2) — in progress', pct:'5%', pctText:'~5% live', color:'amber'},
+        {label:'Legacy fixed-block (GoA 1)', pct:'95%', pctText:'~95%', color:'red'}
+      ],
+      paragraphs:[
+        "<b>The system built for driverless in 1972 is still not driverless in 2026.</b> BART opened with ATO capability and was designed from the ground up for automation — operators were a labor concession. The original signaling now runs past its design life. In 2020 BART awarded a <b>$798M CBTC contract to Hitachi Rail</b>, the largest signaling upgrade in North American history. The first section (Millbrae corridor) entered test-and-build mode in late 2024; mainline phases target 28 trains/hour by 2030 and 30/hour by 2032.",
+        "Today BART runs GoA 1 on virtually all mainline track. The Oakland Airport Connector — a 3-mile people-mover — operates GoA 4 driverless separately."
+      ],
+      facts:[
+        {k:'Opened', v:'1972 — built ATO-capable from day one'},
+        {k:'CBTC contract', v:'$798M, Hitachi Rail, awarded 2020'},
+        {k:'GoA 2 target', v:'Transbay Tube at 28 trains/hr by 2030'}
+      ]
+    },
+    {
+      id:'bos', pioneer:false,
+      name:"Boston MBTA ('The T')", sub:'MBTA · 109 stations · Red, Orange, Blue, Green lines',
+      bars:[
+        {label:'Commuter rail: PTC / GoA 1', pct:'100%', pctText:'PTC 100%', color:'amber'},
+        {label:'Subway: Fixed-block GoA 1', pct:'100%', pctText:'GoA 1', color:'red'}
+      ],
+      paragraphs:[
+        "<b>PTC complete across all 12 commuter rail lines as of January 2025 — a federal mandate milestone.</b> But PTC is GoA 1: it can stop a train that misses a signal, but the engineer still drives. The subway (Red, Orange, Blue, Green lines) runs on fixed-block signaling at GoA 1 throughout. No CBTC deployment or contract exists.",
+        "The MBTA is in the middle of a $9.6B five-year capital plan focused on station renovation, fleet replacement, and accessibility — not automation upgrades. It is the fourth-busiest rapid transit system in the US with ~326,500 daily rapid transit riders (2025)."
+      ],
+      facts:[
+        {k:'PTC complete', v:'January 2025 — all 12 commuter rail lines'},
+        {k:'Subway automation', v:'GoA 1 throughout, no CBTC program'},
+        {k:'Notable', v:'4th-busiest US rapid transit; ~851,600 total daily system riders'}
+      ]
+    },
+    {
+      id:'patco', pioneer:true,
+      name:'PATCO Speedline', sub:'Philadelphia–Lindenwold · 14 stations · 14.2 miles',
+      bars:[{label:'ATO / GoA 2', pct:'100%', pctText:'100%', color:'green'}],
+      paragraphs:[
+        "<b>The first Automatic Train Operation line ever built in the United States — opened February 1969.</b> The PATCO Speedline between Philadelphia and Lindenwold, NJ crossed the Delaware River with ATO from its first day of service. It predates BART by three years. The line still operates ATO today, running nearly 24/7, carrying about 18,500 weekday riders.",
+        "PATCO is a GoA 2 system: trains accelerate and brake automatically, but an operator rides in the cab. It has run this way continuously for 57 years — longer than any other US rapid transit line with automation. It's a remarkable footnote: Philadelphia's commuter-scale rail line has more automation history than New York's entire subway system."
+      ],
+      facts:[
+        {k:'Opened', v:'January 4, 1969 — first ATO line in the USA'},
+        {k:'Continuous ATO', v:'57+ years and counting'},
+        {k:'Ridership', v:'~5.9M annual (2025), ~18,500 weekday'}
+      ]
+    }
+  ];
+  // ============================================================
+  // END OF DATA
+  // ============================================================
+
+  // Resolves a slice/theme color: a value starting with "--" is a CSS custom
+  // property name, read live off :root so charts always match the active
+  // theme; anything else (a literal hex) passes through unchanged.
+  function resolveColor(c, cs){
+    return (typeof c === 'string' && c.indexOf('--') === 0) ? (cs.getPropertyValue(c).trim() || c) : c;
+  }
+
   // ---------- THEME SWITCHER ----------
   (function(){
     var root = document.documentElement;
@@ -2451,19 +2389,7 @@
           } else {
             if(typeof renderCountryBars === 'function') renderCountryBars();
           }
-          if(typeof drawPie === 'function'){
-            drawPie('pieA','legendA',[
-              {label:'Labor (wages & benefits)',pct:59,color:getComputedStyle(root).getPropertyValue('--green').trim(),highlight:true},
-              {label:'Vehicle maintenance',pct:15,color:'#f4b740'},
-              {label:'General administration',pct:10,color:'#5b8dd9'},
-              {label:'Non-vehicle maintenance',pct:8,color:'#9b6dd6'},
-              {label:'Purchased transportation',pct:8,color:'#e8554e'}
-            ]);
-            drawPie('pieB','legendB',[
-              {label:'Manned (GoA 1) — Toronto TTC',pct:55,color:'#e8554e'},
-              {label:'Driverless (GoA 4) — Vancouver SkyTrain',pct:45,color:getComputedStyle(root).getPropertyValue('--green').trim(),highlight:true}
-            ],true);
-          }
+          if(typeof drawAllPies === 'function') drawAllPies();
         }
       });
     });
@@ -2630,26 +2556,6 @@
   // ---------- PIE CHARTS + COUNTRY BAR CHART ----------
   var piesRendered = false;
 
-  // 12-country dataset: [flag, name, goa4, goa23, goa01, notes]
-  var COUNTRIES = [
-    {flag:'🇸🇦', name:'Saudi Arabia', g4:176, g23:0,   g01:0,    note:'Riyadh Metro — 100% GoA4, Guinness record'},
-    {flag:'🇦🇪', name:'UAE',          g4:101, g23:0,   g01:0,    note:'Dubai Metro+Tram — 100% GoA4'},
-    {flag:'🇶🇦', name:'Qatar',        g4:76,  g23:0,   g01:0,    note:'Doha Metro — 3 lines, 100% GoA4 since 2019'},
-    {flag:'🇸🇬', name:'Singapore',    g4:100, g23:140, g01:0,    note:'NEL/DTL/TEL GoA4; NSL/EWL/CCL GoA2'},
-    {flag:'🇩🇰', name:'Denmark',      g4:43,  g23:0,   g01:170,  note:'Copenhagen Metro GoA4; S-bane GoA2 (→GoA4 by 2033)'},
-    {flag:'🇦🇺', name:'Australia',    g4:52,  g23:0,   g01:23,   note:'Sydney Metro GoA4; other rail GoA1'},
-    {flag:'🇨🇦', name:'Canada',       g4:80,  g23:0,   g01:99,   note:'SkyTrain GoA4; TTC GoA1'},
-    {flag:'🇫🇷', name:'France',       g4:61,  g23:50,  g01:135,  note:'Lines 1,4,14 GoA4; others GoA1-2'},
-    {flag:'🇩🇪', name:'Germany',      g4:19,  g23:30,  g01:150,  note:'Nuremberg GoA4; Berlin/Munich GoA2; rest GoA1'},
-    {flag:'🇯🇵', name:'Japan',        g4:40,  g23:190, g01:192,  note:'Toei Oedo GoA4; Tokyo Metro GoA2; some GoA1'},
-    {flag:'🇬🇧', name:'UK',           g4:37,  g23:40,  g01:350,  note:'DLR GoA4; Jubilee/Elizabeth GoA2-3; rest GoA1'},
-    {flag:'🇪🇸', name:'Spain',        g4:30,  g23:5,   g01:215,  note:'Barcelona L9/L10 partial GoA4; Madrid Line 11 GoA3; rest GoA1'},
-    {flag:'🇺🇸', name:'USA',          g4:5,   g23:60,  g01:1100, note:'Honolulu GoA4; CBTC lines GoA2; rest GoA1'},
-    {flag:'🇲🇽', name:'Mexico',       g4:0,   g23:37,  g01:189,  note:'Lines 1 & 12 CBTC GoA2 (Siemens/Alstom); rest GoA1'},
-    {flag:'🇨🇳', name:'China',        g4:900, g23:500, g01:9576, note:'~900km GoA4 (Shanghai, Beijing, Guangzhou etc.); ~500km GoA2; vast GoA1 remainder'},
-    {flag:'🇨🇭', name:'Switzerland',  g4:0,   g23:13,  g01:118,  note:'Waldenburgerbahn GoA2; all else GoA1'},
-  ];
-
   var ccSortMode = 'goa4';
   var ccViewMode = 'bars';
 
@@ -2692,11 +2598,13 @@
       // animate after short delay
       setTimeout(function(){
         row.querySelectorAll('.cc-seg').forEach(function(seg){
-          seg.style.width = reduce ? seg.getAttribute('data-w') :
-            (requestAnimationFrame(function(){ seg.style.width=seg.getAttribute('data-w'); }),'');
-          if(!reduce) requestAnimationFrame(function(){
-            requestAnimationFrame(function(){ seg.style.width=seg.getAttribute('data-w'); });
-          });
+          if(reduce){
+            seg.style.width = seg.getAttribute('data-w');
+          } else {
+            requestAnimationFrame(function(){
+              requestAnimationFrame(function(){ seg.style.width = seg.getAttribute('data-w'); });
+            });
+          }
         });
       }, reduce ? 0 : delay);
     });
@@ -2807,20 +2715,18 @@
     });
   }
 
+  // Draws both donuts from the single PIE_DATASETS copy. Called on first
+  // paint and again after every theme switch, so the two charts can never
+  // show numbers that disagree with each other.
+  function drawAllPies(){
+    drawPie('pieA','legendA', PIE_DATASETS.A.slices, PIE_DATASETS.A.useKm);
+    drawPie('pieB','legendB', PIE_DATASETS.B.slices, PIE_DATASETS.B.useKm);
+  }
+
   function renderPies(){
     if(piesRendered) return;
     piesRendered = true;
-    drawPie('pieA','legendA',[
-      {label:'Labor (wages & benefits)',pct:59,color:'#34d17a',highlight:true},
-      {label:'Vehicle maintenance',pct:15,color:'#f4b740'},
-      {label:'General administration',pct:10,color:'#5b8dd9'},
-      {label:'Non-vehicle maintenance',pct:8,color:'#9b6dd6'},
-      {label:'Purchased transportation',pct:8,color:'#e8554e'}
-    ]);
-    drawPie('pieB','legendB',[
-      {label:'Manned (GoA 1) — Toronto TTC',pct:55,color:'#e8554e'},
-      {label:'Driverless (GoA 4) — Vancouver SkyTrain',pct:45,color:'#34d17a',highlight:true}
-    ],true);
+    drawAllPies();
     renderCountryBars();
   }
 
@@ -2849,7 +2755,7 @@
         ctx.moveTo(cx,cy);
         ctx.arc(cx,cy,r,a,a+sweep);
         ctx.closePath();
-        ctx.fillStyle = s.color;
+        ctx.fillStyle = resolveColor(s.color, cs);
         ctx.fill();
         a += sweep;
         // gap
@@ -2885,7 +2791,7 @@
       var item = document.createElement('div');
       item.className = 'pie-legend-item' + (s.highlight?' highlight':'');
       var km = useKm ? Math.round(s.pct/100*179) + ' km' : '';
-      item.innerHTML = '<div class="li-swatch" style="background:'+s.color+'"></div>'+
+      item.innerHTML = '<div class="li-swatch" style="background:'+resolveColor(s.color, cs)+'"></div>'+
         '<span class="li-label">'+s.label+'</span>'+
         '<span class="li-pct">'+(useKm?km:s.pct+'%')+'</span>';
       legend.appendChild(item);
@@ -2910,6 +2816,36 @@
     }
   }
 
+  // ---------- METRO CARDS: RENDER FROM METRO_SYSTEMS ----------
+  function renderMetroCards(){
+    var grid = document.getElementById('metro-grid');
+    if(!grid) return;
+    grid.innerHTML = METRO_SYSTEMS.map(function(m){
+      var detId = 'mc-det-'+m.id;
+      var badge = m.pioneer ? ' <span class="pioneer-badge">Pioneer ★</span>' : '';
+      var bars = m.bars.map(function(b){
+        return '<div class="mc-bar-wrap">'+
+          '<div class="mc-bar-label">'+b.label+'</div>'+
+          '<div class="mc-track"><div class="mc-fill '+b.color+'" data-w="'+b.pct+'"></div></div>'+
+          '<div class="mc-pct">'+b.pctText+'</div>'+
+        '</div>';
+      }).join('');
+      var paras = m.paragraphs.map(function(p){ return '<p>'+p+'</p>'; }).join('');
+      var facts = m.facts.map(function(f){
+        return '<div class="mc-fact"><span class="mf-k">'+f.k+'</span> '+f.v+'</div>';
+      }).join('');
+      return '<div class="mc'+(m.pioneer?' pioneer':'')+'" data-sys="'+m.id+'">'+
+        '<button class="mc-head" aria-expanded="false" aria-controls="'+detId+'">'+
+          '<div class="mc-left"><div class="mc-name">'+m.name+badge+'</div><div class="mc-sub">'+m.sub+'</div></div>'+
+          '<div class="mc-right">'+bars+'</div>'+
+          '<span class="mc-chev">›</span>'+
+        '</button>'+
+        '<div class="mc-detail" id="'+detId+'" hidden>'+paras+facts+'</div>'+
+      '</div>';
+    }).join('');
+  }
+  renderMetroCards();
+
   // ---------- METRO CARDS: expand/collapse ----------
   (function(){
     document.querySelectorAll('.mc-head').forEach(function(head){
@@ -2930,6 +2866,36 @@
       });
     });
   })();
+  // ---------- WORLD COMPARISON TABLE: RENDER FROM WORLD_COMPARISON ----------
+  function renderWorldComparison(){
+    var table = document.getElementById('cmp-table');
+    if(!table) return;
+    var head = '<div class="cmp-head"><div class="cmp-fn">Mode</div>'+
+      WORLD_COUNTRIES.map(function(c){
+        return '<div class="cmp-country" data-col="'+c.code+'">'+c.flag+' '+c.label+'</div>';
+      }).join('')+
+      '</div>';
+    var rows = WORLD_COMPARISON.map(function(row){
+      var cells = WORLD_COUNTRIES.map(function(c){
+        var cell = row.cells[c.code];
+        var cls = 'cmp-cell '+cell.cls+(cell.split?' split':'')+(cell.leader?' leader':'');
+        var grade = cell.grade+(cell.leader?' <span class="star">★</span>':'');
+        var body = cell.split
+          ? '<div class="cmp-why split-tag">'+cell.split.map(function(s){
+              return '<span class="d-tag '+s.tagCls+'" style="font-size:10px">'+s.tag+'</span> '+s.text;
+            }).join('<br>')+'</div>'
+          : '<div class="cmp-why '+cell.whyCls+'">'+cell.why+'</div>';
+        return '<div class="'+cls+'" data-col="'+c.code+'" data-country-label="'+c.flag+' '+c.label+'">'+
+          '<div class="cmp-grade">'+grade+'</div>'+body+'</div>';
+      }).join('');
+      return '<div class="cmp-row" data-mode="'+row.mode+'">'+
+        '<div class="cmp-fn"><div class="cmp-mode">'+row.name+'</div><div class="cmp-meta">'+row.meta+'</div></div>'+
+        cells+'</div>';
+    }).join('');
+    table.innerHTML = head + rows;
+  }
+  renderWorldComparison();
+
   // ---------- WORLD TAB: COUNTRY SELECTOR ----------
   (function(){
     var btns = document.querySelectorAll('.ct-btn');
