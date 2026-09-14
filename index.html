@@ -401,7 +401,7 @@
      sitting statically in the way the rest of the time. */
   .train{
     position:absolute;top:50%;left:3px;
-    width:22px;height:12px;
+    width:32px;height:16px;
     transform:translate(-100%,-50%); /* nose (right edge) lands exactly on `left` */
     opacity:0;
     transition:left .9s cubic-bezier(.2,.8,.2,1),opacity .3s;
@@ -411,6 +411,13 @@
   }
   .ladder[data-view="possible"] .train{opacity:1}
   .train svg{display:block;width:100%;height:100%}
+  /* body/nose solid in the row's color; wheels at reduced opacity so they
+     read as a distinct part instead of blurring into one flat silhouette;
+     a thin dark stroke on both gives the whole shape an edge against the
+     similarly-colored bar it's riding on */
+  .train .loco-body{fill:currentColor;stroke:#00000070;stroke-width:.6}
+  .train .wheel{fill:currentColor;opacity:.6;stroke:#00000070;stroke-width:.6}
+  .train .lamp{fill:#fff;opacity:.95}
   .train.g{color:var(--green)}
   .train.a{color:var(--amber)}
   .train.r{color:var(--red)}
@@ -1389,7 +1396,7 @@
             <div class="cell"></div><div class="cell"></div>
             <div class="ghost" data-cap="100%"></div>
             <div class="fill g" data-w="100%" data-cap="100%"><span class="lab">GoA 4 · no crew</span></div>
-            <div class="train g" aria-hidden="true"><svg viewBox="0 0 30 16" fill="currentColor"><rect x="1" y="5" width="19" height="7" rx="1"></rect><rect x="15" y="1" width="8" height="8" rx="1"></rect><circle cx="7" cy="14" r="2"></circle><circle cx="16" cy="14" r="2"></circle><circle cx="24.5" cy="5" r="1.4" fill="#fff" opacity=".9"></circle></svg></div>
+            <div class="train g" aria-hidden="true"><svg viewBox="0 0 40 20"><g class="loco-body"><rect x="2" y="6" width="26" height="9" rx="2"></rect><rect x="19" y="1" width="12" height="14" rx="2"></rect><path d="M31 3 L37 8 L37 12 L31 15 Z"></path></g><circle class="wheel" cx="9" cy="17" r="3"></circle><circle class="wheel" cx="18" cy="17" r="3"></circle><circle class="wheel" cx="27" cy="17" r="3"></circle><circle class="lamp" cx="35.3" cy="8" r="1.7"></circle></svg></div>
           </div>
         </button>
         <div class="detail" id="det-guideway" hidden>
@@ -1410,7 +1417,7 @@
             <div class="cell"></div><div class="cell"></div>
             <div class="ghost" data-cap="40%"></div>
             <div class="fill r" data-w="20%" data-cap="40%"><span class="lab">GoA 1</span></div>
-            <div class="train r" aria-hidden="true"><svg viewBox="0 0 30 16" fill="currentColor"><rect x="1" y="5" width="19" height="7" rx="1"></rect><rect x="15" y="1" width="8" height="8" rx="1"></rect><circle cx="7" cy="14" r="2"></circle><circle cx="16" cy="14" r="2"></circle><circle cx="24.5" cy="5" r="1.4" fill="#fff" opacity=".9"></circle></svg></div>
+            <div class="train r" aria-hidden="true"><svg viewBox="0 0 40 20"><g class="loco-body"><rect x="2" y="6" width="26" height="9" rx="2"></rect><rect x="19" y="1" width="12" height="14" rx="2"></rect><path d="M31 3 L37 8 L37 12 L31 15 Z"></path></g><circle class="wheel" cx="9" cy="17" r="3"></circle><circle class="wheel" cx="18" cy="17" r="3"></circle><circle class="wheel" cx="27" cy="17" r="3"></circle><circle class="lamp" cx="35.3" cy="8" r="1.7"></circle></svg></div>
             <div class="crewdot" style="left:18%" data-tip="Operator drives by sight in mixed traffic. No technical path to remove them while the line shares streets with cars and pedestrians."></div>
           </div>
         </button>
@@ -1432,7 +1439,7 @@
             <div class="cell"></div><div class="cell"></div>
             <div class="ghost" data-cap="100%"></div>
             <div class="fill a" data-w="52%" data-cap="100%"><span class="lab">GoA 2 capable</span></div>
-            <div class="train a" aria-hidden="true"><svg viewBox="0 0 30 16" fill="currentColor"><rect x="1" y="5" width="19" height="7" rx="1"></rect><rect x="15" y="1" width="8" height="8" rx="1"></rect><circle cx="7" cy="14" r="2"></circle><circle cx="16" cy="14" r="2"></circle><circle cx="24.5" cy="5" r="1.4" fill="#fff" opacity=".9"></circle></svg></div>
+            <div class="train a" aria-hidden="true"><svg viewBox="0 0 40 20"><g class="loco-body"><rect x="2" y="6" width="26" height="9" rx="2"></rect><rect x="19" y="1" width="12" height="14" rx="2"></rect><path d="M31 3 L37 8 L37 12 L31 15 Z"></path></g><circle class="wheel" cx="9" cy="17" r="3"></circle><circle class="wheel" cx="18" cy="17" r="3"></circle><circle class="wheel" cx="27" cy="17" r="3"></circle><circle class="lamp" cx="35.3" cy="8" r="1.7"></circle></svg></div>
             <div class="crewdot" style="left:50%" data-tip="The train can already start, run and stop itself. The operator is retained by labor agreement (Section 13c), not because the tech needs them."></div>
           </div>
         </button>
@@ -1454,7 +1461,7 @@
             <div class="cell"></div><div class="cell"></div>
             <div class="ghost" data-cap="55%"></div>
             <div class="fill r" data-w="22%" data-cap="55%"><span class="lab">GoA 1 + PTC</span></div>
-            <div class="train r" aria-hidden="true"><svg viewBox="0 0 30 16" fill="currentColor"><rect x="1" y="5" width="19" height="7" rx="1"></rect><rect x="15" y="1" width="8" height="8" rx="1"></rect><circle cx="7" cy="14" r="2"></circle><circle cx="16" cy="14" r="2"></circle><circle cx="24.5" cy="5" r="1.4" fill="#fff" opacity=".9"></circle></svg></div>
+            <div class="train r" aria-hidden="true"><svg viewBox="0 0 40 20"><g class="loco-body"><rect x="2" y="6" width="26" height="9" rx="2"></rect><rect x="19" y="1" width="12" height="14" rx="2"></rect><path d="M31 3 L37 8 L37 12 L31 15 Z"></path></g><circle class="wheel" cx="9" cy="17" r="3"></circle><circle class="wheel" cx="18" cy="17" r="3"></circle><circle class="wheel" cx="27" cy="17" r="3"></circle><circle class="lamp" cx="35.3" cy="8" r="1.7"></circle></svg></div>
             <div class="crewdot" style="left:20%" data-tip="Engineer drives; Positive Train Control is a safety backstop, not automation. London's Thameslink shows GoA 2 is possible on this kind of line."></div>
           </div>
         </button>
@@ -1476,7 +1483,7 @@
             <div class="cell"></div><div class="cell"></div>
             <div class="ghost" data-cap="48%"></div>
             <div class="fill r" data-w="24%" data-cap="48%"><span class="lab">GoA 1 + PTC</span></div>
-            <div class="train r" aria-hidden="true"><svg viewBox="0 0 30 16" fill="currentColor"><rect x="1" y="5" width="19" height="7" rx="1"></rect><rect x="15" y="1" width="8" height="8" rx="1"></rect><circle cx="7" cy="14" r="2"></circle><circle cx="16" cy="14" r="2"></circle><circle cx="24.5" cy="5" r="1.4" fill="#fff" opacity=".9"></circle></svg></div>
+            <div class="train r" aria-hidden="true"><svg viewBox="0 0 40 20"><g class="loco-body"><rect x="2" y="6" width="26" height="9" rx="2"></rect><rect x="19" y="1" width="12" height="14" rx="2"></rect><path d="M31 3 L37 8 L37 12 L31 15 Z"></path></g><circle class="wheel" cx="9" cy="17" r="3"></circle><circle class="wheel" cx="18" cy="17" r="3"></circle><circle class="wheel" cx="27" cy="17" r="3"></circle><circle class="lamp" cx="35.3" cy="8" r="1.7"></circle></svg></div>
             <div class="crewdot" style="left:22%" data-tip="Long open routes with grade crossings and shared track. PTC provides protection; the engineer does the driving."></div>
           </div>
         </button>
@@ -1498,7 +1505,7 @@
             <div class="cell"></div><div class="cell"></div>
             <div class="ghost" data-cap="62%"></div>
             <div class="fill a" data-w="30%" data-cap="62%"><span class="lab">Driver-assist</span></div>
-            <div class="train a" aria-hidden="true"><svg viewBox="0 0 30 16" fill="currentColor"><rect x="1" y="5" width="19" height="7" rx="1"></rect><rect x="15" y="1" width="8" height="8" rx="1"></rect><circle cx="7" cy="14" r="2"></circle><circle cx="16" cy="14" r="2"></circle><circle cx="24.5" cy="5" r="1.4" fill="#fff" opacity=".9"></circle></svg></div>
+            <div class="train a" aria-hidden="true"><svg viewBox="0 0 40 20"><g class="loco-body"><rect x="2" y="6" width="26" height="9" rx="2"></rect><rect x="19" y="1" width="12" height="14" rx="2"></rect><path d="M31 3 L37 8 L37 12 L31 15 Z"></path></g><circle class="wheel" cx="9" cy="17" r="3"></circle><circle class="wheel" cx="18" cy="17" r="3"></circle><circle class="wheel" cx="27" cy="17" r="3"></circle><circle class="lamp" cx="35.3" cy="8" r="1.7"></circle></svg></div>
             <div class="crewdot" style="left:28%" data-tip="Crew required network-wide. One exception: a crewless battery short-haul pilot (Parallel Systems) has been cleared by regulators in Georgia."></div>
           </div>
         </button>
