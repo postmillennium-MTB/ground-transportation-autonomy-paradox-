@@ -21,6 +21,15 @@
 <meta name="twitter:description" content="Robotaxis: ~500k driverless rides a week. US trains with no one in the cab: ~0%. BART could drive itself in 1972.">
 <meta name="twitter:image" content="https://postmillenniumrenaissance.com/og-image.jpg">
 
+<!-- Fonts loaded as <link>, not CSS @import: @import can't start downloading
+     until the browser has already parsed this far into the stylesheet, which
+     costs an extra round-trip before the real typeface shows up. preconnect
+     opens the connection to both Google Fonts hosts early so the stylesheet
+     and the font files it references overlap instead of queuing. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
 <style>
   /* ============================================================
      DESIGN SYSTEM
@@ -32,8 +41,9 @@
      Display face: Saira Condensed — the tall, mechanical lettering
      of rolling-stock reporting marks and platform signage.
      Body: IBM Plex Sans. Data: IBM Plex Mono (gauge readouts).
+     Fonts themselves load via <link> tags in <head>, not @import — see
+     the comment there for why.
      ============================================================ */
-  @import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
   :root{
     --steel:#16181c;
@@ -46,7 +56,13 @@
     --line-solid:#363b44;
     --ink:#e8e9ec;
     --ink-dim:#9aa0ab;
-    --ink-faint:#6b7280;
+    /* #6b7280 measured 3.4:1 against --steel-2 — below the 4.5:1 WCAG AA
+       floor for the 10-12px text this color is used at (source lists,
+       timestamps, hints). #7e8797 clears 4.5:1 against every dark-theme
+       surface it sits on (steel/steel-2/steel-deep) while staying visibly
+       dimmer than --ink-dim. Covers both dark liveries (amtrak, bnsf) —
+       bnsf's darker surfaces clear it with more room, not less. */
+    --ink-faint:#7e8797;
     /* signal aspects — reserved for GoA chart meaning, do not retheme */
     --green:#34d17a;
     --green-dk:#1c8f4f;
@@ -91,7 +107,7 @@
     --steel:#eef0f3; --steel-2:#ffffff; --steel-3:#e4e7ec; --steel-glow:#f8f9fb;
     --steel-deep:#e2e6ec; --steel-track:#dde2e9;
     --line-solid:#ccd2db; --line:#ccd2db40;
-    --ink:#1b2430; --ink-dim:#4a5568; --ink-faint:#7c8896;
+    --ink:#1b2430; --ink-dim:#4a5568; --ink-faint:#5e6772; /* darkened from #7c8896 — 2.9:1 against --steel-deep, below AA */
     --accent:#8a6b00; --accent-dk:#5c4700; --accent-glow:#c8a30044;
     --accent-wash:#ffb61222; --accent-wash-2:#ffb61228; --accent-ink:#ffffff;
   }
@@ -99,7 +115,7 @@
     --steel:#f7f5f4; --steel-2:#ffffff; --steel-3:#ece6e5; --steel-glow:#fdfbfa;
     --steel-deep:#efe7e6; --steel-track:#e7dddc;
     --line-solid:#d8cdcb; --line:#d8cdcb40;
-    --ink:#241416; --ink-dim:#5c4448; --ink-faint:#8a7376;
+    --ink:#241416; --ink-dim:#5c4448; --ink-faint:#786467; /* darkened from #8a7376 — 3.6:1 against --steel-deep, below AA */
     --accent:#b30f26; --accent-dk:#7d0a1d; --accent-glow:#b30f263d;
     --accent-wash:#b30f2610; --accent-wash-2:#b30f2614; --accent-ink:#ffffff;
   }
@@ -2370,27 +2386,44 @@
   }
 
   // ---------- THEME SWITCHER ----------
+  // Remembers the chosen livery in localStorage — a preference only; every
+  // read/write is try/caught and the page defaults to the Amtrak theme
+  // (already the one marked active in the markup) with no saved value.
   (function(){
     var root = document.documentElement;
     var btns = document.querySelectorAll('.theme-btn');
+    var THEME_STORAGE_KEY = 'pmr-autonomy-paradox-theme';
+
+    function applyTheme(t){
+      root.setAttribute('data-theme', t);
+      btns.forEach(function(b){
+        var on = b.getAttribute('data-theme') === t;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true':'false');
+      });
+      // redraw any canvases that already rendered, so they pick up the new palette
+      if(typeof piesRendered !== 'undefined' && piesRendered){
+        if(typeof ccViewMode !== 'undefined' && ccViewMode==='pies'){
+          if(typeof renderCountryPies === 'function') renderCountryPies();
+        } else {
+          if(typeof renderCountryBars === 'function') renderCountryBars();
+        }
+        if(typeof drawAllPies === 'function') drawAllPies();
+      }
+    }
+
+    // Restore a saved theme on load, if there is one and it's still valid.
+    try{
+      var saved = localStorage.getItem(THEME_STORAGE_KEY);
+      var validThemes = Array.prototype.map.call(btns, function(b){ return b.getAttribute('data-theme'); });
+      if(saved && validThemes.indexOf(saved) !== -1) applyTheme(saved);
+    } catch(e){ /* private browsing / blocked storage — default theme stands */ }
+
     btns.forEach(function(btn){
       btn.addEventListener('click', function(){
         var t = btn.getAttribute('data-theme');
-        root.setAttribute('data-theme', t);
-        btns.forEach(function(b){
-          var on = b===btn;
-          b.classList.toggle('active', on);
-          b.setAttribute('aria-pressed', on ? 'true':'false');
-        });
-        // redraw any canvases that already rendered, so they pick up the new palette
-        if(typeof piesRendered !== 'undefined' && piesRendered){
-          if(typeof ccViewMode !== 'undefined' && ccViewMode==='pies'){
-            if(typeof renderCountryPies === 'function') renderCountryPies();
-          } else {
-            if(typeof renderCountryBars === 'function') renderCountryBars();
-          }
-          if(typeof drawAllPies === 'function') drawAllPies();
-        }
+        applyTheme(t);
+        try{ localStorage.setItem(THEME_STORAGE_KEY, t); } catch(e){ /* preference just won't persist */ }
       });
     });
   })();
