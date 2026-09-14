@@ -237,23 +237,17 @@
   section{margin-top:46px}
 
   /* ---------- TAB BAR ---------- */
-  /* 5 tabs at full label width don't fit under ~460px (measured: 667px of
-     tabs in a 375px viewport). Rather than shrink text illegibly or wrap
-     to a second line, the strip scrolls horizontally within itself —
-     overflow-x here, not on the page — so a phone visitor swipes the tab
-     row, not the whole page, to reach tab 04/05. flex-shrink:0 + nowrap
-     keep labels from squishing instead of scrolling. The mask fades the
-     right edge so a cut-off tab reads as "more to scroll," not stray
-     clipped text; it's a no-op on wide screens where nothing sits under
-     the fade zone. */
+  /* Below 768px, 5 tabs at full label width don't fit — measured 667px of
+     tabs in a 375px viewport — and without containment the whole PAGE
+     dragged sideways to reach tab 04/05, with no visual cue they existed.
+     At 768px+ the default flex-shrink here already fits every tab by
+     wrapping the longest label onto a second line where needed (measured:
+     zero page overflow from 768px up) — so the scroll-strip treatment
+     below is scoped to only the range that actually needs it, instead of
+     forcing every tablet/desktop width into permanent scroll mode too. */
   .tabs{
     display:flex;gap:2px;margin-top:30px;
     border-bottom:1px solid var(--line-solid);
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:thin;
-    mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent 100%);
-    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent 100%);
   }
   .tab{
     appearance:none;background:none;border:none;cursor:pointer;
@@ -262,8 +256,19 @@
     color:var(--ink-faint);
     padding:11px 16px 13px;position:relative;
     display:flex;align-items:center;gap:9px;
-    flex-shrink:0;white-space:nowrap;
     transition:color .15s;
+  }
+  @media (max-width:767px){
+    .tabs{
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:thin;
+      /* fades the right edge so a cut-off tab reads as "more to scroll,"
+         not stray clipped text */
+      mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent 100%);
+      -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent 100%);
+    }
+    .tab{ flex-shrink:0;white-space:nowrap; }
   }
   .tab:hover{color:var(--ink-dim)}
   .tab .tn{
