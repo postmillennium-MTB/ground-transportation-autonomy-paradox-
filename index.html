@@ -197,30 +197,13 @@
        dot and "on" verdict panel already glow with, so the headline reads
        as one more lit indicator on this dispatch board, not a new effect */
     text-shadow:0 0 18px var(--accent-glow), 0 0 44px var(--accent-glow);
-    /* keeps "needs a human." glued to its cursor mark (.lit::after) as one
-       unbreakable unit — without this, the cursor could wrap onto its own
-       orphan line, separated from the word it's supposed to sit against.
-       Still wraps normally at the space *before* "needs" since that break
-       point sits outside this rule (on the h1-level text flow). */
-    white-space:nowrap;
   }
   h1 .dark{color:var(--ink);opacity:.55}
-  /* static signal bar right after "human." — same glowing-accent-mark
-     language as .eyebrow .dot, reading as a "live" indicator rather than
-     a stray artifact. Deliberately not blinking: motion in the hero
-     headline competes with actually reading the thesis statement, and
-     the page already respects prefers-reduced-motion everywhere else.
-     Lives on .lit (not h1) specifically so the white-space:nowrap above
-     covers it too — see that comment. */
-  h1 .lit::after{
-    content:'';
-    display:inline-block;
-    width:.14em;height:.74em;
-    margin-left:.1em;
-    background:var(--accent);
-    box-shadow:0 0 12px var(--accent-glow);
-    vertical-align:-.06em;
-  }
+  /* A static bar mark after "human." was tried here (echoing the eyebrow
+     dot as a "live indicator") and dropped: at this font size a plain
+     rectangle flush against a period read as a stray capital "I", not a
+     deliberate mark — a real reader misread it as a typo. The glow above
+     carries the "lit signal" idea on its own without that ambiguity. */
   .standfirst{
     max-width:62ch;font-size:clamp(15px,2.2vw,17px);color:var(--ink-dim);
     margin-bottom:8px;
