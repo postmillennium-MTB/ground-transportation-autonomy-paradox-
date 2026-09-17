@@ -182,8 +182,28 @@
     text-transform:uppercase;
     margin-bottom:14px;
   }
-  h1 .lit{color:var(--accent)}
+  h1 .lit{
+    color:var(--accent);
+    /* signal-lamp glow — reuses --accent-glow, the same token the eyebrow
+       dot and "on" verdict panel already glow with, so the headline reads
+       as one more lit indicator on this dispatch board, not a new effect */
+    text-shadow:0 0 18px var(--accent-glow), 0 0 44px var(--accent-glow);
+  }
   h1 .dark{color:var(--ink);opacity:.55}
+  /* static signal bar after the headline — same glowing-accent-mark
+     language as .eyebrow .dot, reading as a "live" indicator rather than
+     a stray artifact. Deliberately not blinking: motion in the hero
+     headline competes with actually reading the thesis statement, and
+     the page already respects prefers-reduced-motion everywhere else. */
+  h1::after{
+    content:'';
+    display:inline-block;
+    width:.14em;height:.74em;
+    margin-left:.1em;
+    background:var(--accent);
+    box-shadow:0 0 12px var(--accent-glow);
+    vertical-align:-.06em;
+  }
   .standfirst{
     max-width:62ch;font-size:clamp(15px,2.2vw,17px);color:var(--ink-dim);
     margin-bottom:8px;
