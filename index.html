@@ -29,7 +29,7 @@
      and the font files it references overlap instead of queuing. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Orbitron:wght@700;800;900&display=swap">
 
 <style>
   /* ============================================================
@@ -40,7 +40,12 @@
      Palette pulls from railroad signal aspects (red/amber/green
      wayside lamps) against the matte charcoal of locomotive steel.
      Display face: Saira Condensed — the tall, mechanical lettering
-     of rolling-stock reporting marks and platform signage.
+     of rolling-stock reporting marks and platform signage. The hero
+     h1 alone breaks from this into Orbitron, a blockier geometric
+     sci-fi face — a deliberate one-off for the single biggest, most
+     "make a statement" element on the page; every other heading stays
+     on Saira Condensed so the rest of the page still reads as one
+     consistent system.
      Body: IBM Plex Sans. Data: IBM Plex Mono (gauge readouts).
      Fonts themselves load via <link> tags in <head>, not @import — see
      the comment there for why.
@@ -174,11 +179,15 @@
   }
 
   h1{
-    font-family:'Saira Condensed',sans-serif;
+    /* Orbitron has no condensed cut and runs much wider per-letter than
+       Saira Condensed, so size/line-height/letter-spacing are all tuned
+       down from the rest of the page's headings — same font-weight
+       intent (heavy/800), different geometry entirely. */
+    font-family:'Orbitron',sans-serif;
     font-weight:800;
-    font-size:clamp(34px,7vw,68px);
-    line-height:.96;
-    letter-spacing:-.01em;
+    font-size:clamp(26px,5.4vw,54px);
+    line-height:1.08;
+    letter-spacing:0;
     text-transform:uppercase;
     margin-bottom:14px;
   }
@@ -188,14 +197,22 @@
        dot and "on" verdict panel already glow with, so the headline reads
        as one more lit indicator on this dispatch board, not a new effect */
     text-shadow:0 0 18px var(--accent-glow), 0 0 44px var(--accent-glow);
+    /* keeps "needs a human." glued to its cursor mark (.lit::after) as one
+       unbreakable unit — without this, the cursor could wrap onto its own
+       orphan line, separated from the word it's supposed to sit against.
+       Still wraps normally at the space *before* "needs" since that break
+       point sits outside this rule (on the h1-level text flow). */
+    white-space:nowrap;
   }
   h1 .dark{color:var(--ink);opacity:.55}
-  /* static signal bar after the headline — same glowing-accent-mark
+  /* static signal bar right after "human." — same glowing-accent-mark
      language as .eyebrow .dot, reading as a "live" indicator rather than
      a stray artifact. Deliberately not blinking: motion in the hero
      headline competes with actually reading the thesis statement, and
-     the page already respects prefers-reduced-motion everywhere else. */
-  h1::after{
+     the page already respects prefers-reduced-motion everywhere else.
+     Lives on .lit (not h1) specifically so the white-space:nowrap above
+     covers it too — see that comment. */
+  h1 .lit::after{
     content:'';
     display:inline-block;
     width:.14em;height:.74em;
